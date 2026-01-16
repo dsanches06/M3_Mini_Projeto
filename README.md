@@ -16,32 +16,33 @@ Este projeto consiste na criação de uma aplicação de gestão de utilizadores
 ## Tecnologias Utilizadas
 
 - TypeScript
+- Javascript
 - HTML5
 - CSS3
 
 ## Link do Repositório
 
-[GitHub - M3 Mini Projeto](https://github.com/seu-usuario/m3-mini-projeto)
+Clique no [Link do projeto GitHub](https://github.com/dsanches06/M3_Mini_Projeto)
 
 ## Como Clonar e Executar
 
 ### Clonar o Repositório
 
 ```bash
-git clone https://github.com/seu-usuario/m3-mini-projeto.git
-cd m3-mini-projeto
+git clone https://github.com/dsanches06/M3_Mini_Projeto.git
+cd m3_mini_projeto
 ```
 
 ### Executar o Projeto
+
+1 - No terminal
 
 ```bash
 tsc --target ES6 --module ES6 main.ts
 ```
 
-Depois, abra `index.html` com Live Server.
+2 - Depois, abra `index.html` com Live Server.
 
-**Autor:**
+## Autor do Projeto
 
-- **Danilson Sanches**
-- **upskill217**
-
+- **Danilson Sanches - @upskill217**
