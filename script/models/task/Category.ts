@@ -1,2 +1,2 @@
 /* Task Category Type */
-export type Category = "Work" | "Personal" | "Study";
+export type Category = "Trabalho" | "Pessoal" | "Estudo";

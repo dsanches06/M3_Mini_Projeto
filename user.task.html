@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Task Manager</title>
     <link rel="stylesheet" href="css/style.css" />
-    <script src="main.user.task.js" type="module" defer></script>
+    <script src="main.js" type="module" defer></script>
   </head>
   <body>
     <header>
@@ -22,6 +22,98 @@
         TAREFAS DE UTILIZADOR:
         <span id="userNameTaskHeader"></span>
       </h1>
+      <div class="container">
+        <div id="userCountersTask">
+          <div class="statistic">
+            <figure>
+              <img
+                id="allTaskUserBtn"
+                src="images/task.png"
+                alt="task icon"
+                role="button"
+                tabindex="0"
+                title=""
+              />
+              <figcaption>tarefas</figcaption>
+            </figure>
+
+            <div id="totalTasksUser" class="counter-item">0</div>
+          </div>
+          <div class="statistic">
+            <figure>
+              <img
+                id="taskPendingUserBtn"
+                src="images/to-do-list.png"
+                alt="task pending icon"
+                role="button"
+                tabindex="0"
+              />
+              <figcaption>pendentes</figcaption>
+            </figure>
+
+            <div id="pendingUserTasks" class="counter-item">0</div>
+          </div>
+
+          <div class="statistic">
+            <figure>
+              <img
+                id="taskCompletedUserBtn"
+                src="images/completed-task.png"
+                alt="task completed icon"
+                role="button"
+                tabindex="0"
+              />
+              <figcaption>terminados</figcaption>
+            </figure>
+            <div id="completedUserTasks" class="counter-item">0</div>
+          </div>
+        </div>
+        <div class="search-add-container">
+          <input
+            type="text"
+            id="searchTaskUser"
+            placeholder="Procurar Tarefa..."
+          />
+          <div class="form-group">
+            <button id="addTaskUserBtn">Adicionar Tarefa</button>
+            <button id="sortTasksUserBtn">Ordenar A-Z</button>
+            <button id="completedTaskBtn">Remover Tarefas Concluídas</button>
+          </div>
+        </div>
+
+        <div id="usersTaskContainer"></div>
+
+        <div id="modalForm" class="modal">
+          <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Adicionar nova Tarefa</h2>
+            <div id="errorBanner" class="error-banner"></div>
+            <form id="formTaskUser">
+              <div class="form-group">
+                <label for="nameInput">Name</label>
+                <input
+                  type="text"
+                  id="nameInput"
+                  placeholder="inserir o nome da tarefa"
+                />
+                <div id="nameError" class="error-message"></div>
+              </div>
+
+              <div class="form-group">
+                <label for="taskCategory">Categoria</label>
+                <select id="taskCategory">
+                  <option value="Trabalho">Trabalho</option>
+                  <option value="Pessoal">Pessoal</option>
+                  <option value="Estudo">Estudo</option>
+                </select>
+                <div id="emailError" class="error-message"></div>
+              </div>
+
+              <button type="submit">Adicionar Tarefa</button>
+            </form>
+          </div>
+        </div>
+      </div>
     </main>
 
     <footer>

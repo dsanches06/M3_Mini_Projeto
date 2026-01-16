@@ -106,7 +106,8 @@ main h2 {
 }
 
 #userCounters,
-#taskCounters {
+#taskCounters,
+#userCountersTask {
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -115,7 +116,8 @@ main h2 {
 }
 
 #userCounters .statistic,
-#taskCounters .statistic {
+#taskCounters .statistic,
+#userCountersTask .statistic {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -124,7 +126,8 @@ main h2 {
 }
 
 #userCounters .statistic img,
-#taskCounters .statistic img {
+#taskCounters .statistic img,
+#userCountersTask .statistic img {
   width: 50px;
   height: 50px;
 }
@@ -133,10 +136,12 @@ main h2 {
 #ativeUsers,
 #unableUsers,
 #ativeUserPercentage,
-#totalTask,
-#ativeTask,
-#completeTask,
-#ativeTaskPercentage {
+#totalTasks,
+#pendingTasks,
+#completedTasks,
+#totalTasksUser,
+#pendingUserTasks,
+#completedUserTasks {
   font-weight: bold;
   font-size: 16px;
   color: #333;
@@ -151,7 +156,9 @@ main h2 {
   gap: 20px;
 }
 
-#searchUser {
+#searchUser,
+#searchTask,
+#searchTaskUser {
   width: 520px;
   margin-bottom: 10px;
 }

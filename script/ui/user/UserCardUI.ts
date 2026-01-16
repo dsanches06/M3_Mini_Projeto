@@ -66,9 +66,7 @@ function userCardContent(user: User): HTMLDivElement {
 
   const divCardAddTaskBtn = document.createElement("a") as HTMLAnchorElement;
   divCardAddTaskBtn.id = "addTaskIconBtn";
-  //passar o utilizador como parâmetro na navegação em JSON
-  const userJson: string = JSON.stringify(user);
-  divCardAddTaskBtn.href = `../../../user.task.html?user=${userJson}`;
+  divCardAddTaskBtn.href = `../../../user.task.html?userId=${user.id}`;
   divCardAddTaskBtn.role = "button";
   divCardAddTaskBtn.title = "Adicionar Tarefa";
   divCardAddTaskBtn.addEventListener("click", (event) => {

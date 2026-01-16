@@ -47,9 +47,7 @@ function userCardContent(user) {
     divCardTask.textContent = `${user.tasks.length} tarefas atribuídas`;
     const divCardAddTaskBtn = document.createElement("a");
     divCardAddTaskBtn.id = "addTaskIconBtn";
-    //passar o utilizador como parâmetro na navegação em JSON
-    const userJson = JSON.stringify(user);
-    divCardAddTaskBtn.href = `../../../user.task.html?user=${userJson}`;
+    divCardAddTaskBtn.href = `../../../user.task.html?userId=${user.id}`;
     divCardAddTaskBtn.role = "button";
     divCardAddTaskBtn.title = "Adicionar Tarefa";
     divCardAddTaskBtn.addEventListener("click", (event) => {

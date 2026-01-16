@@ -22,15 +22,17 @@ export function showUsers(usersList: User[]): void {
 }
 
 /* Função de renderização */
-export function renderUsers(userList: User[]) {
-  //Limpa o contentor HTML.
-  usersContainer.innerHTML = "";
-  userList.forEach((user) =>
-    //Para cada utilizador, cria um cartão HTML.
-    createUserCard(user, userList)
-  );
-  // Aplicar cores aos cartões
-  applyCardColors();
+export function renderUsers(userList: User[]): void {
+  if (usersContainer) {
+    //Limpa o contentor HTML.
+    usersContainer.innerHTML = "";
+    userList.forEach((user) =>
+      //Para cada utilizador, cria um cartão HTML.
+      createUserCard(user, userList)
+    );
+    // Aplicar cores aos cartões
+    applyCardColors();
+  }
 }
 
 /* Função para adicionar novo utilizador */
@@ -72,8 +74,10 @@ export function removeUserByID(userID: number, userList: User[]): User[] {
 function applyCardColors(): void {
   const cards = usersContainer.querySelectorAll(".card");
   for (const card of cards) {
- // Gerar uma cor aleatória suave
-    const randomColor = `rgb(${Math.floor(Math.random() * 128)}, ${Math.floor(Math.random() * 128)}, ${Math.floor(Math.random() * 128)})`;
+    // Gerar uma cor aleatória suave
+    const randomColor = `rgb(${Math.floor(Math.random() * 128)}, ${Math.floor(
+      Math.random() * 128
+    )}, ${Math.floor(Math.random() * 128)})`;
     const title = card.querySelector(".title") as HTMLElement;
     if (title) {
       title.style.background = randomColor;

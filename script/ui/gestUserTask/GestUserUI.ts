@@ -3,12 +3,15 @@ import { fakeUsersData } from "../../helpers/fakeUsersData.js";
 import { addNewUser, showUsers } from "../user/UserUI.js";
 import { openFormModal } from "../user/UserModalUI.js";
 import GestUserTask from "../../models/gestUserTask/gestUserTask.js";
+import { getLastId } from "../../helpers/getLastID.js";
 
-/* Instância da classe GestUserTask */
-export const gestUserTask = new GestUserTask();
+/* Instância da classe GestUserTask  */
+let gestUserTask: GestUserTask;
 
 /* Função principal para carregar utilizadores iniciais */
-export default function loadInitialUsers(): void {
+export default function loadInitialUsers(gestUsersTasks: GestUserTask): void {
+  //atribuir a instância recebida ao escopo global
+  gestUserTask = gestUsersTasks;
   // Usar um ciclo para converter os dados em instâncias da classe
   for (const userData of fakeUsersData) {
     const user = new User(userData.id, userData.name, userData.email);
@@ -18,23 +21,10 @@ export default function loadInitialUsers(): void {
   showUsers(gestUserTask.users as User[]);
 }
 
-/* Obter o último ID de utilizador */
-function getLastUserId(): number {
-  //
-  let lastUserID: number = 0;
-  //obter o ultimo utilizador no array
-  const lastUser = gestUserTask.users[gestUserTask.users.length - 1];
-  // Check if the last user exists and get the last user's ID
-  if (lastUser) {
-    lastUserID = lastUser.id;
-  }
-  return lastUserID;
-}
-
 /* Abrir modal de formulário */
 const addUserBtn = document.querySelector("#addUserBtn") as HTMLButtonElement;
 if (addUserBtn) {
-  addUserBtn.addEventListener("click", openFormModal);
+  addUserBtn.addEventListener("click", () => openFormModal());
 }
 
 /* Adicionar utilizador via formulário */
@@ -81,7 +71,7 @@ if (formUser) {
     }
 
     //obter um novo id a partir do ultimo
-    let newId = getLastUserId() + 1;
+    let newId = getLastId(gestUserTask.users) + 1;
     //cria um novo user com os dados inseridos no formulario
     const user = addNewUser(newId);
     //adiciona a lista de utilizadores

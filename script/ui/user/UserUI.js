@@ -13,13 +13,15 @@ export function showUsers(usersList) {
 }
 /* Função de renderização */
 export function renderUsers(userList) {
-    //Limpa o contentor HTML.
-    usersContainer.innerHTML = "";
-    userList.forEach((user) => 
-    //Para cada utilizador, cria um cartão HTML.
-    createUserCard(user, userList));
-    // Aplicar cores aos cartões
-    applyCardColors();
+    if (usersContainer) {
+        //Limpa o contentor HTML.
+        usersContainer.innerHTML = "";
+        userList.forEach((user) => 
+        //Para cada utilizador, cria um cartão HTML.
+        createUserCard(user, userList));
+        // Aplicar cores aos cartões
+        applyCardColors();
+    }
 }
 /* Função para adicionar novo utilizador */
 export function addNewUser(id) {

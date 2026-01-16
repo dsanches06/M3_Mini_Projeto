@@ -2,11 +2,12 @@ import User from "../../models/user/User.js";
 import { fakeUsersData } from "../../helpers/fakeUsersData.js";
 import { addNewUser, showUsers } from "../user/UserUI.js";
 import { openFormModal } from "../user/UserModalUI.js";
-import GestUserTask from "../../models/gestUserTask/gestUserTask.js";
-/* Instância da classe GestUserTask */
-export const gestUserTask = new GestUserTask();
+/* Instância da classe GestUserTask  */
+let gestUserTask;
 /* Função principal para carregar utilizadores iniciais */
-export default function loadInitialUsers() {
+export default function loadInitialUsers(gestUsersTasks) {
+    //atribuir a instância recebida ao escopo global
+    gestUserTask = gestUsersTasks;
     // Usar um ciclo para converter os dados em instâncias da classe
     for (const userData of fakeUsersData) {
         const user = new User(userData.id, userData.name, userData.email);

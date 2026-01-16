@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Task Manager</title>
     <link rel="stylesheet" href="css/style.css" />
-    <script src="main.task.js" type="module" defer></script>
+    <script src="main.js" type="module" defer></script>
   </head>
   <body>
     <header>
@@ -17,7 +17,62 @@
         </ul>
       </nav>
     </header>
-    <main></main>
+    <main>
+      <h1>GESTOR DE TAREFAS</h1>
+      <div class="container">
+        <div id="taskCounters">
+          <div class="statistic">
+            <figure>
+              <img
+                id="allTaskBtn"
+                src="images/task.png"
+                alt="task icon"
+                role="button"
+                tabindex="0"
+              />
+              <figcaption>tarefas</figcaption>
+            </figure>
+
+            <div id="totalTasks" class="counter-item">0</div>
+          </div>
+          <div class="statistic">
+            <figure>
+              <img
+                id="taskPendingBtn"
+                src="images/to-do-list.png"
+                alt="task pending icon"
+                role="button"
+                tabindex="0"
+              />
+              <figcaption>pendentes</figcaption>
+            </figure>
+
+            <div id="pendingTasks" class="counter-item">0</div>
+          </div>
+
+          <div class="statistic">
+            <figure>
+              <img
+                id="taskCompletedBtn"
+                src="images/completed-task.png"
+                alt="task completed icon"
+                role="button"
+                tabindex="0"
+              />
+              <figcaption>terminados</figcaption>
+            </figure>
+
+            <div id="completedTasks" class="counter-item">0</div>
+          </div>
+        </div>
+        <div class="search-add-container">
+          <input type="text" id="searchTask" placeholder="Procurar Tarefa..." />
+          <div class="form-group">
+            <button id="sortTasksBtn">Ordenar A-Z</button>
+          </div>
+        </div>
+      </div>
+    </main>
 
     <footer>
       <p>&copy; 2026 Developed by Danilson Sanches @upskill217</p>
