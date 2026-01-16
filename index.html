@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Mini Project Module 3</title>
     <link rel="stylesheet" href="css/style.css" />
+    <script
+      src="https://kit.fontawesome.com/874e9efdc5.js"
+      crossorigin="anonymous"
+    ></script>
     <script type="module" src="main.js" defer></script>
   </head>
   <body>
@@ -17,7 +21,78 @@
         </ul>
       </nav>
     </header>
-    <main></main>
+    <main>
+      <h2>GESTOR DE UTILIZADORES</h2>
+      <div class="container">
+        <div id="userCounters">
+          <div class="statistic">
+            <img src="images/users.png" alt="users icon" />
+            <div id="TotalUsers" class="counter-item"></div>
+          </div>
+          <div class="statistic">
+            <img src="images/ative.png" alt="ative users icon" />
+            <div id="ActiveUsers" class="counter-item"></div>
+          </div>
+
+          <div class="statistic">
+            <img src="images/unable.png" alt="unable users icon" />
+            <div id="InactiveUsers" class="counter-item"></div>
+          </div>
+
+          <div class="statistic">
+            <img src="images/ative.png" alt="ative users icon" />
+            <div id="ActivePercentage" class="counter-item"></div>
+          </div>
+        </div>
+
+        <br />
+        <div class="search-add-container">
+          <input
+            type="text"
+            id="searchUser"
+            placeholder="Procurar Utilizador..."
+          />
+          <div class="form-group">
+            <button id="addUserBtn">Adicionar Utilizador</button>
+            <button id="activeUsersBtn">Utilizadores ativos</button>
+            <button id="sortUsersBtn">Ordenar A-Z</button>
+          </div>
+        </div>
+
+        <div id="usersContainer"></div>
+
+        <div id="modalForm" class="modal">
+          <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Add New User</h2>
+            <div id="errorBanner" class="error-banner"></div>
+            <form id="formUser">
+              <div class="form-group">
+                <label for="nameInput">Name</label>
+                <input
+                  type="text"
+                  id="nameInput"
+                  placeholder="insert the name"
+                />
+                <div id="nameError" class="error-message"></div>
+              </div>
+
+              <div class="form-group">
+                <label for="emailInput">Email</label>
+                <input
+                  type="email"
+                  id="emailInput"
+                  placeholder="insert the email"
+                />
+                <div id="emailError" class="error-message"></div>
+              </div>
+
+              <button type="submit">Add User</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </main>
     <footer>
       <p>&copy; 2026 Developed by Danilson Sanches @upskill217</p>
     </footer>

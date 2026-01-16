@@ -2,14 +2,37 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
 }
 
 body {
-  font-family: Arial, Helvetica, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background-color: #f4f4f4;
   color: #333;
-  width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
+  background-attachment: fixed;
+}
+
+div > input[type="text"],
+div > input[type="email"],
+button {
+  padding: 10px;
+  margin-right: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+button {
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  width: 250px;
+}
+
+input[type="button"]:hover {
+  background-color: #0056b3;
 }
 
 header {
@@ -28,8 +51,8 @@ header {
 }
 
 header h1 {
-  font-size: 24px;
   color: #333;
+  font-size: 24px;
   cursor: pointer;
 }
 
@@ -59,6 +82,338 @@ nav ul li a:hover,
 nav ul li a.active {
   color: #fff;
   background-color: #333;
+}
+
+main {
+  padding: 100px 20px 60px 20px;
+  min-height: calc(100vh - 160px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+main h2 {
+  font-size: 28px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+#userCounters {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+}
+
+#userCounters .statistic {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+}
+
+#userCounters .statistic img {
+  width: 50px;
+  height: 50px;
+}
+
+#TotalUsers,
+#ActiveUsers,
+#InactiveUsers,
+#ActivePercentage {
+  font-weight: bold;
+  font-size: 16px;
+  color: #333;
+}
+
+.search-add-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+#searchUser {
+  width: 520px;
+  margin-bottom: 10px;
+}
+
+#usersContainer {
+  position: relative;
+  width: 1150px;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+#usersContainer .card {
+  position: relative;
+  width: 300px;
+  height: 420px;
+  background: #fff;
+  margin: 20px;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
+  transition: 0.5s;
+}
+
+#usersContainer:hover .card {
+  filter: blur(20px);
+  transform: scale(0.9);
+  opacity: 0.5;
+}
+
+#usersContainer .card:hover {
+  filter: blur(0px);
+  transform: scale(1.1);
+  opacity: 1;
+}
+
+#usersContainer .card .title {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  clip-path: circle(180px at center 0);
+  text-align: center;
+}
+
+#usersContainer .card .title h2 {
+  color: #fff;
+  font-size: 4.5em;
+  padding: 30px 0;
+}
+
+#usersContainer .card .content {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  bottom: 40%;
+  left: 50%;
+  transform: translate(-50%, 50%);
+  padding: 20px;
+  width: 100%;
+}
+
+#usersContainer .card .content p {
+  color: #666;
+}
+
+#usersContainer .card .btnGroup {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  width: 90%;
+  justify-content: center;
+}
+
+#usersContainer .card .btnGroup button {
+  border-radius: 40px;
+  color: #fff;
+  background: #000;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+#usersContainer .card .btnGroup button#removeBtn {
+  background-color: #dc3545;
+}
+
+#usersContainer .card .btnGroup button#removeBtn:hover {
+  background-color: #c82333;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal-content {
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  margin: 50px auto;
+  padding: 40px;
+  border: none;
+  width: 90%;
+  max-width: 450px;
+  max-height: 350px;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  animation: slideIn 0.3s ease-out;
+  position: relative;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.modal-content h2 {
+  color: #333;
+  margin-bottom: 25px;
+  font-size: 24px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.close {
+  color: #999;
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 32px;
+  font-weight: 300;
+  cursor: pointer;
+  line-height: 1;
+  transition: color 0.2s ease;
+}
+
+#formUser {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+}
+
+label {
+  font-size: 14px;
+  color: #555;
+  font-weight: 500;
+  font-family: inherit;
+  min-width: 80px;
+  margin: 0;
+}
+
+input[type="text"],
+input[type="email"] {
+  flex: 1;
+  min-width: 250px;
+  padding: 12px 15px;
+  margin: 0;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  transition: all 0.3s ease;
+  background-color: #fafafa;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus {
+  outline: none;
+  border-color: #007bff;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+input[type="text"]::placeholder,
+input[type="email"]::placeholder {
+  color: #999;
+}
+
+button[type="submit"] {
+  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+  color: white;
+  padding: 12px 20px;
+  margin-top: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+button:hover,
+input[type="text"]:hover,
+input[type="email"]:hover,
+button[type="submit"]:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 123, 255, 0.3);
+}
+
+button:active,
+input[type="text"]:active,
+input[type="email"]:active,
+button[type="submit"]:active {
+  transform: translateY(0);
+}
+
+.error-message {
+  color: #ff0000;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.error-banner {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 15px;
+  display: none;
+  font-size: 14px;
+}
+
+.user-details {
+  padding: 20px;
+}
+
+.user-details h3 {
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.user-details p {
+  margin: 5px 0;
+  font-size: 14px;
 }
 
 footer {
