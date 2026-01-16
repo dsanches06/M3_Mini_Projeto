@@ -1,23 +1,4 @@
-body {
-  font-family: Arial;
-  padding: 20px;
-}
 
-h1 {
-  text-align: center;
-  padding: 0 20px;
-}
-
-.container {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-.container .exercicios {
-  display: flex;
-  flex-direction: row;
-  gap: 20px;
-}
 
 .listar-tarefas {
   display: flex;
@@ -41,12 +22,3 @@ h1 {
   list-style: square;
 }
 
-button {
-  margin-left: 20px;
-  background-color: #333;
-  border-radius: 5px;
-  color: #fff;
-  border: none;
-  padding: 5px 10px;
-  cursor: pointer;
-}

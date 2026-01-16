@@ -1,16 +1,36 @@
 /* Função para abrir o modal de formulario */
 export function openFormModal() {
     const modalForm = document.querySelector("#modalForm");
-    modalForm.style.display = "flex";
-    closeModal(modalForm);
+    if (modalForm) {
+        modalForm.style.display = "flex";
+        closeModal(modalForm);
+    }
+    else {
+        console.error("Modal form not found");
+    }
 }
 /* Função para fechar o modal */
 export function closeModal(modal) {
     const closeBtn = modal.querySelector(".close");
-    closeBtn.addEventListener("click", () => modal.remove());
+    if (closeBtn) {
+        closeBtn.addEventListener("click", () => {
+            if (modal.id === "modalForm") {
+                modal.style.display = "none";
+            }
+            else {
+                modal.remove();
+            }
+        });
+    }
     modal.addEventListener("click", (e) => {
-        if (e.target === modal)
-            modal.remove();
+        if (e.target === modal) {
+            if (modal.id === "modalForm") {
+                modal.style.display = "none";
+            }
+            else {
+                modal.remove();
+            }
+        }
     });
 }
 /* Função que cria o modal para mostrar detalhes do tulizador */

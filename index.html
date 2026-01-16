@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Mini Project Module 3</title>
     <link rel="stylesheet" href="css/style.css" />
+    <script src="main.user.js" type="module" defer></script>
   </head>
   <body>
     <header>
@@ -12,7 +13,7 @@
       <nav>
         <ul class="menu">
           <li><a href="#">Users</a></li>
-          <li><a href="task.html">Tasks</a></li>
+          <li><a href="tasks.html">Tasks</a></li>
         </ul>
       </nav>
     </header>
@@ -21,21 +22,59 @@
       <div class="container">
         <div id="userCounters">
           <div class="statistic">
-            <img src="images/users.png" alt="users icon" />
+            <figure>
+              <img
+                id="allUserBtn"
+                src="images/users.png"
+                alt="users icon"
+                role="button"
+                tabindex="0"
+              />
+              <figcaption>utilizadores</figcaption>
+            </figure>
+
             <div id="totalUsers" class="counter-item"></div>
           </div>
           <div class="statistic">
-            <img src="images/ative.png" alt="ative users icon" />
+            <figure>
+              <img
+                id="ativeUsersBtn"
+                src="images/ative.png"
+                alt="ative users icon"
+                role="button"
+                tabindex="0"
+              />
+              <figcaption>ativos</figcaption>
+            </figure>
+
             <div id="ativeUsers" class="counter-item"></div>
           </div>
 
           <div class="statistic">
-            <img src="images/unable.png" alt="unable users icon" />
+            <figure>
+              <img
+                id="unableUsersBtn"
+                src="images/unable.png"
+                alt="unable users icon"
+                role="button"
+                tabindex="0"
+              />
+              <figcaption>Inativos</figcaption>
+            </figure>
+
             <div id="unableUsers" class="counter-item"></div>
           </div>
 
           <div class="statistic">
-            <img src="images/ative.png" alt="ative users icon" />
+            <figure>
+              <img
+                src="images/ative.png"
+                alt="ative users icon"
+                title="Mostrar utlizadores ativos em (%)"
+              />
+              <figcaption>ativos (%)</figcaption>
+            </figure>
+
             <div id="ativeUserPercentage" class="counter-item"></div>
           </div>
         </div>
@@ -49,7 +88,6 @@
           />
           <div class="form-group">
             <button id="addUserBtn">Adicionar Utilizador</button>
-            <button id="activeUsersBtn">Utilizadores ativos</button>
             <button id="sortUsersBtn">Ordenar A-Z</button>
           </div>
         </div>
@@ -91,6 +129,5 @@
     <footer>
       <p>&copy; 2026 Developed by Danilson Sanches @upskill217</p>
     </footer>
-    <script type="module" src="main.js"></script>
   </body>
 </html>

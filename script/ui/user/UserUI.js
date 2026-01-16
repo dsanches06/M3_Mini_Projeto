@@ -57,7 +57,8 @@ export function removeUserByID(userID, userList) {
 function applyCardColors() {
     const cards = usersContainer.querySelectorAll(".card");
     for (const card of cards) {
-        const randomColor = "#" + Math.floor(Math.random() * 16777215).toString(16);
+        // Gerar uma cor aleatória suave
+        const randomColor = `rgb(${Math.floor(Math.random() * 128)}, ${Math.floor(Math.random() * 128)}, ${Math.floor(Math.random() * 128)})`;
         const title = card.querySelector(".title");
         if (title) {
             title.style.background = randomColor;

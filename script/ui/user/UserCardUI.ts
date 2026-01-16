@@ -30,8 +30,11 @@ export function createUserCard(user: User, userList: User[]): void {
 
 /* */
 function userCardTitle(user: User): HTMLDivElement {
+  //somente o nome sem apelido
+  const names = user.name.split(" ");
   const cardTitle = document.createElement("h2") as HTMLHeadingElement;
-  cardTitle.textContent = `${user.id}`;
+  cardTitle.textContent = `${names[0]}`;
+  cardTitle.style.fontSize = "36px";
 
   const divCardTitle = document.createElement("div") as HTMLDivElement;
   divCardTitle.appendChild(cardTitle);
@@ -39,10 +42,14 @@ function userCardTitle(user: User): HTMLDivElement {
   return divCardTitle;
 }
 
-/*  */
+/* Função para criar o conteúdo do cartão de usuário */
 function userCardContent(user: User): HTMLDivElement {
   const divCardName = document.createElement("p") as HTMLParagraphElement;
   divCardName.textContent = `${user.name}`;
+
+  const divCardId = document.createElement("p") as HTMLParagraphElement;
+  divCardId.style.fontWeight = "bold";
+  divCardId.textContent = `${user.id}`;
 
   const divCardEmail = document.createElement("p") as HTMLParagraphElement;
   divCardEmail.textContent = `${user.email}`;
@@ -52,20 +59,38 @@ function userCardContent(user: User): HTMLDivElement {
 
   //Mostra o estado com texto ou cor diferente
   divCardStatus.style.color = user.isAtive ? "green" : "red";
+  divCardStatus.style.fontWeight = "bold";
 
-  const divCardTasks = document.createElement("p") as HTMLParagraphElement;
-  divCardTasks.className = "tasks";
-  divCardTasks.textContent = "0 tarefas atribuídas";
+  const divCardTask = document.createElement("p") as HTMLParagraphElement;
+  divCardTask.textContent = `${user.tasks.length} tarefas atribuídas`;
+
+  const divCardAddTaskBtn = document.createElement("a") as HTMLAnchorElement;
+  divCardAddTaskBtn.id = "addTaskIconBtn";
+  //passar o utilizador como parâmetro na navegação em JSON
+  const userJson: string = JSON.stringify(user);
+  divCardAddTaskBtn.href = `../../../user.task.html?user=${userJson}`;
+  divCardAddTaskBtn.role = "button";
+  divCardAddTaskBtn.title = "Adicionar Tarefa";
+  divCardAddTaskBtn.addEventListener("click", (event) => {
+    event.stopPropagation();
+  });
+
+  const divCardUserTasks = document.createElement("div") as HTMLDivElement;
+  divCardUserTasks.className = "userTasks";
+  divCardUserTasks.appendChild(divCardTask);
+  divCardUserTasks.appendChild(divCardAddTaskBtn);
 
   const divUserCardContent = document.createElement("div") as HTMLDivElement;
+  divUserCardContent.appendChild(divCardId);
   divUserCardContent.appendChild(divCardName);
   divUserCardContent.appendChild(divCardEmail);
   divUserCardContent.appendChild(divCardStatus);
-  divUserCardContent.appendChild(divCardTasks);
+  divUserCardContent.appendChild(divCardUserTasks);
 
   return divUserCardContent;
 }
 
+/* Função para criar os botões do cartão de usuário */
 function userCardBtn(user: User, userList: User[]): HTMLDivElement {
   const bntToggle = document.createElement("button") as HTMLButtonElement;
   bntToggle.textContent = user.isAtive ? "Desativar" : "Ativar ";
