@@ -1,5 +1,47 @@
-# M3_Mini_Projeto
+# M3 Mini Projeto
+
 Gestão de Utilizadores e de tarefas
 
+## Descrição
 
+Este projeto consiste na criação de uma aplicação de gestão de utilizadores e tarefas. O objetivo é implementar funcionalidades para criar, ler, atualizar e eliminar utilizadores e suas respectivas tarefas associadas.
+
+## Funcionalidades
+
+- Gestão de utilizadores (CRUD)
+- Gestão de tarefas (CRUD)
+- Associação de tarefas a utilizadores
+- Interface amigável e responsiva
+
+## Tecnologias Utilizadas
+
+- TypeScript
+- HTML5
+- CSS3
+
+## Link do Repositório
+
+[GitHub - M3 Mini Projeto](https://github.com/seu-usuario/m3-mini-projeto)
+
+## Como Clonar e Executar
+
+### Clonar o Repositório
+
+```bash
+git clone https://github.com/seu-usuario/m3-mini-projeto.git
+cd m3-mini-projeto
+```
+
+### Executar o Projeto
+
+```bash
 tsc --target ES6 --module ES6 main.ts
+```
+
+Depois, abra `index.html` com Live Server.
+
+**Autor:**
+
+- **Danilson Sanches**
+- **upskill217**
+
