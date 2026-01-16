@@ -1,4 +1,4 @@
-import UserClass from "../../models/user/UserClass.js";
+import User from "../../models/user/User.js";
 import { fakeUsersData } from "../../helpers/fakeUsersData.js";
 import { addNewUser, showUsers } from "./UserUI.js";
 import { openFormModal } from "./UserModalUI.js";
@@ -8,7 +8,7 @@ const usersList = [];
 export default function loadInitialUsers() {
     // Usar um ciclo para converter os dados em instâncias da classe
     for (const userData of fakeUsersData) {
-        const user = new UserClass(userData.id, userData.name, userData.email);
+        const user = new User(userData.id, userData.name, userData.email);
         usersList.push(user);
     }
     // Mostrar os utilizadores

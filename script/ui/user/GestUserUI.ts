@@ -1,4 +1,4 @@
-import UserClass from "../../models/user/UserClass.js";
+import User from "../../models/user/User.js";
 import IUser from "../../models/user/IUser.js";
 import { fakeUsersData } from "../../helpers/fakeUsersData.js";
 import { addNewUser, showUsers } from "./UserUI.js";
@@ -11,11 +11,11 @@ const usersList: IUser[] = [];
 export default function loadInitialUsers(): void {
   // Usar um ciclo para converter os dados em instâncias da classe
   for (const userData of fakeUsersData) {
-    const user = new UserClass(userData.id, userData.name, userData.email);
+    const user = new User(userData.id, userData.name, userData.email);
     usersList.push(user);
   }
   // Mostrar os utilizadores
-  showUsers(usersList as UserClass[]);
+  showUsers(usersList as User[]);
 }
 
 /* Obter o último ID de utilizador */
@@ -83,7 +83,7 @@ formUser.addEventListener("submit", (event: Event) => {
   const modalForm = document.querySelector("#modalForm") as HTMLDivElement;
   modalForm.style.display = "none";
   //mostra todos os utilizadores
-  showUsers(usersList as UserClass[]);
+  showUsers(usersList as User[]);
 });
 
 /* Filtrar utilizadores ativos */
@@ -92,7 +92,7 @@ const filterActiveBtn = document.querySelector(
 ) as HTMLButtonElement;
 filterActiveBtn.addEventListener("click", () => {
   const activeUsers = usersList.filter((user) => user.isAtive);
-  showUsers(activeUsers as UserClass[]);
+  showUsers(activeUsers as User[]);
 });
 
 /* Procurar utilizador por nome */
@@ -105,7 +105,7 @@ searchUser.addEventListener("input", () => {
     user.name.toLowerCase().includes(name)
   );
   //mostrar os utilizadores filtrados
-  showUsers(filteredUsers as UserClass[]);
+  showUsers(filteredUsers as User[]);
 });
 
 /* Ordenar utilizadores por nome */
@@ -125,7 +125,7 @@ sortUsersBtn.addEventListener("click", () => {
   //Inverta o estado para o próximo clique
   isAscending = !isAscending;
   // Mostrar os utilizadores ordenados
-  showUsers(sortedUsers as UserClass[]);
+  showUsers(sortedUsers as User[]);
   // Atualize o texto ou ícone do botão
   sortUsersBtn.textContent = isAscending ? "Ordenar A-Z" : "Ordenar Z-A";
 });

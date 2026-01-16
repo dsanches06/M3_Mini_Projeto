@@ -1,4 +1,4 @@
-import UserClass from "../../models/user/UserClass.js";
+import User from "../../models/user/User.js";
 
 /* Função para abrir o modal de formulario */
 export function openFormModal() {
@@ -18,7 +18,7 @@ export function closeModal(modal: HTMLDivElement) {
 }
 
 /* Função que cria o modal para mostrar detalhes do tulizador */
-export function modalUserDetail(user: UserClass): HTMLDivElement {
+export function modalUserDetail(user: User): HTMLDivElement {
   const title = document.createElement("h3") as HTMLHeadingElement;
   title.textContent = "Detalhes do Utilizador";
 
@@ -51,7 +51,7 @@ export function modalUserDetail(user: UserClass): HTMLDivElement {
 }
 
 /* Modal para visualização de detalhes do utilizador */
-export function showUserDetails(user: UserClass) {
+export function showUserDetails(user: User) {
   const modal = document.createElement("div") as HTMLDivElement;
   modal.className = "modal";
   modal.style.display = "flex";

@@ -1,5 +1,5 @@
-import UserClass from "../../models/user/UserClass.js";
-import { countActiveUsers, countInactiveUsers, countUsers, countActivePercentage, } from "./UserCountersUI.js";
+import User from "../../models/user/User.js";
+import { countAtiveUsers, countUnableUsers, countUsers, countAtivePercentage, } from "./UserCountersUI.js";
 import { createUserCard } from "./UserCardUI.js";
 /* Container de utilizadores */
 const usersContainer = document.querySelector("#usersContainer");
@@ -7,9 +7,9 @@ const usersContainer = document.querySelector("#usersContainer");
 export function showUsers(usersList) {
     renderUsers(usersList);
     countUsers(usersList);
-    countActiveUsers(usersList);
-    countInactiveUsers(usersList);
-    countActivePercentage(usersList);
+    countAtiveUsers(usersList);
+    countUnableUsers(usersList);
+    countAtivePercentage(usersList);
 }
 /* Função de renderização */
 export function renderUsers(userList) {
@@ -32,7 +32,7 @@ export function addNewUser(id) {
     nameInput.value = "";
     emailInput.value = "";
     //retorna um novo objeto do tipo UserClass
-    return new UserClass(id, name, email);
+    return new User(id, name, email);
 }
 /* Alternar estado (ativo / inativo) */
 export function toggleUserState(userID, userList) {
@@ -41,7 +41,7 @@ export function toggleUserState(userID, userList) {
     //se o utilizador for encontrado
     if (user) {
         //alternar o estado do utilizador
-        user.toggleEstado();
+        user.toggleStates();
         //atualiza a exibição dos utilizadores
         showUsers(userList);
     }

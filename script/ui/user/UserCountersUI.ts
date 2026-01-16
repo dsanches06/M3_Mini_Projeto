@@ -1,37 +1,37 @@
-import UserClass from "../../models/user/UserClass.js";
+import User from "../../models/user/User.js";
 
 /* Contador de utilizadores ativos */
-export function countActiveUsers(usersList: UserClass[]): void {
-  const activeUsers = usersList.filter((user) => user.isAtive);
-  const activeUsersElement = document.querySelector(
-    "#ActiveUsers"
+export function countAtiveUsers(usersList: User[]): void {
+  const ativeUsers = usersList.filter((user) => user.isAtive);
+  const ativeUsersElement = document.querySelector(
+    "#ativeUsers"
   ) as HTMLDivElement;
-  activeUsersElement.textContent = `${activeUsers.length}`;
+  ativeUsersElement.textContent = `${ativeUsers.length}`;
 }
 
 /* Contador de utilizadores inativos */
-export function countInactiveUsers(usersList: UserClass[]): void {
-  const inactiveUsers = usersList.filter((user) => !user.isAtive);
-  const inactiveUsersElement = document.querySelector(
-    "#InactiveUsers"
+export function countUnableUsers(usersList: User[]): void {
+  const unableUsers = usersList.filter((user) => !user.isAtive);
+  const unableUsersElement = document.querySelector(
+    "#unableUsers"
   ) as HTMLDivElement;
-  inactiveUsersElement.textContent = `${inactiveUsers.length}`;
+  unableUsersElement.textContent = `${unableUsers.length}`;
 }
 
 /* Contador de utilizadores */
-export function countUsers(usersList: UserClass[]): void {
-  const totalUsers = document.querySelector("#TotalUsers") as HTMLDivElement;
+export function countUsers(usersList: User[]): void {
+  const totalUsers = document.querySelector("#totalUsers") as HTMLDivElement;
   totalUsers.textContent = `${usersList.length}`;
 }
 
 /* Percentagem de utilizadores ativos */
-export function countActivePercentage(usersList: UserClass[]): void {
+export function countAtivePercentage(usersList: User[]): void {
   const activeUsers = usersList.filter((user) => user.isAtive).length;
   const totalUsers = usersList.length;
   const percentage =
     totalUsers > 0 ? ((activeUsers / totalUsers) * 100).toFixed(2) : 0;
-  const activePercentageElement = document.querySelector(
-    "#ActivePercentage"
+  const ativePercentageElement = document.querySelector(
+    "#ativeUserPercentage"
   ) as HTMLDivElement;
-  activePercentageElement.textContent = `${percentage}%`;
+  ativePercentageElement.textContent = `${percentage}%`;
 }

@@ -1,4 +1,4 @@
-import UserClass from "../../models/user/UserClass.js";
+import User from "../../models/user/User.js";
 import { showUserDetails } from "./UserModalUI.js";
 import { toggleUserState, removeUserByID, showUsers } from "./UserUI.js";
 
@@ -8,7 +8,7 @@ const usersContainer = document.querySelector(
 ) as HTMLDivElement;
 
 /* Criar cartão de utilizador */
-export function createUserCard(user: UserClass, userList: UserClass[]): void {
+export function createUserCard(user: User, userList: User[]): void {
   const divUserCard = document.createElement("div") as HTMLDivElement;
   divUserCard.className = "card";
   divUserCard.addEventListener("click", () => showUserDetails(user));
@@ -29,7 +29,7 @@ export function createUserCard(user: UserClass, userList: UserClass[]): void {
 }
 
 /* */
-function userCardTitle(user: UserClass): HTMLDivElement {
+function userCardTitle(user: User): HTMLDivElement {
   const cardTitle = document.createElement("h2") as HTMLHeadingElement;
   cardTitle.textContent = `${user.id}`;
 
@@ -40,7 +40,7 @@ function userCardTitle(user: UserClass): HTMLDivElement {
 }
 
 /*  */
-function userCardContent(user: UserClass): HTMLDivElement {
+function userCardContent(user: User): HTMLDivElement {
   const divCardName = document.createElement("p") as HTMLParagraphElement;
   divCardName.textContent = `${user.name}`;
 
@@ -66,7 +66,7 @@ function userCardContent(user: UserClass): HTMLDivElement {
   return divUserCardContent;
 }
 
-function userCardBtn(user: UserClass, userList: UserClass[]): HTMLDivElement {
+function userCardBtn(user: User, userList: User[]): HTMLDivElement {
   const bntToggle = document.createElement("button") as HTMLButtonElement;
   bntToggle.textContent = user.isAtive ? "Desativar" : "Ativar ";
   bntToggle.id = "toogleBtn";

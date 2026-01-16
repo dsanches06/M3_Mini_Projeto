@@ -1,0 +1,68 @@
+import ITask from "../../models/task/ITask.js";
+import Task from "../../models/task/Task.js";
+import { Category } from "../../models/task/Category.js";
+import { showTaskCounter, updateTaskList, styleTasks } from "./Components.js";
+import User from "../../models/user/User.js";
+
+/*  Array de Tarefas */
+const taskList: ITask[] = [];
+
+/*  Função Principal para Mostrar Tarefas */
+export default function showTasks(): void {
+  showTaskCounter(taskList as Task[]);
+  updateTaskList(taskList as Task[]);
+  styleTasks(taskList as Task[]);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const inputElement = document.querySelector("#taskInput") as HTMLInputElement;
+  const addButton = document.querySelector("#addTaskBtn") as HTMLButtonElement;
+  const sortButton = document.querySelector("#sortTaskBtn") as HTMLButtonElement;
+  const categorySelect = document.querySelector(
+    "#taskCategory"
+  ) as HTMLSelectElement;
+  const completedTaskBtn = document.querySelector(
+    "#completedTaskBtn"
+  ) as HTMLButtonElement;
+  const searchInput = document.querySelector("#searchTask") as HTMLInputElement;
+
+  /*  Adicionar tarefa via input */
+  addButton.addEventListener("click", () => {
+    const title = inputElement.value.trim();
+    const category = categorySelect.value as Category;
+    if (title && category) {
+      const user = new User(8, "Alice Morais", "alice@example.com");
+      const newTask = new Task(Date.now(), title, category, user);
+      taskList.push(newTask);
+      inputElement.value = "";
+      showTasks();
+    }
+  });
+
+  /*  Ordenação Alfabética */
+  sortButton.addEventListener("click", () => {
+    taskList.sort((a, b) => a.title.localeCompare(b.title));
+    showTasks();
+  });
+
+  /* Limpar Todas as Concluídas */
+  completedTaskBtn.style.backgroundColor = "red";
+  completedTaskBtn.addEventListener("click", () => {
+    for (let i = taskList.length - 1; i >= 0; i--) {
+      if (taskList[i].completed) {
+        taskList.splice(i, 1);
+      }
+    }
+    showTasks();
+  });
+
+  /* Pesquisa Dinâmica */
+  searchInput.addEventListener("input", () => {
+    const searchTerm = searchInput.value.toLowerCase();
+    const filteredTasks = taskList.filter((task) =>
+      task.title.toLowerCase().includes(searchTerm)
+    );
+    updateTaskList(filteredTasks as Task[]);
+    styleTasks(filteredTasks as Task[]);
+  });
+});
