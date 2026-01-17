@@ -1,9 +1,11 @@
+import { Category } from "./../../models/task/Category";
 import User from "../../models/user/User.js";
-import { fakeUsersData } from "../../helpers/fakeUsersData.js";
-import { addNewUser, showUsers } from "../user/UserUI.js";
+import { fakeUsersData, fakeTasksData } from "../../helpers/FakeData.js";
+import showUsers, { addNewUser } from "../user/UserUI.js";
 import { openFormModal } from "../user/UserModalUI.js";
 import GestUserTask from "../../models/gestUserTask/gestUserTask.js";
 import { getLastId } from "../../helpers/getLastID.js";
+import Task from "../../models/task/Task.js";
 
 /* Instância da classe GestUserTask  */
 let gestUserTask: GestUserTask;
@@ -15,6 +17,20 @@ export default function loadInitialUsers(gestUsersTasks: GestUserTask): void {
   // Usar um ciclo para converter os dados em instâncias da classe
   for (const userData of fakeUsersData) {
     const user = new User(userData.id, userData.name, userData.email);
+    for (const taskData of fakeTasksData) {
+      const task = new Task(
+        taskData.id,
+        taskData.title,
+        taskData.category as Category,
+        user
+      );
+
+      if (taskData.completed) {
+        task.markCompleted();
+      }
+
+      user.createTask(task);
+    }
     gestUserTask.addUser(user);
   }
   // Mostrar os utilizadores

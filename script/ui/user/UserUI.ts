@@ -13,7 +13,7 @@ const usersContainer = document.querySelector(
 ) as HTMLDivElement;
 
 /* Mostrar utilizadores */
-export function showUsers(usersList: User[]): void {
+export default function showUsers(usersList: User[]): void {
   renderUsers(usersList);
   countUsers(usersList);
   countAtiveUsers(usersList);
@@ -22,7 +22,7 @@ export function showUsers(usersList: User[]): void {
 }
 
 /* Função de renderização */
-export function renderUsers(userList: User[]): void {
+function renderUsers(userList: User[]): void {
   if (usersContainer) {
     //Limpa o contentor HTML.
     usersContainer.innerHTML = "";

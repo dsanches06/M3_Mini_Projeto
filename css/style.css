@@ -105,6 +105,13 @@ main h2 {
   color: #333;
 }
 
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+}
+
 #userCounters,
 #taskCounters,
 #userCountersTask {
@@ -117,7 +124,7 @@ main h2 {
 
 #userCounters .statistic,
 #taskCounters .statistic,
-#userCountersTask .statistic {
+#userCounteruserCountersTasksTask .statistic {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -183,6 +190,7 @@ main h2 {
   overflow: hidden;
   box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
   transition: 0.5s;
+  cursor: pointer;
 }
 
 #usersContainer:hover .card {
@@ -275,6 +283,56 @@ main h2 {
 
 #usersContainer .card .btnGroup button#removeBtn:hover {
   background-color: #c82333;
+}
+
+#taskContainer {
+  position: relative;
+  width: 1150px;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#taskContainer table {
+  width: 100%;
+  border-collapse: collapse;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+#taskContainer table caption {
+  font-size: 20px;
+  font-weight: bold;
+  margin: 10px 0;
+  text-align: center;
+  color: #333;
+}
+
+#taskContainer table th,
+#taskContainer table td {
+  padding: 15px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+}
+
+#taskContainer table th {
+  background-color: #f8f9fa;
+  color: #333;
+  font-weight: 600;
+}
+#taskContainer table tbody tr:nth-child(even) {
+  background-color: #e8f4f8;
+}
+
+#taskContainer table tbody tr:nth-child(odd) {
+  background-color: #f0f8fb;
+}
+
+#taskContainer table tbody tr:hover {
+  background-color: #f8f9fa;
 }
 
 .modal {

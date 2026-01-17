@@ -4,7 +4,7 @@ import { createUserCard } from "./UserCardUI.js";
 /* Container de utilizadores */
 const usersContainer = document.querySelector("#usersContainer");
 /* Mostrar utilizadores */
-export function showUsers(usersList) {
+export default function showUsers(usersList) {
     renderUsers(usersList);
     countUsers(usersList);
     countAtiveUsers(usersList);
@@ -12,7 +12,7 @@ export function showUsers(usersList) {
     countAtivePercentage(usersList);
 }
 /* Função de renderização */
-export function renderUsers(userList) {
+function renderUsers(userList) {
     if (usersContainer) {
         //Limpa o contentor HTML.
         usersContainer.innerHTML = "";

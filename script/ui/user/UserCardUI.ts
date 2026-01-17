@@ -1,6 +1,6 @@
 import User from "../../models/user/User.js";
 import { showUserDetails } from "./UserModalUI.js";
-import { toggleUserState, removeUserByID, showUsers } from "./UserUI.js";
+import showUsers, { toggleUserState, removeUserByID } from "./UserUI.js";
 
 /* Container de utilizadores */
 const usersContainer = document.querySelector(

@@ -1,7 +1,9 @@
 import User from "../../models/user/User.js";
-import { fakeUsersData } from "../../helpers/fakeUsersData.js";
-import { addNewUser, showUsers } from "../user/UserUI.js";
+import { fakeUsersData, fakeTasksData } from "../../helpers/FakeData.js";
+import showUsers, { addNewUser } from "../user/UserUI.js";
 import { openFormModal } from "../user/UserModalUI.js";
+import { getLastId } from "../../helpers/getLastID.js";
+import Task from "../../models/task/Task.js";
 /* Instância da classe GestUserTask  */
 let gestUserTask;
 /* Função principal para carregar utilizadores iniciais */
@@ -11,27 +13,22 @@ export default function loadInitialUsers(gestUsersTasks) {
     // Usar um ciclo para converter os dados em instâncias da classe
     for (const userData of fakeUsersData) {
         const user = new User(userData.id, userData.name, userData.email);
+        for (const taskData of fakeTasksData) {
+            const task = new Task(taskData.id, taskData.title, taskData.category, user);
+            if (taskData.completed) {
+                task.markCompleted();
+            }
+            user.createTask(task);
+        }
         gestUserTask.addUser(user);
     }
     // Mostrar os utilizadores
     showUsers(gestUserTask.users);
 }
-/* Obter o último ID de utilizador */
-function getLastUserId() {
-    //
-    let lastUserID = 0;
-    //obter o ultimo utilizador no array
-    const lastUser = gestUserTask.users[gestUserTask.users.length - 1];
-    // Check if the last user exists and get the last user's ID
-    if (lastUser) {
-        lastUserID = lastUser.id;
-    }
-    return lastUserID;
-}
 /* Abrir modal de formulário */
 const addUserBtn = document.querySelector("#addUserBtn");
 if (addUserBtn) {
-    addUserBtn.addEventListener("click", openFormModal);
+    addUserBtn.addEventListener("click", () => openFormModal());
 }
 /* Adicionar utilizador via formulário */
 const formUser = document.querySelector("#formUser");
@@ -67,7 +64,7 @@ if (formUser) {
             return;
         }
         //obter um novo id a partir do ultimo
-        let newId = getLastUserId() + 1;
+        let newId = getLastId(gestUserTask.users) + 1;
         //cria um novo user com os dados inseridos no formulario
         const user = addNewUser(newId);
         //adiciona a lista de utilizadores
