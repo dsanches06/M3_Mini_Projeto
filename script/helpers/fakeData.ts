@@ -13,9 +13,9 @@ export const fakeUsersData = [
 ];
 
 export const fakeTasksData = [
-  { id: 1, title: "Tarefa 1", completed: false, category: "Trabalho" },
-  { id: 2, title: "Tarefa 2", completed: true, category: "Pessoal" },
-  { id: 3, title: "Tarefa 3", completed: false, category: "Estudo" },
-  { id: 4, title: "Tarefa 4", completed: true, category: "Trabalho" },
-  { id: 5, title: "Tarefa 5", completed: false, category: "Pessoal" },
+  { id: 1, title: "ATarefa 1", completed: false, category: "Trabalho" },
+  { id: 2, title: "BTarefa 2", completed: true, category: "Pessoal" },
+  { id: 3, title: "CTarefa 3", completed: false, category: "Estudo" },
+  { id: 4, title: "ETarefa 4", completed: true, category: "Trabalho" },
+  { id: 5, title: "ZTarefa 5", completed: false, category: "Pessoal" },
 ];

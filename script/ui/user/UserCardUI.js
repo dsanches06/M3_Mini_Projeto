@@ -21,7 +21,7 @@ export function createUserCard(user, userList) {
 /* */
 function userCardTitle(user) {
     //somente o nome sem apelido
-    const names = user.name.split(" ");
+    const names = user.name.split(" ") || user.name.split("");
     const cardTitle = document.createElement("h2");
     cardTitle.textContent = `${names[0]}`;
     cardTitle.style.fontSize = "36px";
@@ -49,7 +49,7 @@ function userCardContent(user) {
     divCardAddTaskBtn.id = "addTaskIconBtn";
     divCardAddTaskBtn.href = `../../../user.task.html?userId=${user.id}`;
     divCardAddTaskBtn.role = "button";
-    divCardAddTaskBtn.title = "Adicionar Tarefa";
+    divCardAddTaskBtn.title = "Visualizar Tarefas";
     divCardAddTaskBtn.addEventListener("click", (event) => {
         event.stopPropagation();
     });

@@ -2,14 +2,14 @@ import { countAllUserTasks, countPendingUserTasks, countCompletedUserTasks, } fr
 /* Container de tarefas */
 const taskContainer = document.querySelector("#taskContainer");
 /* Mostrar tarefas */
-export default function showTask(usersList) {
-    renderTask(usersList);
-    countAllUserTasks(usersList);
-    countPendingUserTasks(usersList);
-    countCompletedUserTasks(usersList);
+export default function showTask(taskList) {
+    renderTask(taskList);
+    countAllUserTasks(taskList);
+    countPendingUserTasks(taskList);
+    countCompletedUserTasks(taskList);
 }
 /* Função de renderização */
-function renderTask(userList) {
+function renderTask(taskList) {
     if (taskContainer) {
         taskContainer.innerHTML = "";
         const table = createTable();
@@ -18,14 +18,15 @@ function renderTask(userList) {
         const thead = createTableHeader();
         table.appendChild(thead);
         const tbody = createTableBody();
-        userList.forEach((user) => {
-            user.tasks.forEach((task) => {
-                const row = createTableRow(task);
-                tbody.appendChild(row);
-            });
+        taskList.forEach((task) => {
+            const row = createTableRow(task);
+            tbody.appendChild(row);
         });
         table.appendChild(tbody);
         taskContainer.appendChild(table);
+    }
+    else {
+        console.warn("Elemento #taskContainer não foi renderizado no DOM.");
     }
 }
 /* Função para criar uma tabela */

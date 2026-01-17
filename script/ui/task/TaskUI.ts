@@ -1,4 +1,3 @@
-import User from "../../models/user/User.js";
 import Task from "../../models/task/Task.js";
 import {
   countAllUserTasks,
@@ -8,19 +7,19 @@ import {
 
 /* Container de tarefas */
 const taskContainer = document.querySelector(
-  "#taskContainer"
+  "#taskContainer",
 ) as HTMLDivElement;
 
 /* Mostrar tarefas */
-export default function showTask(usersList: User[]): void {
-  renderTask(usersList);
-  countAllUserTasks(usersList);
-  countPendingUserTasks(usersList);
-  countCompletedUserTasks(usersList);
+export default function showTask(taskList: Task[]): void {
+  renderTask(taskList);
+  countAllUserTasks(taskList);
+  countPendingUserTasks(taskList);
+  countCompletedUserTasks(taskList);
 }
 
 /* Função de renderização */
-function renderTask(userList: User[]): void {
+function renderTask(taskList: Task[]): void {
   if (taskContainer) {
     taskContainer.innerHTML = "";
     const table = createTable();
@@ -33,14 +32,15 @@ function renderTask(userList: User[]): void {
 
     const tbody = createTableBody();
 
-    userList.forEach((user) => {
-      user.tasks.forEach((task) => {
-        const row = createTableRow(task as Task);
-        tbody.appendChild(row);
-      });
+    taskList.forEach((task) => {
+      const row = createTableRow(task as Task);
+      tbody.appendChild(row);
     });
+
     table.appendChild(tbody);
     taskContainer.appendChild(table);
+  } else {
+    console.warn("Elemento #taskContainer não foi renderizado no DOM.");
   }
 }
 

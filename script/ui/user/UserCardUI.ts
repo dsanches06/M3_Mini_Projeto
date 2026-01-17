@@ -4,7 +4,7 @@ import showUsers, { toggleUserState, removeUserByID } from "./UserUI.js";
 
 /* Container de utilizadores */
 const usersContainer = document.querySelector(
-  "#usersContainer"
+  "#usersContainer",
 ) as HTMLDivElement;
 
 /* Criar cartão de utilizador */
@@ -31,7 +31,7 @@ export function createUserCard(user: User, userList: User[]): void {
 /* */
 function userCardTitle(user: User): HTMLDivElement {
   //somente o nome sem apelido
-  const names = user.name.split(" ");
+  const names = user.name.split(" ") || user.name.split("");
   const cardTitle = document.createElement("h2") as HTMLHeadingElement;
   cardTitle.textContent = `${names[0]}`;
   cardTitle.style.fontSize = "36px";
@@ -68,7 +68,7 @@ function userCardContent(user: User): HTMLDivElement {
   divCardAddTaskBtn.id = "addTaskIconBtn";
   divCardAddTaskBtn.href = `../../../user.task.html?userId=${user.id}`;
   divCardAddTaskBtn.role = "button";
-  divCardAddTaskBtn.title = "Adicionar Tarefa";
+  divCardAddTaskBtn.title = "Visualizar Tarefas";
   divCardAddTaskBtn.addEventListener("click", (event) => {
     event.stopPropagation();
   });

@@ -30,6 +30,9 @@ const addUserBtn = document.querySelector("#addUserBtn");
 if (addUserBtn) {
     addUserBtn.addEventListener("click", () => openFormModal());
 }
+else {
+    console.warn("Elemento #addUserBtn não foi renderizado no DOM.");
+}
 /* Adicionar utilizador via formulário */
 const formUser = document.querySelector("#formUser");
 if (formUser) {
@@ -76,6 +79,9 @@ if (formUser) {
         showUsers(gestUserTask.users);
     });
 }
+else {
+    console.warn("Elemento #formUser não foi renderizado no DOM.");
+}
 /* Filtrar todos os utilizadores */
 const allUserBtn = document.querySelector("#allUserBtn");
 if (allUserBtn) {
@@ -83,6 +89,9 @@ if (allUserBtn) {
     allUserBtn.addEventListener("click", () => {
         showUsers(gestUserTask.users);
     });
+}
+else {
+    console.warn("Elemento #allUserBtn não foi renderizado no DOM.");
 }
 /* Filtrar utilizadores ativos */
 const ativeUsersBtn = document.querySelector("#ativeUsersBtn");
@@ -93,6 +102,9 @@ if (ativeUsersBtn) {
         showUsers(activeUsers);
     });
 }
+else {
+    console.warn("Elemento #ativeUsersBtn não foi renderizado no DOM.");
+}
 /* Filtrar utilizadores inativos */
 const unableUsersBtn = document.querySelector("#unableUsersBtn");
 if (unableUsersBtn) {
@@ -101,6 +113,9 @@ if (unableUsersBtn) {
         const activeUsers = gestUserTask.users.filter((user) => !user.isAtive);
         showUsers(activeUsers);
     });
+}
+else {
+    console.warn("Elemento #unableUsersBtn não foi renderizado no DOM.");
 }
 /* Procurar utilizador por nome */
 const searchUser = document.querySelector("#searchUser");
@@ -113,6 +128,9 @@ if (searchUser) {
         //mostrar os utilizadores filtrados
         showUsers(filteredUsers);
     });
+}
+else {
+    console.warn("Elemento #searchUser não foi renderizado no DOM.");
 }
 /* Ordenar utilizadores por nome */
 const sortUsersBtn = document.querySelector("#sortUsersBtn");
@@ -135,4 +153,7 @@ if (sortUsersBtn) {
         // Atualize o texto ou ícone do botão
         sortUsersBtn.textContent = isAscending ? "Ordenar A-Z" : "Ordenar Z-A";
     });
+}
+else {
+    console.warn("Elemento #sortUsersBtn não foi renderizado no DOM.");
 }

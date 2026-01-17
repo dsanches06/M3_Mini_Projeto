@@ -22,13 +22,11 @@ export default function loadInitialUsers(gestUsersTasks: GestUserTask): void {
         taskData.id,
         taskData.title,
         taskData.category as Category,
-        user
+        user,
       );
-
       if (taskData.completed) {
         task.markCompleted();
       }
-
       user.createTask(task);
     }
     gestUserTask.addUser(user);
@@ -41,6 +39,8 @@ export default function loadInitialUsers(gestUsersTasks: GestUserTask): void {
 const addUserBtn = document.querySelector("#addUserBtn") as HTMLButtonElement;
 if (addUserBtn) {
   addUserBtn.addEventListener("click", () => openFormModal());
+} else {
+  console.warn("Elemento #addUserBtn não foi renderizado no DOM.");
 }
 
 /* Adicionar utilizador via formulário */
@@ -53,14 +53,14 @@ if (formUser) {
     // Obter valores dos inputs
     const nameInput = document.querySelector("#nameInput") as HTMLInputElement;
     const emailInput = document.querySelector(
-      "#emailInput"
+      "#emailInput",
     ) as HTMLInputElement;
     const name = nameInput.value.trim();
     const email = emailInput.value.trim();
 
     // Obter elemento do banner de erro
     const errorBanner = document.querySelector(
-      "#errorBanner"
+      "#errorBanner",
     ) as HTMLDivElement;
 
     // Limpar mensagens de erro anteriores
@@ -98,6 +98,8 @@ if (formUser) {
     //mostra todos os utilizadores
     showUsers(gestUserTask.users as User[]);
   });
+} else {
+  console.warn("Elemento #formUser não foi renderizado no DOM.");
 }
 
 /* Filtrar todos os utilizadores */
@@ -107,11 +109,13 @@ if (allUserBtn) {
   allUserBtn.addEventListener("click", () => {
     showUsers(gestUserTask.users as User[]);
   });
+} else {
+  console.warn("Elemento #allUserBtn não foi renderizado no DOM.");
 }
 
 /* Filtrar utilizadores ativos */
 const ativeUsersBtn = document.querySelector(
-  "#ativeUsersBtn"
+  "#ativeUsersBtn",
 ) as HTMLImageElement;
 if (ativeUsersBtn) {
   ativeUsersBtn.title = "Mostrar utilizadores ativos";
@@ -119,11 +123,13 @@ if (ativeUsersBtn) {
     const activeUsers = gestUserTask.users.filter((user) => user.isAtive);
     showUsers(activeUsers as User[]);
   });
+} else {
+  console.warn("Elemento #ativeUsersBtn não foi renderizado no DOM.");
 }
 
 /* Filtrar utilizadores inativos */
 const unableUsersBtn = document.querySelector(
-  "#unableUsersBtn"
+  "#unableUsersBtn",
 ) as HTMLImageElement;
 if (unableUsersBtn) {
   unableUsersBtn.title = "Mostrar utilizadores inativos";
@@ -131,6 +137,8 @@ if (unableUsersBtn) {
     const activeUsers = gestUserTask.users.filter((user) => !user.isAtive);
     showUsers(activeUsers as User[]);
   });
+} else {
+  console.warn("Elemento #unableUsersBtn não foi renderizado no DOM.");
 }
 
 /* Procurar utilizador por nome */
@@ -141,16 +149,18 @@ if (searchUser) {
     const name = searchUser.value.toLowerCase();
     //filtrar a lista de utilizadores pelo nome
     const filteredUsers = gestUserTask.users.filter((user) =>
-      user.name.toLowerCase().includes(name)
+      user.name.toLowerCase().includes(name),
     );
     //mostrar os utilizadores filtrados
     showUsers(filteredUsers as User[]);
   });
+} else {
+  console.warn("Elemento #searchUser não foi renderizado no DOM.");
 }
 
 /* Ordenar utilizadores por nome */
 const sortUsersBtn = document.querySelector(
-  "#sortUsersBtn"
+  "#sortUsersBtn",
 ) as HTMLButtonElement;
 if (sortUsersBtn) {
   //Crie uma variável de controle de estado
@@ -170,4 +180,6 @@ if (sortUsersBtn) {
     // Atualize o texto ou ícone do botão
     sortUsersBtn.textContent = isAscending ? "Ordenar A-Z" : "Ordenar Z-A";
   });
+} else {
+  console.warn("Elemento #sortUsersBtn não foi renderizado no DOM.");
 }
