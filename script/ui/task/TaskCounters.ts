@@ -4,6 +4,9 @@ import Task from "../../models/task/Task.js";
 export function countAllUserTasks(taskList: Task[]): void {
   const totalTasks = document.querySelector("#totalTasks") as HTMLDivElement;
   if (totalTasks) {
+    //Limpa o contentor HTML.
+    totalTasks.innerHTML = "";
+    //cria a variavel total
     let total = 0;
     //por cada utilizador
     for (const task of taskList) {
@@ -22,6 +25,9 @@ export function countPendingUserTasks(taskList: Task[]): void {
     "#pendingTasks",
   ) as HTMLDivElement;
   if (pendingTasks) {
+    //Limpa o contentor HTML.
+    pendingTasks.innerHTML = "";
+    //cria a variavel total
     let total = 0;
     //por cada utilizador
     for (const task of taskList) {
@@ -43,6 +49,9 @@ export function countCompletedUserTasks(taskList: Task[]): void {
     "#completedTasks",
   ) as HTMLDivElement;
   if (completedTasks) {
+    //Limpa o contentor HTML.
+    completedTasks.innerHTML = "";
+    //cria a variavel total
     let total = 0;
     //por cada utilizador
     for (const task of taskList) {

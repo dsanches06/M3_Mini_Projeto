@@ -18,7 +18,7 @@ export default function showTask(taskList: Task[]): void {
   countCompletedUserTasks(taskList);
 }
 
-/* Função de renderização */
+/* Função de renderização de todas as tarefas */
 function renderTask(taskList: Task[]): void {
   if (taskContainer) {
     taskContainer.innerHTML = "";

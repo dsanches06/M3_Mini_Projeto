@@ -2,16 +2,26 @@ import GestUserTask from "../../models/gestUserTask/gestUserTask.js";
 import User from "../../models/user/User.js";
 import showTask from "../task/TaskUI.js";
 import Task from "../../models/task/Task.js";
+import { getTasksByFilter } from "../../helpers/getTaskByFilter.js";
 
-/* instancia global do array de utilizadores */
-let users: User[] = [];
+/* array global de utilizadores */
+let users: User[];
+//array global para armazenar tarefas filtradas
+let tasksFiltered: Task[];
 
 /* Função principal para mostrar as tarefas de todos os utilizadores */
 export default function loadAllTask(gestUsersTask: GestUserTask): void {
-  //atribuir a instância recebida ao escopo global
+  //atribuir o valor ao array global de utilizadores
   users = gestUsersTask.users as User[];
+  //inicializa o array para evitar repetiçoes de dados
+  tasksFiltered = [];
+  //por cada utilizador
+  for (const user of users) {
+    //filtra a procura de tarefas e adiciona ao array e retorna o mesmo array
+    tasksFiltered = getTasksByFilter(user, tasksFiltered, "all");
+  }
   //mostrar todas as tarefas de todos os utilizadores
-  showTask(getTasksByFilter("all"));
+  showTask(tasksFiltered);
 }
 
 /* Filtrar todas as tarefas */
@@ -19,8 +29,15 @@ const allTaskBtn = document.querySelector("#allTaskBtn") as HTMLImageElement;
 if (allTaskBtn) {
   allTaskBtn.title = "Mostrar todas as tarefas";
   allTaskBtn.addEventListener("click", () => {
+    //inicializa o array para evitar repetiçoes de dados
+    tasksFiltered = [];
+    //por cada utilizador
+    for (const user of users) {
+      //filtra a procura de tarefas e adiciona ao array e retorna o mesmo array
+      tasksFiltered = getTasksByFilter(user, tasksFiltered, "all");
+    }
     //mostrar todas as tarefas de todos os utilizadores
-    showTask(getTasksByFilter("all"));
+    showTask(tasksFiltered);
   });
 } else {
   console.warn("Elemento #allTaskBtn não foi renderizado no DOM.");
@@ -33,8 +50,16 @@ const taskPendingBtn = document.querySelector(
 if (taskPendingBtn) {
   taskPendingBtn.title = "Mostrar tarefas pendentes";
   taskPendingBtn.addEventListener("click", () => {
-    //mostrar as tarefas pendentes
-    showTask(getTasksByFilter("pending"));
+    //inicializa o array para evitar repetiçoes de dados
+    tasksFiltered = [];
+    //por cada utilizador
+    for (const user of users) {
+      //filtra a procura de tarefas pendentes e adiciona ao
+      //array e retorna o mesmo array
+      tasksFiltered = getTasksByFilter(user, tasksFiltered, "pending");
+    }
+    //mostrar todas as tarefas de todos os utilizadores
+    showTask(tasksFiltered);
   });
 } else {
   console.warn("Elemento #taskPendingBtn não foi renderizado no DOM.");
@@ -47,8 +72,16 @@ const taskCompletedBtn = document.querySelector(
 if (taskCompletedBtn) {
   taskCompletedBtn.title = "Mostrar tarefas concluídas";
   taskCompletedBtn.addEventListener("click", () => {
-    //mostrar as tarefas concluídas
-    showTask(getTasksByFilter("completed"));
+    //inicializa o array para evitar repetiçoes de dados
+    tasksFiltered = [];
+    //por cada utilizador
+    for (const user of users) {
+      //filtra a procura de tarefas concluidas
+      // e adiciona ao array e retorna o mesmo array
+      tasksFiltered = getTasksByFilter(user, tasksFiltered, "completed");
+    }
+    //mostra apenas tarefas concluidas
+    showTask(tasksFiltered);
   });
 } else {
   console.warn("Elemento #taskCompletedBtn não foi renderizado no DOM.");
@@ -60,8 +93,16 @@ if (searchTask) {
   searchTask.addEventListener("input", () => {
     //obter o titulo inserido no input em minusculas
     const title = searchTask.value.toLowerCase();
+    //inicializa o array para evitar repetiçoes de dados
+    tasksFiltered = [];
+    //por cada utilizador
+    for (const user of users) {
+      //filtra a procura de tarefas pelo titulo
+      //e adiciona ao array e retorna o mesmo array
+      tasksFiltered = getTasksByFilter(user, tasksFiltered, "search", title);
+    }
     //mostrar as tarefas filtrados pelo titulo
-    showTask(getTasksByFilter("search", title));
+    showTask(tasksFiltered);
   });
 } else {
   console.warn("Elemento #searchTask não foi renderizado no DOM.");
@@ -75,60 +116,31 @@ if (sortTasksBtn) {
   //Crie uma variável de controle
   let isAscending = true;
   sortTasksBtn.addEventListener("click", () => {
-    //array filter
-    let filterTasks: Task[] = [];
+    //array de ordenação
+    let sortTask: Task[] = [];
+    //inicializa o array para evitar repetiçoes de dados
+    tasksFiltered = [];
+    //por cada utilizador
+    for (const user of users) {
+      //filtra a procura de tarefas pelo titulo
+      //e adiciona ao array e retorna o mesmo array
+      tasksFiltered = getTasksByFilter(user, tasksFiltered, "all");
+    }
     //Ordenar com base no estado atual
     if (isAscending) {
-      filterTasks = getTasksByFilter("all").sort((a, b) =>
-        a.title.localeCompare(b.title),
-      );
+      //faz ordenção no estado ascendente
+      sortTask = tasksFiltered.sort((a, b) => a.title.localeCompare(b.title));
     } else {
-      filterTasks = getTasksByFilter("all").sort((a, b) =>
-        b.title.localeCompare(a.title),
-      );
+      //faz ordenção no estado descendente
+      sortTask = tasksFiltered.sort((a, b) => b.title.localeCompare(a.title));
     }
     //Inverta o estado para o próximo clique
     isAscending = !isAscending;
-    // Mostrar oas tarefas ordenados
-    showTask(filterTasks);
+    // Mostrar as tarefas ordenados conforme estado
+    showTask(sortTask);
     // Atualize o texto ou ícone do botão
     sortTasksBtn.textContent = isAscending ? "Ordenar A-Z" : "Ordenar Z-A";
   });
 } else {
   console.warn("Elemento #sortTaskBtn não foi renderizado no DOM.");
-}
-
-/* Função para obter tarefas por filtro */
-function getTasksByFilter(filter: string, title?: string): Task[] {
-  //array task
-  let tasks: Task[] = [];
-  //por cada utilizador
-  for (const user of users) {
-    //filtra as tarefas do utilizador
-    for (const task of user.tasks as Task[]) {
-      switch (filter) {
-        case "all":
-          tasks.push(task);
-          break;
-        case "pending":
-          if (!task.completed) {
-            tasks.push(task);
-          }
-          break;
-        case "completed":
-          if (task.completed) {
-            tasks.push(task);
-          }
-          break;
-        case "search":
-          if (task.title.toLowerCase().includes(title || "")) {
-            tasks.push(task);
-          }
-          break;
-        default:
-          console.warn(`Filtro desconhecido: ${filter}`);
-      }
-    }
-  }
-  return tasks;
 }

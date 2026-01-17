@@ -22,6 +22,9 @@ function renderUsers(userList) {
         // Aplicar cores aos cartões
         applyCardColors();
     }
+    else {
+        console.warn("Elemento #usersContainer não foi renderizado no DOM.");
+    }
 }
 /* Função para adicionar novo utilizador */
 export function addNewUser(id) {

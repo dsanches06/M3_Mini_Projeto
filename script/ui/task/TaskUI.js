@@ -8,7 +8,7 @@ export default function showTask(taskList) {
     countPendingUserTasks(taskList);
     countCompletedUserTasks(taskList);
 }
-/* Função de renderização */
+/* Função de renderização de todas as tarefas */
 function renderTask(taskList) {
     if (taskContainer) {
         taskContainer.innerHTML = "";

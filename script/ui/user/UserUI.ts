@@ -9,7 +9,7 @@ import { createUserCard } from "./UserCardUI.js";
 
 /* Container de utilizadores */
 const usersContainer = document.querySelector(
-  "#usersContainer"
+  "#usersContainer",
 ) as HTMLDivElement;
 
 /* Mostrar utilizadores */
@@ -28,10 +28,12 @@ function renderUsers(userList: User[]): void {
     usersContainer.innerHTML = "";
     userList.forEach((user) =>
       //Para cada utilizador, cria um cartão HTML.
-      createUserCard(user, userList)
+      createUserCard(user, userList),
     );
     // Aplicar cores aos cartões
     applyCardColors();
+  } else {
+    console.warn("Elemento #usersContainer não foi renderizado no DOM.");
   }
 }
 
@@ -76,14 +78,14 @@ function applyCardColors(): void {
   for (const card of cards) {
     // Gerar uma cor aleatória suave
     const randomColor = `rgb(${Math.floor(Math.random() * 128)}, ${Math.floor(
-      Math.random() * 128
+      Math.random() * 128,
     )}, ${Math.floor(Math.random() * 128)})`;
     const title = card.querySelector(".title") as HTMLElement;
     if (title) {
       title.style.background = randomColor;
     }
     const contentA = card.querySelector(
-      ".btnGroup button#toogleBtn"
+      ".btnGroup button#toogleBtn",
     ) as HTMLElement;
     if (contentA) {
       contentA.style.background = randomColor;

@@ -1,22 +1,33 @@
-import showTask from "../task/TaskUI.js";
 import { getTasksByFilter } from "../../helpers/getTaskByFilter.js";
-/* array global de utilizadores */
-let users;
-//array global para armazenar tarefas filtradas
+import showUserTask from "../usertask/UserTaskUI.js";
+/* instancia global de utilizador  */
+let user;
+//array para armazena tarefas filtradas
 let tasksFiltered;
-/* Função principal para mostrar as tarefas de todos os utilizadores */
-export default function loadAllTask(gestUsersTask) {
-    //atribuir o valor ao array global de utilizadores
-    users = gestUsersTask.users;
-    //inicializa o array para evitar repetiçoes de dados
-    tasksFiltered = [];
-    //por cada utilizador
-    for (const user of users) {
-        //filtra a procura de tarefas e adiciona ao array e retorna o mesmo array
-        tasksFiltered = getTasksByFilter(user, tasksFiltered, "all");
+/* Função principal para mostrar as tarefas apenas de um utilizador */
+export default function loadUserTask(gestUsersTask) {
+    //obter o id capturado de url
+    let id = getUserIdFromURL();
+    //se o id for diferente de - 1
+    if (id !== -1) {
+        //atribuir o valor do utilizador encontrado pelo id
+        user = gestUsersTask.users.find((user) => user.id === id);
+        //mostra as ttarefas do utilizador atual
+        showUserTask(user, user.tasks);
     }
-    //mostrar todas as tarefas de todos os utilizadores
-    showTask(tasksFiltered);
+}
+/* Função principal para carregar tarefas do utilizador */
+function getUserIdFromURL() {
+    let userId = -1;
+    const urlParams = new URLSearchParams(window.location.search);
+    const userParam = urlParams.get("userId");
+    if (userParam) {
+        //converter de volta para inteiro
+        userId = parseInt(userParam, 10);
+        //retorna o id convertido
+        return userId;
+    } //retorna o id com valor -1
+    return userId;
 }
 /* Filtrar todas as tarefas */
 const allTaskBtn = document.querySelector("#allTaskBtn");
@@ -25,13 +36,10 @@ if (allTaskBtn) {
     allTaskBtn.addEventListener("click", () => {
         //inicializa o array para evitar repetiçoes de dados
         tasksFiltered = [];
-        //por cada utilizador
-        for (const user of users) {
-            //filtra a procura de tarefas e adiciona ao array e retorna o mesmo array
-            tasksFiltered = getTasksByFilter(user, tasksFiltered, "all");
-        }
-        //mostrar todas as tarefas de todos os utilizadores
-        showTask(tasksFiltered);
+        //filtra a procura de tarefas e adiciona ao array e retorna o mesmo array
+        tasksFiltered = getTasksByFilter(user, tasksFiltered, "all");
+        //mostra as ttarefas do utilizador atual
+        showUserTask(user, tasksFiltered);
     });
 }
 else {
@@ -44,14 +52,10 @@ if (taskPendingBtn) {
     taskPendingBtn.addEventListener("click", () => {
         //inicializa o array para evitar repetiçoes de dados
         tasksFiltered = [];
-        //por cada utilizador
-        for (const user of users) {
-            //filtra a procura de tarefas pendentes e adiciona ao
-            //array e retorna o mesmo array
-            tasksFiltered = getTasksByFilter(user, tasksFiltered, "pending");
-        }
-        //mostrar todas as tarefas de todos os utilizadores
-        showTask(tasksFiltered);
+        //filtra a procura de tarefas e adiciona ao array e retorna o mesmo array
+        tasksFiltered = getTasksByFilter(user, tasksFiltered, "pending");
+        //mostra as ttarefas do utilizador atual
+        showUserTask(user, tasksFiltered);
     });
 }
 else {
@@ -64,14 +68,10 @@ if (taskCompletedBtn) {
     taskCompletedBtn.addEventListener("click", () => {
         //inicializa o array para evitar repetiçoes de dados
         tasksFiltered = [];
-        //por cada utilizador
-        for (const user of users) {
-            //filtra a procura de tarefas concluidas
-            // e adiciona ao array e retorna o mesmo array
-            tasksFiltered = getTasksByFilter(user, tasksFiltered, "completed");
-        }
-        //mostra apenas tarefas concluidas
-        showTask(tasksFiltered);
+        //filtra a procura de tarefas e adiciona ao array e retorna o mesmo array
+        tasksFiltered = getTasksByFilter(user, tasksFiltered, "completed");
+        //mostra as ttarefas do utilizador atual
+        showUserTask(user, tasksFiltered);
     });
 }
 else {
@@ -85,14 +85,10 @@ if (searchTask) {
         const title = searchTask.value.toLowerCase();
         //inicializa o array para evitar repetiçoes de dados
         tasksFiltered = [];
-        //por cada utilizador
-        for (const user of users) {
-            //filtra a procura de tarefas pelo titulo
-            //e adiciona ao array e retorna o mesmo array
-            tasksFiltered = getTasksByFilter(user, tasksFiltered, "search", title);
-        }
-        //mostrar as tarefas filtrados pelo titulo
-        showTask(tasksFiltered);
+        //filtra a procura de tarefas e adiciona ao array e retorna o mesmo array
+        tasksFiltered = getTasksByFilter(user, tasksFiltered, "search", title);
+        //mostra as ttarefas do utilizador atual
+        showUserTask(user, tasksFiltered);
     });
 }
 else {
@@ -108,12 +104,9 @@ if (sortTasksBtn) {
         let sortTask = [];
         //inicializa o array para evitar repetiçoes de dados
         tasksFiltered = [];
-        //por cada utilizador
-        for (const user of users) {
-            //filtra a procura de tarefas pelo titulo
-            //e adiciona ao array e retorna o mesmo array
-            tasksFiltered = getTasksByFilter(user, tasksFiltered, "all");
-        }
+        //filtra a procura de tarefas pelo titulo
+        //e adiciona ao array e retorna o mesmo array
+        tasksFiltered = getTasksByFilter(user, tasksFiltered, "all");
         //Ordenar com base no estado atual
         if (isAscending) {
             //faz ordenção no estado ascendente
@@ -126,7 +119,7 @@ if (sortTasksBtn) {
         //Inverta o estado para o próximo clique
         isAscending = !isAscending;
         // Mostrar as tarefas ordenados conforme estado
-        showTask(sortTask);
+        showUserTask(user, sortTask);
         // Atualize o texto ou ícone do botão
         sortTasksBtn.textContent = isAscending ? "Ordenar A-Z" : "Ordenar Z-A";
     });

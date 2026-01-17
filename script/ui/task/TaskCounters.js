@@ -2,6 +2,9 @@
 export function countAllUserTasks(taskList) {
     const totalTasks = document.querySelector("#totalTasks");
     if (totalTasks) {
+        //Limpa o contentor HTML.
+        totalTasks.innerHTML = "";
+        //cria a variavel total
         let total = 0;
         //por cada utilizador
         for (const task of taskList) {
@@ -18,6 +21,9 @@ export function countAllUserTasks(taskList) {
 export function countPendingUserTasks(taskList) {
     const pendingTasks = document.querySelector("#pendingTasks");
     if (pendingTasks) {
+        //Limpa o contentor HTML.
+        pendingTasks.innerHTML = "";
+        //cria a variavel total
         let total = 0;
         //por cada utilizador
         for (const task of taskList) {
@@ -37,6 +43,9 @@ export function countPendingUserTasks(taskList) {
 export function countCompletedUserTasks(taskList) {
     const completedTasks = document.querySelector("#completedTasks");
     if (completedTasks) {
+        //Limpa o contentor HTML.
+        completedTasks.innerHTML = "";
+        //cria a variavel total
         let total = 0;
         //por cada utilizador
         for (const task of taskList) {
