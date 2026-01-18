@@ -1,9 +1,15 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Task Manager</title>
+    <meta
+      name="description"
+      content="Gestor de Tarefas - Visualize e gerencie todas as tarefas do sistema, 
+      com estatísticas de pendentes e concluídas."
+    />
+    <title>Mini Projeto Module 3</title>
+    <link rel="canonical" href="./tasks.html" />
     <link rel="stylesheet" href="css/style.css" />
     <script src="main.js" type="module" defer></script>
   </head>
@@ -18,14 +24,14 @@
       </nav>
     </header>
     <main>
-      <h1>GESTOR DE TAREFAS</h1>
-      <div class="container">
-        <div id="taskCounters">
-          <div class="statistic">
+      <h2>GESTOR DE TAREFAS</h2>
+      <section class="container">
+        <section id="taskCounters">
+          <section class="statistic">
             <figure>
               <img
                 id="allTaskBtn"
-                src="images/task.png"
+                src="images/tarefa.png"
                 alt="task icon"
                 role="button"
                 tabindex="0"
@@ -33,13 +39,13 @@
               <figcaption>tarefas</figcaption>
             </figure>
 
-            <div id="totalTasks" class="counter-item"></div>
-          </div>
-          <div class="statistic">
+            <section id="totalTasks" class="counter-item"></section>
+          </section>
+          <section class="statistic">
             <figure>
               <img
                 id="taskPendingBtn"
-                src="images/to-do-list.png"
+                src="images/pendente.png"
                 alt="task pending icon"
                 role="button"
                 tabindex="0"
@@ -47,14 +53,14 @@
               <figcaption>pendentes</figcaption>
             </figure>
 
-            <div id="pendingTasks" class="counter-item"></div>
-          </div>
+            <section id="pendingTasks" class="counter-item"></section>
+          </section>
 
-          <div class="statistic">
+          <section class="statistic">
             <figure>
               <img
                 id="taskCompletedBtn"
-                src="images/completed-task.png"
+                src="images/tarefa-concluida.png"
                 alt="task completed icon"
                 role="button"
                 tabindex="0"
@@ -62,17 +68,20 @@
               <figcaption>concluídos</figcaption>
             </figure>
 
-            <div id="completedTasks" class="counter-item"></div>
-          </div>
-        </div>
-        <div class="search-add-container">
+            <section id="completedTasks" class="counter-item"></section>
+          </section>
+        </section>
+        <section class="search-add-container">
           <input type="text" id="searchTask" placeholder="Procurar Tarefa..." />
-          <div class="form-group">
+          <section class="form-group">
             <button id="sortTasksBtn">Ordenar A-Z</button>
-          </div>
-        </div>
-        <div id="taskContainer"></div>
-      </div>
+            <button id="removeAllCompletedTaskBtn">
+              Remover Tarefas Concluídas
+            </button>
+          </section>
+        </section>
+        <section id="taskContainer"></section>
+      </section>
     </main>
 
     <footer>

@@ -2,7 +2,7 @@ import Task from "../../models/task/Task.js";
 
 /* Contador de tarefas de todos os utilizadores */
 export function countAllUserTasks(taskList: Task[]): void {
-  const totalTasks = document.querySelector("#totalTasks") as HTMLDivElement;
+  const totalTasks = document.querySelector("#totalTasks") as HTMLElement;
   if (totalTasks) {
     //Limpa o contentor HTML.
     totalTasks.innerHTML = "";
@@ -23,7 +23,7 @@ export function countAllUserTasks(taskList: Task[]): void {
 export function countPendingUserTasks(taskList: Task[]): void {
   const pendingTasks = document.querySelector(
     "#pendingTasks",
-  ) as HTMLDivElement;
+  ) as HTMLElement;
   if (pendingTasks) {
     //Limpa o contentor HTML.
     pendingTasks.innerHTML = "";
@@ -47,7 +47,7 @@ export function countPendingUserTasks(taskList: Task[]): void {
 export function countCompletedUserTasks(taskList: Task[]): void {
   const completedTasks = document.querySelector(
     "#completedTasks",
-  ) as HTMLDivElement;
+  ) as HTMLElement;
   if (completedTasks) {
     //Limpa o contentor HTML.
     completedTasks.innerHTML = "";

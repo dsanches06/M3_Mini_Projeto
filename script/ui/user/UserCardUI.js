@@ -4,7 +4,7 @@ import showUsers, { toggleUserState, removeUserByID } from "./UserUI.js";
 const usersContainer = document.querySelector("#usersContainer");
 /* Criar cartão de utilizador */
 export function createUserCard(user, userList) {
-    const divUserCard = document.createElement("div");
+    const divUserCard = document.createElement("section");
     divUserCard.className = "card";
     divUserCard.addEventListener("click", () => showUserDetails(user));
     const divUserCardTitle = userCardTitle(user);
@@ -25,7 +25,7 @@ function userCardTitle(user) {
     const cardTitle = document.createElement("h2");
     cardTitle.textContent = `${names[0]}`;
     cardTitle.style.fontSize = "36px";
-    const divCardTitle = document.createElement("div");
+    const divCardTitle = document.createElement("section");
     divCardTitle.appendChild(cardTitle);
     return divCardTitle;
 }
@@ -49,15 +49,15 @@ function userCardContent(user) {
     divCardAddTaskBtn.id = "addTaskIconBtn";
     divCardAddTaskBtn.href = `../../../user.task.html?userId=${user.id}`;
     divCardAddTaskBtn.role = "button";
-    divCardAddTaskBtn.title = "Visualizar Tarefas";
+    divCardAddTaskBtn.title = "Visualizar tarefas do utilizador";
     divCardAddTaskBtn.addEventListener("click", (event) => {
         event.stopPropagation();
     });
-    const divCardUserTasks = document.createElement("div");
+    const divCardUserTasks = document.createElement("section");
     divCardUserTasks.className = "userTasks";
     divCardUserTasks.appendChild(divCardTask);
     divCardUserTasks.appendChild(divCardAddTaskBtn);
-    const divUserCardContent = document.createElement("div");
+    const divUserCardContent = document.createElement("section");
     divUserCardContent.appendChild(divCardId);
     divUserCardContent.appendChild(divCardName);
     divUserCardContent.appendChild(divCardEmail);
@@ -86,7 +86,7 @@ function userCardBtn(user, userList) {
         }
     });
     //para agrupar os botoes
-    const divUserCardBtn = document.createElement("div");
+    const divUserCardBtn = document.createElement("section");
     divUserCardBtn.appendChild(bntToggle);
     divUserCardBtn.appendChild(btnRemover);
     return divUserCardBtn;

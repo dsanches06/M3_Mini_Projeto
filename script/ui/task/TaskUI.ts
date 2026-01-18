@@ -5,21 +5,20 @@ import {
   countCompletedUserTasks,
 } from "./TaskCounters.js";
 
-/* Container de tarefas */
-const taskContainer = document.querySelector(
-  "#taskContainer",
-) as HTMLDivElement;
+
 
 /* Mostrar tarefas */
 export default function showTask(taskList: Task[]): void {
-  renderTask(taskList);
   countAllUserTasks(taskList);
   countPendingUserTasks(taskList);
   countCompletedUserTasks(taskList);
+  renderTask(taskList);
 }
 
 /* Função de renderização de todas as tarefas */
 function renderTask(taskList: Task[]): void {
+  /* Container de tarefas */
+const taskContainer = document.querySelector("#taskContainer") as HTMLElement;
   if (taskContainer) {
     taskContainer.innerHTML = "";
     const table = createTable();

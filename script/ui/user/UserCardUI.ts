@@ -5,11 +5,11 @@ import showUsers, { toggleUserState, removeUserByID } from "./UserUI.js";
 /* Container de utilizadores */
 const usersContainer = document.querySelector(
   "#usersContainer",
-) as HTMLDivElement;
+) as HTMLElement;
 
 /* Criar cartão de utilizador */
 export function createUserCard(user: User, userList: User[]): void {
-  const divUserCard = document.createElement("div") as HTMLDivElement;
+  const divUserCard = document.createElement("section") as HTMLElement;
   divUserCard.className = "card";
   divUserCard.addEventListener("click", () => showUserDetails(user));
 
@@ -29,21 +29,21 @@ export function createUserCard(user: User, userList: User[]): void {
 }
 
 /* */
-function userCardTitle(user: User): HTMLDivElement {
+function userCardTitle(user: User): HTMLElement {
   //somente o nome sem apelido
   const names = user.name.split(" ") || user.name.split("");
   const cardTitle = document.createElement("h2") as HTMLHeadingElement;
   cardTitle.textContent = `${names[0]}`;
   cardTitle.style.fontSize = "36px";
 
-  const divCardTitle = document.createElement("div") as HTMLDivElement;
+  const divCardTitle = document.createElement("section") as HTMLElement;
   divCardTitle.appendChild(cardTitle);
 
   return divCardTitle;
 }
 
 /* Função para criar o conteúdo do cartão de usuário */
-function userCardContent(user: User): HTMLDivElement {
+function userCardContent(user: User): HTMLElement {
   const divCardName = document.createElement("p") as HTMLParagraphElement;
   divCardName.textContent = `${user.name}`;
 
@@ -68,17 +68,17 @@ function userCardContent(user: User): HTMLDivElement {
   divCardAddTaskBtn.id = "addTaskIconBtn";
   divCardAddTaskBtn.href = `../../../user.task.html?userId=${user.id}`;
   divCardAddTaskBtn.role = "button";
-  divCardAddTaskBtn.title = "Visualizar Tarefas";
+  divCardAddTaskBtn.title = "Visualizar tarefas do utilizador";
   divCardAddTaskBtn.addEventListener("click", (event) => {
     event.stopPropagation();
   });
 
-  const divCardUserTasks = document.createElement("div") as HTMLDivElement;
+  const divCardUserTasks = document.createElement("section") as HTMLElement;
   divCardUserTasks.className = "userTasks";
   divCardUserTasks.appendChild(divCardTask);
   divCardUserTasks.appendChild(divCardAddTaskBtn);
 
-  const divUserCardContent = document.createElement("div") as HTMLDivElement;
+  const divUserCardContent = document.createElement("section") as HTMLElement;
   divUserCardContent.appendChild(divCardId);
   divUserCardContent.appendChild(divCardName);
   divUserCardContent.appendChild(divCardEmail);
@@ -89,7 +89,7 @@ function userCardContent(user: User): HTMLDivElement {
 }
 
 /* Função para criar os botões do cartão de usuário */
-function userCardBtn(user: User, userList: User[]): HTMLDivElement {
+function userCardBtn(user: User, userList: User[]): HTMLElement {
   const bntToggle = document.createElement("button") as HTMLButtonElement;
   bntToggle.textContent = user.isAtive ? "Desativar" : "Ativar ";
   bntToggle.id = "toogleBtn";
@@ -111,7 +111,7 @@ function userCardBtn(user: User, userList: User[]): HTMLDivElement {
   });
 
   //para agrupar os botoes
-  const divUserCardBtn = document.createElement("div") as HTMLDivElement;
+  const divUserCardBtn = document.createElement("section") as HTMLElement;
   divUserCardBtn.appendChild(bntToggle);
   divUserCardBtn.appendChild(btnRemover);
 

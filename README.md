@@ -38,7 +38,7 @@ cd m3_mini_projeto
 1 - No terminal execute
 
 ```bash
-tsc --target ES6 --module ES6 main.user.ts main.task.ts main.user.task.ts
+tsc --target ES6 --module ES6 main.ts
 ```
 
 2 - Depois, abra `index.html` com Live Server.

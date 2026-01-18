@@ -1,15 +1,15 @@
 import { countAllUserTasks, countPendingUserTasks, countCompletedUserTasks, } from "./TaskCounters.js";
-/* Container de tarefas */
-const taskContainer = document.querySelector("#taskContainer");
 /* Mostrar tarefas */
 export default function showTask(taskList) {
-    renderTask(taskList);
     countAllUserTasks(taskList);
     countPendingUserTasks(taskList);
     countCompletedUserTasks(taskList);
+    renderTask(taskList);
 }
 /* Função de renderização de todas as tarefas */
 function renderTask(taskList) {
+    /* Container de tarefas */
+    const taskContainer = document.querySelector("#taskContainer");
     if (taskContainer) {
         taskContainer.innerHTML = "";
         const table = createTable();

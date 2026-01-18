@@ -2,10 +2,10 @@ import { Category } from "./../../models/task/Category";
 import User from "../../models/user/User.js";
 import { fakeUsersData, fakeTasksData } from "../../helpers/FakeData.js";
 import showUsers, { addNewUser } from "../user/UserUI.js";
-import { openFormModal } from "../user/UserModalUI.js";
 import GestUserTask from "../../models/gestUserTask/gestUserTask.js";
 import { getLastId } from "../../helpers/getLastID.js";
 import Task from "../../models/task/Task.js";
+import { openFormModal } from "../modal/ModalUI.js";
 
 /* Instância da classe GestUserTask  */
 let gestUserTask: GestUserTask;
@@ -38,7 +38,7 @@ export default function loadInitialUsers(gestUsersTasks: GestUserTask): void {
 /* Abrir modal de formulário */
 const addUserBtn = document.querySelector("#addUserBtn") as HTMLButtonElement;
 if (addUserBtn) {
-  addUserBtn.addEventListener("click", () => openFormModal());
+  addUserBtn.addEventListener("click", () => openFormModal("modalUserForm"));
 } else {
   console.warn("Elemento #addUserBtn não foi renderizado no DOM.");
 }
@@ -57,11 +57,8 @@ if (formUser) {
     ) as HTMLInputElement;
     const name = nameInput.value.trim();
     const email = emailInput.value.trim();
-
     // Obter elemento do banner de erro
-    const errorBanner = document.querySelector(
-      "#errorBanner",
-    ) as HTMLDivElement;
+    const errorBanner = document.querySelector("#errorBanner") as HTMLElement;
 
     // Limpar mensagens de erro anteriores
     errorBanner.textContent = "";
@@ -87,13 +84,13 @@ if (formUser) {
     }
 
     //obter um novo id a partir do ultimo
-    let newId = getLastId(gestUserTask.users) + 1;
+    let newId: number = getLastId(gestUserTask.users) + 1;
     //cria um novo user com os dados inseridos no formulario
-    const user = addNewUser(newId);
+    const user: User = addNewUser(newId);
     //adiciona a lista de utilizadores
     gestUserTask.addUser(user);
     //fecha o modal
-    const modalForm = document.querySelector("#modalForm") as HTMLDivElement;
+    const modalForm = document.querySelector("#modalUserForm") as HTMLElement;
     modalForm.style.display = "none";
     //mostra todos os utilizadores
     showUsers(gestUserTask.users as User[]);

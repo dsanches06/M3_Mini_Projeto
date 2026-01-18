@@ -2,18 +2,42 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Poppins", sans-serif;
+  font-family: "Arial Black", Gadget, sans-serif;
+  list-style: none;
 }
 
 body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #f4f4f4;
+  background-color: #fff;
   color: #333;
   min-width: 100vw;
   min-height: 100vh;
   background-attachment: fixed;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  background-color: rgba(0, 0, 0, 0.7);
+  color: transparent;
+  text-shadow: 0px 2px 3px rgba(255, 255, 255, 0.3);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+h1:hover,
+h2:hover,
+h3:hover,
+h4:hover,
+img:hover,
+#addTaskIconBtn:hover {
+  transform: scale(1.05);
+  transition:
+    color 0.3s,
+    transform 0.3s;
 }
 
 div > input[type="text"],
@@ -56,39 +80,36 @@ header {
 }
 
 header h1 {
-  color: #333;
-  font-size: 24px;
   cursor: pointer;
-}
-
-header h1:hover {
-  transform: scale(1.05);
-  transition:
-    color 0.3s,
-    transform 0.3s;
 }
 
 /* Navbar base */
 nav ul {
-  list-style: none;
   display: flex;
   gap: 20px;
 }
 
 nav ul li a {
   text-decoration: none;
-  color: #333;
   font-weight: bold;
   transition: color 0.3s;
   padding: 5px 10px;
-  border-radius: 5px;
   font-size: 20px;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: transparent;
+  text-shadow: 0px 2px 3px rgba(255, 255, 255, 0.3);
+  -webkit-background-clip: text;
+  background-clip: text;
 }
 
-nav ul li a:hover,
-nav ul li a.active {
-  color: #fff;
-  background-color: #333;
+nav ul li:hover,
+nav ul li a:active {
+  transform: scale(1.05);
+  transition:
+    color 0.3s,
+    transform 0.3s;
+  background-color: #fff;
+  border-radius: 5px;
 }
 
 main {
@@ -102,9 +123,7 @@ main {
 }
 
 main h2 {
-  font-size: 28px;
   margin-bottom: 20px;
-  color: #333;
 }
 
 .container {
@@ -172,20 +191,25 @@ main h2 {
   margin-bottom: 10px;
 }
 
-#usersContainer {
+#usersContainer,
+#taskContainer,
+#usersTaskContainer {
   position: relative;
   width: 1150px;
   padding: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+#usersContainer {
   flex-wrap: wrap;
 }
 
 #usersContainer .card {
   position: relative;
   width: 300px;
-  height: 380px;
+  height: 400px;
   background: #fff;
   margin: 20px;
   border-radius: 20px;
@@ -211,15 +235,13 @@ main h2 {
   position: relative;
   width: 100%;
   height: 100%;
-  background: #000;
   clip-path: circle(150px at center 0);
   text-align: center;
 }
 
 #usersContainer .card .title h2 {
-  color: #fff;
-  font-size: 4.5em;
   padding: 30px 0;
+  color: #fff;
 }
 
 #usersContainer .card .content {
@@ -248,8 +270,8 @@ main h2 {
   gap: 5px;
 }
 
-#usersContainer .card .content .userTasks a#addTaskIconBtn {
-  background-image: url("/images/bue-eye.png");
+#usersContainer .card .content .userTasks a#addTaskIconBtn,
+.task-buttons a {
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
@@ -257,6 +279,10 @@ main h2 {
   width: 50px;
   height: 50px;
   cursor: pointer;
+}
+
+#usersContainer .card .content .userTasks a#addTaskIconBtn {
+  background-image: url("/images/bue-eye.png");
 }
 
 #usersContainer .card .btnGroup {
@@ -279,15 +305,18 @@ main h2 {
   font-weight: bold;
 }
 
-#usersContainer .card .btnGroup button#removeBtn {
+#usersContainer .card .btnGroup button#removeBtn,
+.form-group button#removeAllCompletedTaskBtn {
   background-color: #dc3545;
 }
 
-#usersContainer .card .btnGroup button#removeBtn:hover {
+#usersContainer .card .btnGroup button#removeBtn:hover,
+.form-group button#removeAllCompletedTaskBtn:hover {
   background-color: #c82333;
 }
 
-#taskContainer {
+#taskContainer,
+#usersTaskContainer {
   position: relative;
   width: 1150px;
   padding: 20px;
@@ -296,7 +325,8 @@ main h2 {
   align-items: center;
 }
 
-#taskContainer table {
+#taskContainer table,
+#usersTaskContainer #usersTaskList {
   width: 100%;
   border-collapse: collapse;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
@@ -325,16 +355,58 @@ main h2 {
   color: #333;
   font-weight: 600;
 }
-#taskContainer table tbody tr:nth-child(even) {
+
+#taskContainer table tbody tr:nth-child(even),
+#usersTaskContainer .user-task-item:nth-child(even) {
   background-color: rgba(51, 51, 51, 0.3);
 }
 
-#taskContainer table tbody tr:nth-child(odd) {
+#taskContainer table tbody tr:nth-child(odd),
+#usersTaskContainer .user-task-item:nth-child(odd) {
   background-color: rgba(51, 51, 51, 0.1);
 }
 
-#taskContainer table tbody tr:hover {
+#taskContainer table tbody tr:hover,
+#usersTaskContainer .user-task-item:hover {
   background-color: #f8f9fa;
+}
+
+#usersTaskContainer #usersTaskList {
+  line-height: 200%;
+}
+
+#usersTaskContainer .user-task-item {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  gap: 30px;
+  border-bottom: 1px solid #eee;
+}
+
+#usersTaskContainer .task-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.task-buttons a {
+  width: 30px;
+  height: 30px;
+}
+
+.task-buttons a#editTaskBtn {
+  background-image: url("/images/editar.png");
+}
+.task-buttons a#completeTaskBtn {
+  background-image: url("/images/tarefa-concluida.png");
+}
+
+.task-buttons a#deleteTaskBtn {
+  background-image: url("/images/remover.png");
 }
 
 .modal {
@@ -364,8 +436,8 @@ main h2 {
   padding: 40px;
   border: none;
   width: 90%;
-  max-width: 450px;
-  max-height: 450px;
+  max-width: 550px;
+  max-height: 500px;
   border-radius: 12px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
   animation: slideIn 0.3s ease-out;
@@ -384,15 +456,13 @@ main h2 {
 }
 
 .modal-content h2 {
-  color: #333;
   margin-bottom: 25px;
-  font-size: 24px;
   font-weight: 600;
   text-align: center;
 }
 
 .close {
-  color: #999;
+  color: #666;
   position: absolute;
   top: 15px;
   right: 20px;
@@ -458,7 +528,7 @@ select:focus {
 input[type="text"]::placeholder,
 input[type="email"]::placeholder,
 select::placeholder {
-  color: #999;
+  color: #666;
 }
 
 button[type="submit"] {
@@ -519,12 +589,21 @@ select:active {
 
 .user-details h3 {
   margin-bottom: 10px;
-  color: #333;
+  text-align: center;
 }
 
 .user-details p {
   margin: 5px 0;
   font-size: 14px;
+}
+
+.user-tasks-details {
+  margin-top: 20px;
+  line-height: 180%;
+}
+
+.user-tasks-details .detailTasksTitle {
+  text-align: center;
 }
 
 footer {

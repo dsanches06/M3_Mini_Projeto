@@ -1,9 +1,15 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mini Project Module 3</title>
+    <meta
+      name="description"
+      content="Gestor de Utilizadores e Tarefas - Mini Projeto Módulo 3. 
+    Gerencie utilizadores, visualize estatísticas e adicione novos utilizadores."
+    />
+    <title>Mini Projeto Module 3</title>
+    <link rel="canonical" href="./index.html" />
     <link rel="stylesheet" href="css/style.css" />
     <script src="main.js" type="module" defer></script>
   </head>
@@ -19,9 +25,9 @@
     </header>
     <main>
       <h2>GESTOR DE UTILIZADORES</h2>
-      <div class="container">       
-        <div id="userCounters">
-          <div class="statistic">
+      <section class="container">
+        <section id="userCounters">
+          <section class="statistic">
             <figure>
               <img
                 id="allUserBtn"
@@ -33,9 +39,9 @@
               <figcaption>utilizadores</figcaption>
             </figure>
 
-            <div id="totalUsers" class="counter-item"></div>
-          </div>
-          <div class="statistic">
+            <section id="totalUsers" class="counter-item"></section>
+          </section>
+          <section class="statistic">
             <figure>
               <img
                 id="ativeUsersBtn"
@@ -47,10 +53,10 @@
               <figcaption>ativos</figcaption>
             </figure>
 
-            <div id="ativeUsers" class="counter-item"></div>
-          </div>
+            <section id="ativeUsers" class="counter-item"></section>
+          </section>
 
-          <div class="statistic">
+          <section class="statistic">
             <figure>
               <img
                 id="unableUsersBtn"
@@ -62,10 +68,10 @@
               <figcaption>Inativos</figcaption>
             </figure>
 
-            <div id="unableUsers" class="counter-item"></div>
-          </div>
+            <section id="unableUsers" class="counter-item"></section>
+          </section>
 
-          <div class="statistic">
+          <section class="statistic">
             <figure>
               <img
                 src="images/ative.png"
@@ -75,55 +81,55 @@
               <figcaption>ativos (%)</figcaption>
             </figure>
 
-            <div id="ativeUserPercentage" class="counter-item"></div>
-          </div>
-        </div>
+            <section id="ativeUserPercentage" class="counter-item"></section>
+          </section>
+        </section>
 
-        <div class="search-add-container">
+        <section class="search-add-container">
           <input
             type="text"
             id="searchUser"
             placeholder="Procurar Utilizador..."
           />
-          <div class="form-group">
+          <section class="form-group">
             <button id="addUserBtn">Adicionar Utilizador</button>
             <button id="sortUsersBtn">Ordenar A-Z</button>
-          </div>
-        </div>
+          </section>
+        </section>
 
-        <div id="usersContainer"></div>
+        <section id="usersContainer"></section>
 
-        <div id="modalForm" class="modal">
-          <div class="modal-content">
+        <section id="modalUserForm" class="modal">
+          <section class="modal-content">
             <span class="close">&times;</span>
-            <h2>Add New User</h2>
-            <div id="errorBanner" class="error-banner"></div>
+            <h2>Adicionar Novo Utilizador</h2>
+            <section id="errorBanner" class="error-banner"></section>
             <form id="formUser">
-              <div class="form-group">
-                <label for="nameInput">Name</label>
+              <section class="form-group">
+                <label for="nameInput">Nome</label>
                 <input
                   type="text"
                   id="nameInput"
-                  placeholder="insert the name"
+                  placeholder="inserir o nome"
                 />
-                <div id="nameError" class="error-message"></div>
-              </div>
+                <section id="nameError" class="error-message"></section>
+              </section>
 
-              <div class="form-group">
+              <section class="form-group">
                 <label for="emailInput">Email</label>
                 <input
                   type="email"
                   id="emailInput"
-                  placeholder="insert the email"
+                  placeholder="inserir o email"
                 />
-                <div id="emailError" class="error-message"></div>
-              </div>
+                <section id="emailError" class="error-message"></section>
+              </section>
 
-              <button type="submit">Add User</button>
+              <button type="submit">Adicionar Utilizador</button>
             </form>
-          </div>
-        </div>
-      </div>
+          </section>
+        </section>
+      </section>
     </main>
     <footer>
       <p>&copy; 2026 Developed by Danilson Sanches @upskill217</p>

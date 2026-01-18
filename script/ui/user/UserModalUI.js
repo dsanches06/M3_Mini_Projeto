@@ -1,41 +1,28 @@
-/* Função para abrir o modal de formulario */
-export function openFormModal() {
-    const modalForm = document.querySelector("#modalForm");
-    if (modalForm) {
-        modalForm.style.display = "flex";
-        closeModal(modalForm);
-    }
-    else {
-        console.error("Modal form not found");
-    }
+import { closeModal } from "../../ui/modal/ModalUI.js";
+/* Modal para visualização de detalhes do utilizador */
+export function showUserDetails(user) {
+    const modal = document.createElement("section");
+    modal.id = "modalUserDetails";
+    modal.className = "modal";
+    modal.style.display = "flex";
+    const modalContent = document.createElement("section");
+    modalContent.className = "modal-content";
+    const closeBtn = document.createElement("span");
+    closeBtn.className = "close";
+    closeBtn.textContent = "×";
+    const userDetails = modalUserDetail(user);
+    userDetails.id = "userDetails";
+    userDetails.className = "user-details";
+    modalContent.appendChild(closeBtn);
+    modalContent.appendChild(userDetails);
+    modal.appendChild(modalContent);
+    document.body.appendChild(modal);
+    closeModal(modal, modal.id);
 }
-/* Função para fechar o modal */
-export function closeModal(modal) {
-    const closeBtn = modal.querySelector(".close");
-    if (closeBtn) {
-        closeBtn.addEventListener("click", () => {
-            if (modal.id === "modalForm") {
-                modal.style.display = "none";
-            }
-            else {
-                modal.remove();
-            }
-        });
-    }
-    modal.addEventListener("click", (e) => {
-        if (e.target === modal) {
-            if (modal.id === "modalForm") {
-                modal.style.display = "none";
-            }
-            else {
-                modal.remove();
-            }
-        }
-    });
-}
-/* Função que cria o modal para mostrar detalhes do tulizador */
-export function modalUserDetail(user) {
+/* Função que cria o modal para mostrar detalhes do utilizador */
+function modalUserDetail(user) {
     const title = document.createElement("h3");
+    title.id = "detailTitle";
     title.textContent = "Detalhes do Utilizador";
     const detailName = document.createElement("p");
     detailName.id = "detailName";
@@ -49,30 +36,42 @@ export function modalUserDetail(user) {
     const detailStatus = document.createElement("p");
     detailStatus.id = "detailStatus";
     detailStatus.innerHTML = `<strong>Status:</strong> ${user.isAtive ? "Ativo" : "Inativo"}`;
-    const userDetails = document.createElement("div");
+    const userTasksDetails = modalUserTask(user);
+    userTasksDetails.className = "user-tasks-details";
+    const userDetails = document.createElement("section");
     userDetails.appendChild(title);
     userDetails.appendChild(detailId);
     userDetails.appendChild(detailName);
     userDetails.appendChild(detailEmail);
     userDetails.appendChild(detailStatus);
+    userDetails.appendChild(userTasksDetails);
     return userDetails;
 }
-/* Modal para visualização de detalhes do utilizador */
-export function showUserDetails(user) {
-    const modal = document.createElement("div");
-    modal.className = "modal";
-    modal.style.display = "flex";
-    const modalContent = document.createElement("div");
-    modalContent.className = "modal-content";
-    const closeBtn = document.createElement("span");
-    closeBtn.className = "close";
-    closeBtn.textContent = "×";
-    const userDetails = modalUserDetail(user);
-    userDetails.id = "userDetails";
-    userDetails.className = "user-details";
-    modalContent.appendChild(closeBtn);
-    modalContent.appendChild(userDetails);
-    modal.appendChild(modalContent);
-    document.body.appendChild(modal);
-    closeModal(modal);
+/* Função que cria o modal para mostrar detalhes do tulizador */
+function modalUserTask(user) {
+    //cria um subtítulo
+    const sectionTitle = document.createElement("h4");
+    sectionTitle.className = "detailTasksTitle";
+    sectionTitle.textContent = "--- Tarefas do Utilizador ---";
+    //criar uma lista não ordenada
+    const ul = document.createElement("ul");
+    //por cada tarefa do utilizador
+    user.tasks.forEach((task) => {
+        const li = document.createElement("li");
+        li.textContent = `${task.title} - ${task.completed ? "Concluído" : "Pendente"} - ${task.category} - ${task.completeDate
+            ? task.completeDate.toLocaleDateString("pt-PT", {
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+                hour: "2-digit",
+                minute: "2-digit",
+            })
+            : "N/A"}`;
+        ul.appendChild(li);
+    });
+    //criar uma nova section
+    const section = document.createElement("section");
+    section.appendChild(sectionTitle);
+    section.appendChild(ul);
+    return section;
 }

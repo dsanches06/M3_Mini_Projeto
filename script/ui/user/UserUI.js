@@ -5,11 +5,11 @@ import { createUserCard } from "./UserCardUI.js";
 const usersContainer = document.querySelector("#usersContainer");
 /* Mostrar utilizadores */
 export default function showUsers(usersList) {
-    renderUsers(usersList);
     countUsers(usersList);
     countAtiveUsers(usersList);
     countUnableUsers(usersList);
     countAtivePercentage(usersList);
+    renderUsers(usersList);
 }
 /* Função de renderização */
 function renderUsers(userList) {

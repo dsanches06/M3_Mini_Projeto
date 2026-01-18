@@ -1,4 +1,7 @@
+import { getLastId } from "../../helpers/getLastID.js";
 import { getTasksByFilter } from "../../helpers/getTaskByFilter.js";
+import { openFormModal } from "../modal/ModalUI.js";
+import { addNewUserTask, getUserIdFromURL, removeCompletedTasks, } from "../usertask/UserTaskCRUD.js";
 import showUserTask from "../usertask/UserTaskUI.js";
 /* instancia global de utilizador  */
 let user;
@@ -15,19 +18,6 @@ export default function loadUserTask(gestUsersTask) {
         //mostra as ttarefas do utilizador atual
         showUserTask(user, user.tasks);
     }
-}
-/* Função principal para carregar tarefas do utilizador */
-function getUserIdFromURL() {
-    let userId = -1;
-    const urlParams = new URLSearchParams(window.location.search);
-    const userParam = urlParams.get("userId");
-    if (userParam) {
-        //converter de volta para inteiro
-        userId = parseInt(userParam, 10);
-        //retorna o id convertido
-        return userId;
-    } //retorna o id com valor -1
-    return userId;
 }
 /* Filtrar todas as tarefas */
 const allTaskBtn = document.querySelector("#allTaskBtn");
@@ -94,12 +84,12 @@ if (searchTask) {
 else {
     console.warn("Elemento #searchTask não foi renderizado no DOM.");
 }
-/* Ordenar tarefa pelo titulo */
-const sortTasksBtn = document.querySelector("#sortTasksBtn");
-if (sortTasksBtn) {
+/*« Ordenar tarefas por título */
+const sortTasksUserBtn = document.querySelector("#sortTasksUserBtn");
+if (sortTasksUserBtn) {
     //Crie uma variável de controle
     let isAscending = true;
-    sortTasksBtn.addEventListener("click", () => {
+    sortTasksUserBtn.addEventListener("click", () => {
         //array de ordenação
         let sortTask = [];
         //inicializa o array para evitar repetiçoes de dados
@@ -121,9 +111,82 @@ if (sortTasksBtn) {
         // Mostrar as tarefas ordenados conforme estado
         showUserTask(user, sortTask);
         // Atualize o texto ou ícone do botão
-        sortTasksBtn.textContent = isAscending ? "Ordenar A-Z" : "Ordenar Z-A";
+        sortTasksUserBtn.textContent = isAscending ? "Ordenar A-Z" : "Ordenar Z-A";
     });
 }
 else {
     console.warn("Elemento #sortTaskBtn não foi renderizado no DOM.");
+}
+/* Abrir modal de formulário */
+const addTaskUserBtn = document.querySelector("#addTaskUserBtn");
+if (addTaskUserBtn) {
+    addTaskUserBtn.addEventListener("click", () => {
+        openFormModal("modalUserTaskForm");
+    });
+}
+else {
+    console.warn("Elemento #addTaskUserBtn não foi renderizado no DOM.");
+}
+/* Remover todas as tarefas concluídas */
+const removeCompletedTaskBtn = document.querySelector("#removeCompletedTaskBtn");
+if (removeCompletedTaskBtn) {
+    removeCompletedTaskBtn.addEventListener("click", () => removeCompletedTasks(user));
+}
+else {
+    console.warn("Elemento #removeCompletedTaskBtn não foi renderizado no DOM.");
+}
+/* Adicionar tarefa do utilizador via formulário */
+const formTaskUser = document.querySelector("#formTaskUser");
+if (formTaskUser) {
+    formTaskUser.addEventListener("submit", (event) => {
+        // Prevent form submissio
+        event.preventDefault();
+        // Obter valores dos inputs
+        const titleInput = document.querySelector("#titleInput");
+        const taskCategory = document.querySelector("#taskCategory");
+        const title = titleInput.value.trim();
+        const category = taskCategory.value.trim();
+        // Obter elemento do banner de erro
+        const errorBanner = document.querySelector("#errorBanner");
+        // Limpar mensagens de erro anteriores
+        errorBanner.textContent = "";
+        errorBanner.style.display = "none";
+        // Validações
+        let isValid = true;
+        let errorMessages = [];
+        if (title === "") {
+            errorMessages.push("O titulo não pode estar vazio.");
+            isValid = false;
+        }
+        if (category === "") {
+            errorMessages.push("A categoria não pode estar vazio.");
+            isValid = false;
+        }
+        if (category !== "Trabalho" &&
+            category !== "Pessoal" &&
+            category !== "Estudo") {
+            errorMessages.push("A categoria deve ser 'Trabalho', 'Pessoal' ou 'Estudo'.");
+            isValid = false;
+        }
+        // Se não válido, mostrar banner de erro
+        if (!isValid) {
+            errorBanner.textContent = errorMessages.join(" ");
+            errorBanner.style.display = "block";
+            return;
+        }
+        //obter um novo id a partir do ultimo
+        let newId = getLastId(user.tasks) + 1;
+        //cria um novo user com os dados inseridos no formulario
+        const task = addNewUserTask(newId, user);
+        //adiciona a lista de utilizadores
+        user.createTask(task);
+        //fecha o modal
+        const modalForm = document.querySelector("#modalUserTaskForm");
+        modalForm.style.display = "none";
+        //mostra todos os utilizadores
+        showUserTask(user, user.tasks);
+    });
+}
+else {
+    console.warn("Elemento #formTaskUser não foi renderizado no DOM.");
 }

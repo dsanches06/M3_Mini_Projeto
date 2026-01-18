@@ -8,17 +8,15 @@ import {
 import { createUserCard } from "./UserCardUI.js";
 
 /* Container de utilizadores */
-const usersContainer = document.querySelector(
-  "#usersContainer",
-) as HTMLDivElement;
+const usersContainer = document.querySelector("#usersContainer") as HTMLElement;
 
 /* Mostrar utilizadores */
 export default function showUsers(usersList: User[]): void {
-  renderUsers(usersList);
   countUsers(usersList);
   countAtiveUsers(usersList);
   countUnableUsers(usersList);
   countAtivePercentage(usersList);
+  renderUsers(usersList);
 }
 
 /* Função de renderização */

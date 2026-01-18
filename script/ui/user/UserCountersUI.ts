@@ -4,7 +4,7 @@ import User from "../../models/user/User.js";
 export function countAtiveUsers(usersList: User[]): void {
   const ativeUsersElement = document.querySelector(
     "#ativeUsers"
-  ) as HTMLDivElement;
+  ) as HTMLElement;
   if (ativeUsersElement) {
     const ativeUsers = usersList.filter((user) => user.isAtive);
     ativeUsersElement.textContent = `${ativeUsers.length}`;
@@ -15,7 +15,7 @@ export function countAtiveUsers(usersList: User[]): void {
 export function countUnableUsers(usersList: User[]): void {
   const unableUsersElement = document.querySelector(
     "#unableUsers"
-  ) as HTMLDivElement;
+  ) as HTMLElement;
   if (unableUsersElement) {
     const unableUsers = usersList.filter((user) => !user.isAtive);
     unableUsersElement.textContent = `${unableUsers.length}`;
@@ -24,7 +24,7 @@ export function countUnableUsers(usersList: User[]): void {
 
 /* Contador de utilizadores */
 export function countUsers(usersList: User[]): void {
-  const totalUsers = document.querySelector("#totalUsers") as HTMLDivElement;
+  const totalUsers = document.querySelector("#totalUsers") as HTMLElement;
   if (totalUsers) {
     totalUsers.textContent = `${usersList.length}`;
   }
@@ -34,7 +34,7 @@ export function countUsers(usersList: User[]): void {
 export function countAtivePercentage(usersList: User[]): void {
   const ativePercentageElement = document.querySelector(
     "#ativeUserPercentage"
-  ) as HTMLDivElement;
+  ) as HTMLElement;
   if (ativePercentageElement) {
     const activeUsers = usersList.filter((user) => user.isAtive).length;
     const totalUsers = usersList.length;

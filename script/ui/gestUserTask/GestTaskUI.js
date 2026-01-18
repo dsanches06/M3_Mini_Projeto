@@ -134,3 +134,32 @@ if (sortTasksBtn) {
 else {
     console.warn("Elemento #sortTaskBtn não foi renderizado no DOM.");
 }
+/* Remover todas as tarefas concluídas de todos os utilizadores */
+const removeAllCompletedTaskBtn = document.querySelector("#removeAllCompletedTaskBtn");
+if (removeAllCompletedTaskBtn) {
+    removeAllCompletedTaskBtn.title = "Remover todas as tarefas concluídas";
+    removeAllCompletedTaskBtn.addEventListener("click", () => {
+        //inicializa o array para evitar repetiçoes de dados
+        tasksFiltered = [];
+        //por cada utilizador
+        for (const user of users) {
+            //por cada tarefa do utilizador
+            for (const task of user.tasks) {
+                //se estiver completa
+                if (task.completed) {
+                    //remover da lista de tarefas do utilizador
+                    user.removeTask(task.id);
+                }
+                else {
+                    //se não estiver concluida
+                    tasksFiltered.push(task);
+                }
+            }
+        }
+        //mostrar todas as tarefas que não foram concluídas
+        showTask(tasksFiltered);
+    });
+}
+else {
+    console.warn("Elemento #removeAllCompletedTaskBtn não foi renderizado no DOM.");
+}
