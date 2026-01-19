@@ -52,7 +52,7 @@ function modalUserTask(user) {
     //cria um subtítulo
     const sectionTitle = document.createElement("h4");
     sectionTitle.className = "detailTasksTitle";
-    sectionTitle.textContent = "--- Tarefas do Utilizador ---";
+    sectionTitle.textContent = "Tarefas do Utilizador";
     //criar uma lista não ordenada
     const ul = document.createElement("ul");
     //por cada tarefa do utilizador

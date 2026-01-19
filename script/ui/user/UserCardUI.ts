@@ -66,7 +66,7 @@ function userCardContent(user: User): HTMLElement {
 
   const divCardAddTaskBtn = document.createElement("a") as HTMLAnchorElement;
   divCardAddTaskBtn.id = "addTaskIconBtn";
-  divCardAddTaskBtn.href = `../../../user.task.html?userId=${user.id}`;
+  divCardAddTaskBtn.href = `./user.task.html?userId=${user.id}`;
   divCardAddTaskBtn.role = "button";
   divCardAddTaskBtn.title = "Visualizar tarefas do utilizador";
   divCardAddTaskBtn.addEventListener("click", (event) => {

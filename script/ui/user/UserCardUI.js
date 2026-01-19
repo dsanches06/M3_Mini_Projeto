@@ -47,7 +47,7 @@ function userCardContent(user) {
     divCardTask.textContent = `${user.tasks.length} tarefas atribuídas`;
     const divCardAddTaskBtn = document.createElement("a");
     divCardAddTaskBtn.id = "addTaskIconBtn";
-    divCardAddTaskBtn.href = `../../../user.task.html?userId=${user.id}`;
+    divCardAddTaskBtn.href = `./user.task.html?userId=${user.id}`;
     divCardAddTaskBtn.role = "button";
     divCardAddTaskBtn.title = "Visualizar tarefas do utilizador";
     divCardAddTaskBtn.addEventListener("click", (event) => {
