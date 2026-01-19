@@ -1,5 +1,5 @@
 import Task from "../../models/task/Task.js";
-import { limparContainer } from "../container/ContainerSection.js";
+import { clearContainer } from "../dom/ContainerSection.js";
 import {
   countAllUserTasks,
   countPendingUserTasks,
@@ -7,9 +7,10 @@ import {
 } from "./TaskCounters.js";
 import loadTaskPage from "./TaskPage.js";
 
+
 /* Mostrar tarefas */
-export default function showTask(taskList: Task[],): void {
-  limparContainer();
+export default function showTask(taskList: Task[]): void {
+  clearContainer();
   //loadTaskPage();
   countAllUserTasks(taskList);
   countPendingUserTasks(taskList);

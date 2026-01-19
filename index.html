@@ -19,118 +19,13 @@
       <h1><a href="./index.html">GESTUSERTASK</a></h1>
       <nav>
         <ul class="menu">
-          <li><a id="menuHome">Users</a></li>
-          <li><a id="menuTasks">Tasks</a></li>
+          <li><a id="menuUsers" class="js-link">Users</a></li>
+          <li><a id="menuTasks" class="js-link">Tasks</a></li>
         </ul>
       </nav>
     </header>
     <main role="main">
-      <section id="containerSection" class="container">
-        <h2>GESTOR DE UTILIZADORES</h2>
-        <section id="userCounters">
-          <section class="statistics">
-            <figure>
-              <img
-                id="allUserBtn"
-                src="images/users.png"
-                alt="users icon"
-                role="button"
-                tabindex="0"
-              />
-              <figcaption>utilizadores</figcaption>
-            </figure>
-
-            <section id="totalUsers" class="counter-item"></section>
-          </section>
-          <section class="statistics">
-            <figure>
-              <img
-                id="ativeUsersBtn"
-                src="images/ative.png"
-                alt="ative users icon"
-                role="button"
-                tabindex="0"
-              />
-              <figcaption>ativos</figcaption>
-            </figure>
-
-            <section id="ativeUsers" class="counter-item"></section>
-          </section>
-
-          <section class="statistics">
-            <figure>
-              <img
-                id="unableUsersBtn"
-                src="images/unable.png"
-                alt="unable users icon"
-                role="button"
-                tabindex="0"
-              />
-              <figcaption>Inativos</figcaption>
-            </figure>
-
-            <section id="unableUsers" class="counter-item"></section>
-          </section>
-
-          <section class="statistics">
-            <figure>
-              <img
-                src="images/ative.png"
-                alt="ative users icon"
-                title="Mostrar utilizadores ativos em (%)"
-              />
-              <figcaption>ativos (%)</figcaption>
-            </figure>
-
-            <section id="ativeUserPercentage" class="counter-item"></section>
-          </section>
-        </section>
-
-        <section class="search-add-container">
-          <input
-            type="text"
-            id="searchUser"
-            placeholder="Procurar Utilizador..."
-          />
-          <section class="form-group">
-            <button id="addUserBtn">Adicionar Utilizador</button>
-            <button id="sortUsersBtn">Ordenar A-Z</button>
-          </section>
-        </section>
-
-        <section id="usersContainer"></section>
-
-        <section id="modalUserForm" class="modal">
-          <section class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Adicionar Novo Utilizador</h2>
-            <section id="errorBanner" class="error-banner"></section>
-            <form id="formUser">
-              <section class="form-group">
-                <label for="nameInput">Nome</label>
-                <input
-                  type="text"
-                  id="nameInput"
-                  placeholder="inserir o nome"
-                />
-                <section id="nameError" class="error-message"></section>
-              </section>
-
-              <section class="form-group">
-                <label for="emailInput">Email</label>
-                <input
-                  type="email"
-                  id="emailInput"
-                  placeholder="inserir o email"
-                />
-                <section id="emailError" class="error-message"></section>
-              </section>
-
-              <button type="submit">Adicionar Utilizador</button>
-            </form>
-          </section>
-        </section>
-      </section>
+      <section id="containerSection" class="container"></section>
     </main>
     <footer>
       <p>&copy; 2026 Developed by Danilson Sanches @upskill217</p>

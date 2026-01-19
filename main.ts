@@ -8,16 +8,15 @@ import ITask from "./script/models/task/ITask.js";
 
 /* Instância da classe GestUserTask */
 const gestUserTask: GestUserTask = new GestUserTask();
-const fakeUserData = fakeUsersData;
-const fakeTaskData = fakeTasksData;
 
-/* carregar utilizadores iniciais com as suas tarefas, vindo de fake data */
-loadInitialUsers(
-  gestUserTask,
-  fakeUserData as IUser[],
-  fakeTaskData as ITask[],
-);
-/* mostrar todas as tarefas */
-loadAllTask(gestUserTask);
-/* mostrar apenas as tarefas de um utilizador */
-loadUserTask(gestUserTask);
+window.onload = () => {
+  /* carregar utilizadores iniciais com as suas tarefas, vindo de fake data */
+  loadInitialUsers(gestUserTask);
+};
+
+
+
+// /* mostrar todas as tarefas */
+// loadAllTask(gestUserTask);
+// /* mostrar apenas as tarefas de um utilizador */
+// loadUserTask(gestUserTask);

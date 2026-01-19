@@ -1,133 +1,89 @@
 import User from "../../models/user/User.js";
-import { adicionarElementoNoContainer } from "../container/ContainerSection.js";
+import { addElementInContainer } from "../dom/ContainerSection.js";
 import {
   createHeadingTitle,
   createSection,
   createFigureWithImage,
   createInput,
   createButton,
-} from "../container/CreatePage.js";
+} from "../dom/CreatePage.js";
+import { createStatisticsCounter } from "../dom/SectionCounter.js";
 import GestUserTask from "./../../models/gestUserTask/gestUserTask.js";
 
 export default function loadTaskPage(
   testUserTask: GestUserTask,
-  user?: User
+  user?: User,
 ): void {
   const titleHeading = createHeadingTitle(
-    "GESTOR DE TAREFAS"
+    "GESTOR DE TAREFAS",
   ) as HTMLHeadingElement;
   titleHeading.classList.add("taskPageTitle");
 
-  const sectionCounter = createSection("taskCounters") as HTMLElement;
+  /* Secção do contador de todas as tarefas */
+  const sectionCounter = createTaskCounter("taskCounters") as HTMLElement;
   sectionCounter.classList.add("taskCounterSection");
-
-  /* Seção do contador de todas as tarefas */
-  const sectionAllTask = allTaskCounter("sectionAllTask") as HTMLElement;
-  sectionAllTask.classList.add("statistics");
-
-  /* Seção do contador de tarefas pendentes */
-  const sectionPendingTask = pendingTaskCounter(
-    "sectionPendingTask"
-  ) as HTMLElement;
-  sectionPendingTask.classList.add("statistics");
-
-  /* Seção do contador de tarefas concluídas */
-  const sectionCompletedTask = completedTaskCounter(
-    "sectionCompletedTask"
-  ) as HTMLElement;
-  sectionCompletedTask.classList.add("statistics");
-
-  sectionCounter.appendChild(sectionAllTask);
-  sectionCounter.appendChild(sectionPendingTask);
-  sectionCounter.appendChild(sectionCompletedTask);
 
   const taskContainer = createSection("taskContainer") as HTMLElement;
   taskContainer.classList.add("task-container");
 
-  const sectionAddSearch = sectionAddContainer("sectionAddSearch");
+  const sectionAddSearch = sectionSearchTask("sectionAddSearch");
   sectionAddSearch.classList.add("search-add-container");
 
-  adicionarElementoNoContainer(titleHeading);
-  adicionarElementoNoContainer(sectionCounter);
-  adicionarElementoNoContainer(taskContainer);
-  adicionarElementoNoContainer(sectionAddSearch);
+  addElementInContainer(titleHeading);
+  addElementInContainer(sectionCounter);
+  addElementInContainer(taskContainer);
+  addElementInContainer(sectionAddSearch);
 }
 
-/* Função para criar a seção do contador de todas as tarefas */
-function allTaskCounter(id: string): HTMLElement {
-  const figureAllTask = createFigureWithImage(
+/* */
+function createTaskCounter(id: string): HTMLElement {
+  // Para Todas as Tarefas:
+  const allTasks = createStatisticsCounter(
+    "allTask",
     "allTaskBtn",
-    "task icon",
     "../images/tarefa.png",
-    "tarefas"
+    "tarefas",
+    "totalTasks",
   ) as HTMLElement;
-  const totalTasks = createSection("totalTasks") as HTMLElement;
-  totalTasks.classList.add("counter-item");
-
-  const sectionAllTask = createSection(id) as HTMLElement;
-  sectionAllTask.appendChild(figureAllTask);
-  sectionAllTask.appendChild(totalTasks);
-  return sectionAllTask;
-}
-
-/* Função para criar a seção do contador de tarefas pendentes */
-function pendingTaskCounter(id: string): HTMLElement {
-  const figureAllTask = createFigureWithImage(
+  // Para Tarefas Pendentes:
+  const pendingTasks = createStatisticsCounter(
+    "taskPending",
     "taskPendingBtn",
-    "task pending icon",
     "../images/pendente.png",
-    "pendentes"
+    "pendentes",
+    "pendingTasks",
   ) as HTMLElement;
-  const pendingTasks = createSection("pendingTasks") as HTMLElement;
-  pendingTasks.classList.add("counter-item");
-
-  const sectionPendingTask = createSection(id) as HTMLElement;
-  sectionPendingTask.appendChild(figureAllTask);
-  sectionPendingTask.appendChild(pendingTasks);
-  return sectionPendingTask;
-}
-
-/* Função para criar a seção do contador de tarefas concluídas */
-function completedTaskCounter(id: string): HTMLElement {
-  const figureCompletedTask = createFigureWithImage(
+  // Para Tarefas  Concluídas:
+  const completed = createStatisticsCounter(
+    "taskCompleted",
     "taskCompletedBtn",
-    "task completed icon",
-    "../images/tarefa-concluida.png",
-    "concluídos"
-  ) as HTMLElement;
-  const completedTasks = createSection("completedTasks") as HTMLElement;
-  completedTasks.classList.add("counter-item");
-
-  const sectionCompletedTask = createSection(id) as HTMLElement;
-  sectionCompletedTask.appendChild(figureCompletedTask);
-  sectionCompletedTask.appendChild(completedTasks);
-
-  return sectionCompletedTask;
+    "concluídos",
+    "tarefa-concluida.png",
+    "completedTasks",
+  );
+  const sectionCounter = createSection(`${id}`) as HTMLElement;
+  sectionCounter.append(allTasks, pendingTasks, completed);
+  return sectionCounter;
 }
 
-function sectionAddContainer(id: string): HTMLElement {
+/* */
+function sectionSearchTask(id: string): HTMLElement {
   const inputSearch = createInput("searchTask", "text") as HTMLInputElement;
   inputSearch.placeholder = "Procurar tarefa por título...";
 
-  const sectionGroup = createSection("sectionGroup") as HTMLElement;
-  sectionGroup.classList.add("form-group");
-
-  const btnSortTasks = createButton(
-    "sortTasksBtn",
-    "Ordenar A-Z",
-    "button"
-  ) as HTMLButtonElement;
-
-  const removeAllCompletedTaskBtn = createButton(
+  const btnSort = createButton("sortTasksBtn", "Ordenar A-Z", "button");
+  const btnRemove = createButton(
     "removeAllCompletedTaskBtn",
     "Remover Tarefas Concluídas",
-    "button"
-  ) as HTMLButtonElement;
-  sectionGroup.appendChild(btnSortTasks);
-  sectionGroup.appendChild(removeAllCompletedTaskBtn);
+    "button",
+  );
 
-  const sectionSearch = createSection(id) as HTMLElement;
-  sectionSearch.appendChild(inputSearch);
-  sectionSearch.appendChild(sectionGroup);
-  return sectionSearch;
+  const sectionGroup = createSection("sectionGroup") as HTMLElement;
+  sectionGroup.classList.add("form-group");
+  sectionGroup.append(btnSort, btnRemove);
+
+  const mainSection = createSection(id) as HTMLElement;
+  mainSection.append(inputSearch, sectionGroup);
+
+  return mainSection;
 }

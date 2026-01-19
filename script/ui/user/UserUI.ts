@@ -4,35 +4,54 @@ import {
   countUnableUsers,
   countUsers,
   countAtivePercentage,
-} from "./UserCountersUI.js";
+} from "./UserCountersUI.js"
 import { createUserCard } from "./UserCardUI.js";
+import { createSection } from "../dom/CreatePage.js";
+import { addElementInContainer } from "../dom/ContainerSection.js";
 
 /* Container de utilizadores */
-const usersContainer = document.querySelector("#usersContainer") as HTMLElement;
 
-/* Mostrar utilizadores */
-export default function showUsers(usersList: User[]): void {
-  countUsers(usersList);
-  countAtiveUsers(usersList);
-  countUnableUsers(usersList);
-  countAtivePercentage(usersList);
-  renderUsers(usersList);
-}
 
 /* Função de renderização */
-function renderUsers(userList: User[]): void {
-  if (usersContainer) {
-    //Limpa o contentor HTML.
-    usersContainer.innerHTML = "";
-    userList.forEach((user) =>
-      //Para cada utilizador, cria um cartão HTML.
-      createUserCard(user, userList),
-    );
-    // Aplicar cores aos cartões
-    applyCardColors();
-  } else {
-    console.warn("Elemento #usersContainer não foi renderizado no DOM.");
-  }
+export default function renderUsers(usersList: User[]): HTMLElement {
+ const usersContainer = createSection("usersContainer") as HTMLElement;
+  //Limpa o contentor HTML.
+  usersContainer.innerHTML = "";
+  usersList.forEach((user) =>
+    //Para cada utilizador, cria um cartão HTML.
+    //createUserCard(user, usersList),
+    console.log(user)
+  );
+  // Aplicar cores aos cartões
+  //applyCardColors();
+  return usersContainer;
+}
+
+/* */
+export function showUsersCount(usersList: User[]): HTMLElement {
+  //
+  const allUsers = document.querySelector("#allUsers") as HTMLElement;
+  allUsers.appendChild(countUsers(usersList));
+  //
+  const ativeUsers = document.querySelector("#ativeUsers") as HTMLElement;
+  ativeUsers.appendChild(countAtiveUsers(usersList));
+  //
+  const unableUsers = document.querySelector("#unableUsers") as HTMLElement;
+  unableUsers.appendChild(countUnableUsers(usersList));
+  //
+  const ativeUsersPercentageCount = document.querySelector(
+    "#ativeUsersPercentageCount",
+  ) as HTMLElement;
+  ativeUsersPercentageCount.appendChild(countAtivePercentage(usersList));
+  return ativeUsersPercentageCount;
+
+  const usersCounters = document.querySelector("#userCounters") as HTMLElement;
+  usersCounters.append(
+    allUsers,
+    ativeUsers,
+    unableUsers,
+    ativeUsersPercentageCount,
+  );
 }
 
 /* Função para adicionar novo utilizador */
@@ -58,7 +77,7 @@ export function toggleUserState(userID: number, userList: User[]): void {
     //alternar o estado do utilizador
     user.toggleStates();
     //atualiza a exibição dos utilizadores
-    showUsers(userList);
+    renderUsers(userList);
   }
 }
 
@@ -72,7 +91,7 @@ export function removeUserByID(userID: number, userList: User[]): User[] {
 
 /* Aplicar cores aos cartões */
 function applyCardColors(): void {
-  const cards = usersContainer.querySelectorAll(".card");
+ /* const cards = usersContainer.querySelectorAll(".card");
   for (const card of cards) {
     // Gerar uma cor aleatória suave
     const randomColor = `rgb(${Math.floor(Math.random() * 128)}, ${Math.floor(
@@ -88,5 +107,5 @@ function applyCardColors(): void {
     if (contentA) {
       contentA.style.background = randomColor;
     }
-  }
+  }*/
 }

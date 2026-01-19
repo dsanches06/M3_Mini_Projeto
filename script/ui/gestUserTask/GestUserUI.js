@@ -2,10 +2,14 @@ import User from "../../models/user/User.js";
 import showUsers, { addNewUser } from "../user/UserUI.js";
 import { getLastId } from "../../helpers/getLastID.js";
 import Task from "../../models/task/Task.js";
+import { openFormModal } from "../modal/ModalUI.js";
+import { clearContainer } from "../dom/ContainerSection.js";
+import { fakeTasksData, fakeUsersData } from "../../helpers/fakeData.js";
+import { loadPageAllUser } from "../user/UserPage.js";
 /* Instância da classe GestUserTask  */
 let gestUserTask;
 /* Função principal para carregar utilizadores iniciais */
-export default function loadInitialUsers(gestUsersTasks, fakeUsersData, fakeTasksData) {
+export default function loadInitialUsers(gestUsersTasks) {
     //atribuir a instância recebida ao escopo global
     gestUserTask = gestUsersTasks;
     // Usar um ciclo para converter os dados em instâncias da classe
@@ -20,14 +24,15 @@ export default function loadInitialUsers(gestUsersTasks, fakeUsersData, fakeTask
         }
         gestUserTask.addUser(user);
     }
-    // Mostrar os utilizadores
-    showUsers(gestUserTask.users);
+    //Limpa o container antes de mostrar os utilizadores
+    clearContainer();
+    // carrega a pagina dinamica de utilizadores
+    loadPageAllUser(gestUserTask);
 }
 /* Abrir modal de formulário */
 const addUserBtn = document.querySelector("#addUserBtn");
 if (addUserBtn) {
-    addUserBtn.addEventListener("click", () => {
-    });
+    addUserBtn.addEventListener("click", () => openFormModal("modalUserForm"));
 }
 else {
     console.warn("Elemento #addUserBtn não foi renderizado no DOM.");

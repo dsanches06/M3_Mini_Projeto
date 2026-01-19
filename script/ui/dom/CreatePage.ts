@@ -1,79 +1,77 @@
 /* Função para criar um título de página (elemento h2) */
-export function createHeadingTitle(title: string): HTMLHeadingElement {
+export function createHeadingTitle(title: string): HTMLElement {
   const titleElement = document.createElement("h2") as HTMLHeadingElement;
-  titleElement.textContent = title;
+  titleElement.textContent = `${title}`;
   return titleElement;
 }
 
 /* Função para criar uma seção (elemento section) */
 export function createSection(id: string): HTMLElement {
   const section = document.createElement("section") as HTMLElement;
-  section.id = id;
+  section.id = `${id}`;
   return section;
 }
 
-/* Função para criar uma figura com imagem e legenda */
+/* Função que cria uma estrutura completa de Figure com Imagem e Legenda */
 export function createFigureWithImage(
   id: string,
-  alt: string,
   src: string,
-  captionText?: string
+  label: string,
 ): HTMLElement {
-  //criar a figura
-  const figure = document.createElement("figure") as HTMLElement;
-  figure.id = id;
-  //criar a imagem
+  const figure = document.createElement("figure");
+
   const img = document.createElement("img") as HTMLImageElement;
   img.id = id;
-  img.alt = alt;
   img.src = src;
+  img.alt = `imagem de ${label}`;
   img.role = "button";
   img.tabIndex = 0;
-  figure.appendChild(img);
-  //se houver legenda, criar o figcaption
-  if (captionText) {
-    const figCaption = document.createElement("figcaption") as HTMLElement;
-    figCaption.textContent = captionText;
-    figure.appendChild(figCaption);
-  } //retornar a figura
+  img.classList.add("counters-img");
+
+  const figCaption = document.createElement("figcaption");
+  figCaption.textContent = label;
+
+  // Adiciona a imagem e a legenda à figure
+  figure.append(img, figCaption);
+
   return figure;
 }
 
 /* Função para criar um formulário (elemento form) */
 export function createForm(id: string): HTMLFormElement {
   const form = document.createElement("form") as HTMLFormElement;
-  form.id = id;
+  form.id = `${id}`;
   return form;
 }
 
 /* Função para criar um rótulo (elemento label) */
 export function createLabel(id: string, htmlFor: string): HTMLLabelElement {
   const label = document.createElement("label") as HTMLLabelElement;
-  label.id = id;
-  label.htmlFor = htmlFor;
+  label.id = `${id}`;
+  label.htmlFor = `${htmlFor}`;
   return label;
 }
 
 /* Função para criar um input (elemento input) */
 export function createInput(id: string, type: string) {
   const input = document.createElement("input") as HTMLInputElement;
-  input.type = type;
-  input.id = id;
+  input.id = `${id}`;
+  input.type = `${type}`;
   return input;
 }
 
 /* Função para criar um select (elemento select) */
 export function createSelect(id: string): HTMLSelectElement {
   const select = document.createElement("select") as HTMLSelectElement;
-  select.id = id;
+  select.id = `${id}`;
   return select;
 }
 
 /* Função para criar uma option (elemento option) */
 export function createOption(value: string): HTMLOptionElement {
   const option = document.createElement("option") as HTMLOptionElement;
-  option.text = value;
-  option.value = value;
+  option.text = `${value}`;
+  option.value = `${value}`;
   return option;
 }
 
@@ -81,11 +79,11 @@ export function createOption(value: string): HTMLOptionElement {
 export function createButton(
   id: string,
   text: string,
-  type: "submit" | "reset" | "button"
+  type: "submit" | "reset" | "button",
 ): HTMLButtonElement {
   const button = document.createElement("button") as HTMLButtonElement;
-  button.id = id;
-  button.textContent = text;
-  button.type = type;
+  button.id = `${id}`;
+  button.textContent = `${text}`;
+  button.type = `${type}`;
   return button;
 }
