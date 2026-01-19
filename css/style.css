@@ -281,7 +281,7 @@ main h2 {
 }
 
 #usersContainer .card .content .userTasks a#addTaskIconBtn {
-  background-image: url("/images/bue-eye.png");
+  background-image: url("../images/bue-eye.png");
 }
 
 #usersContainer .card .btnGroup {
@@ -398,14 +398,14 @@ main h2 {
 }
 
 .task-buttons a#editTaskBtn {
-  background-image: url("/images/editar.png");
+  background-image: url("../images/editar.png");
 }
 .task-buttons a#completeTaskBtn {
-  background-image: url("/images/tarefa-concluida.png");
+  background-image: url("../images/tarefa-concluida.png");
 }
 
 .task-buttons a#deleteTaskBtn {
-  background-image: url("/images/remover.png");
+  background-image: url("../images/remover.png");
 }
 
 .modal {
