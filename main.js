@@ -7,7 +7,7 @@ import { fakeUsersData, fakeTasksData } from "./script/helpers/fakeData.js";
 const gestUserTask = new GestUserTask();
 const fakeUserData = fakeUsersData;
 const fakeTaskData = fakeTasksData;
-/* carregar utilizadores iniciais */
+/* carregar utilizadores iniciais com as suas tarefas, vindo de fake data */
 loadInitialUsers(gestUserTask, fakeUserData, fakeTaskData);
 /* mostrar todas as tarefas */
 loadAllTask(gestUserTask);

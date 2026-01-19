@@ -154,6 +154,7 @@ if (removeAllCompletedTaskBtn) {
   removeAllCompletedTaskBtn.addEventListener("click", () => {
     //inicializa o array para evitar repetiçoes de dados
     tasksFiltered = [];
+    let usersFiltered: User[] = [];
     //por cada utilizador
     for (const user of users) {
       //por cada tarefa do utilizador
@@ -163,10 +164,14 @@ if (removeAllCompletedTaskBtn) {
           //remover da lista de tarefas do utilizador
           user.removeTask(task.id);
         } else {
-          //se não estiver concluida
-          tasksFiltered.push(task);
+          //se não estiver concluida adicionar o utilizador ao array filtrado
+          usersFiltered.push(user);
         }
       }
+    }
+    //filtrar as tarefas não concluídas de todos os utilizadores
+    for (const user of usersFiltered) {
+      tasksFiltered = getTasksByFilter(user, tasksFiltered, "pending");
     }
     //mostrar todas as tarefas que não foram concluídas
     showTask(tasksFiltered);
