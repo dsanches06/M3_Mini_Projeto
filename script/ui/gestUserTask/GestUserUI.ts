@@ -7,6 +7,8 @@ import GestUserTask from "../../models/gestUserTask/gestUserTask.js";
 import { getLastId } from "../../helpers/getLastID.js";
 import Task from "../../models/task/Task.js";
 import { openFormModal } from "../modal/ModalUI.js";
+import { limparContainer } from "../container/ContainerSection.js";
+import loadTaskPage from "../task/TaskPage.js";
 
 /* Instância da classe GestUserTask  */
 let gestUserTask: GestUserTask;
@@ -15,7 +17,7 @@ let gestUserTask: GestUserTask;
 export default function loadInitialUsers(
   gestUsersTasks: GestUserTask,
   fakeUsersData: IUser[],
-  fakeTasksData: ITask[],
+  fakeTasksData: ITask[]
 ): void {
   //atribuir a instância recebida ao escopo global
   gestUserTask = gestUsersTasks;
@@ -27,7 +29,7 @@ export default function loadInitialUsers(
         taskData.id,
         taskData.title,
         taskData.category as Category,
-        user,
+        user
       );
       if (taskData.completed) {
         task.markCompleted();
@@ -43,7 +45,13 @@ export default function loadInitialUsers(
 /* Abrir modal de formulário */
 const addUserBtn = document.querySelector("#addUserBtn") as HTMLButtonElement;
 if (addUserBtn) {
-  addUserBtn.addEventListener("click", () => openFormModal("modalUserForm"));
+  addUserBtn.addEventListener("click", () =>
+    // openFormModal("modalUserForm")
+
+    {
+      
+    }
+  );
 } else {
   console.warn("Elemento #addUserBtn não foi renderizado no DOM.");
 }
@@ -58,7 +66,7 @@ if (formUser) {
     // Obter valores dos inputs
     const nameInput = document.querySelector("#nameInput") as HTMLInputElement;
     const emailInput = document.querySelector(
-      "#emailInput",
+      "#emailInput"
     ) as HTMLInputElement;
     const name = nameInput.value.trim();
     const email = emailInput.value.trim();
@@ -117,7 +125,7 @@ if (allUserBtn) {
 
 /* Filtrar utilizadores ativos */
 const ativeUsersBtn = document.querySelector(
-  "#ativeUsersBtn",
+  "#ativeUsersBtn"
 ) as HTMLImageElement;
 if (ativeUsersBtn) {
   ativeUsersBtn.title = "Mostrar utilizadores ativos";
@@ -131,7 +139,7 @@ if (ativeUsersBtn) {
 
 /* Filtrar utilizadores inativos */
 const unableUsersBtn = document.querySelector(
-  "#unableUsersBtn",
+  "#unableUsersBtn"
 ) as HTMLImageElement;
 if (unableUsersBtn) {
   unableUsersBtn.title = "Mostrar utilizadores inativos";
@@ -151,7 +159,7 @@ if (searchUser) {
     const name = searchUser.value.toLowerCase();
     //filtrar a lista de utilizadores pelo nome
     const filteredUsers = gestUserTask.users.filter((user) =>
-      user.name.toLowerCase().includes(name),
+      user.name.toLowerCase().includes(name)
     );
     //mostrar os utilizadores filtrados
     showUsers(filteredUsers as User[]);
@@ -162,7 +170,7 @@ if (searchUser) {
 
 /* Ordenar utilizadores por nome */
 const sortUsersBtn = document.querySelector(
-  "#sortUsersBtn",
+  "#sortUsersBtn"
 ) as HTMLButtonElement;
 if (sortUsersBtn) {
   //Crie uma variável de controle de estado

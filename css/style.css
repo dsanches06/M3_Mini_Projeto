@@ -144,9 +144,9 @@ main h2 {
   gap: 50px;
 }
 
-#userCounters .statistic,
-#taskCounters .statistic,
-#userCounteruserCountersTasksTask .statistic {
+#userCounters .statistics,
+#taskCounters .statistics,
+#userCountersTask .statistics {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -154,9 +154,9 @@ main h2 {
   gap: 10px;
 }
 
-#userCounters .statistic img,
-#taskCounters .statistic img,
-#userCountersTask .statistic img {
+#userCounters .statistics img,
+#taskCounters .statistics img,
+#userCountersTask .statistics img {
   width: 50px;
   height: 50px;
 }

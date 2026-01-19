@@ -19,16 +19,16 @@
       <h1><a href="./index.html">GESTUSERTASK</a></h1>
       <nav>
         <ul class="menu">
-          <li><a href="#">Users</a></li>
-          <li><a href="tasks.html">Tasks</a></li>
+          <li><a id="menuHome">Users</a></li>
+          <li><a id="menuTasks">Tasks</a></li>
         </ul>
       </nav>
     </header>
-    <main>
-      <h2>GESTOR DE UTILIZADORES</h2>
-      <section class="container">
+    <main role="main">
+      <section id="containerSection" class="container">
+        <h2>GESTOR DE UTILIZADORES</h2>
         <section id="userCounters">
-          <section class="statistic">
+          <section class="statistics">
             <figure>
               <img
                 id="allUserBtn"
@@ -42,7 +42,7 @@
 
             <section id="totalUsers" class="counter-item"></section>
           </section>
-          <section class="statistic">
+          <section class="statistics">
             <figure>
               <img
                 id="ativeUsersBtn"
@@ -57,7 +57,7 @@
             <section id="ativeUsers" class="counter-item"></section>
           </section>
 
-          <section class="statistic">
+          <section class="statistics">
             <figure>
               <img
                 id="unableUsersBtn"
@@ -72,7 +72,7 @@
             <section id="unableUsers" class="counter-item"></section>
           </section>
 
-          <section class="statistic">
+          <section class="statistics">
             <figure>
               <img
                 src="images/ative.png"

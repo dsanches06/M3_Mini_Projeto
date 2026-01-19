@@ -2,7 +2,6 @@ import User from "../../models/user/User.js";
 import showUsers, { addNewUser } from "../user/UserUI.js";
 import { getLastId } from "../../helpers/getLastID.js";
 import Task from "../../models/task/Task.js";
-import { openFormModal } from "../modal/ModalUI.js";
 /* Instância da classe GestUserTask  */
 let gestUserTask;
 /* Função principal para carregar utilizadores iniciais */
@@ -27,7 +26,8 @@ export default function loadInitialUsers(gestUsersTasks, fakeUsersData, fakeTask
 /* Abrir modal de formulário */
 const addUserBtn = document.querySelector("#addUserBtn");
 if (addUserBtn) {
-    addUserBtn.addEventListener("click", () => openFormModal("modalUserForm"));
+    addUserBtn.addEventListener("click", () => {
+    });
 }
 else {
     console.warn("Elemento #addUserBtn não foi renderizado no DOM.");

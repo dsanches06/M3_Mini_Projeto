@@ -1,6 +1,10 @@
+import { limparContainer } from "../container/ContainerSection.js";
 import { countAllUserTasks, countPendingUserTasks, countCompletedUserTasks, } from "./TaskCounters.js";
+import loadTaskPage from "./TaskPage.js";
 /* Mostrar tarefas */
 export default function showTask(taskList) {
+    limparContainer();
+    loadTaskPage();
     countAllUserTasks(taskList);
     countPendingUserTasks(taskList);
     countCompletedUserTasks(taskList);

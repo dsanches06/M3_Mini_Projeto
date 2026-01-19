@@ -1,14 +1,16 @@
 import Task from "../../models/task/Task.js";
+import { limparContainer } from "../container/ContainerSection.js";
 import {
   countAllUserTasks,
   countPendingUserTasks,
   countCompletedUserTasks,
 } from "./TaskCounters.js";
-
-
+import loadTaskPage from "./TaskPage.js";
 
 /* Mostrar tarefas */
 export default function showTask(taskList: Task[]): void {
+  limparContainer();
+  loadTaskPage();
   countAllUserTasks(taskList);
   countPendingUserTasks(taskList);
   countCompletedUserTasks(taskList);
@@ -18,7 +20,7 @@ export default function showTask(taskList: Task[]): void {
 /* Função de renderização de todas as tarefas */
 function renderTask(taskList: Task[]): void {
   /* Container de tarefas */
-const taskContainer = document.querySelector("#taskContainer") as HTMLElement;
+  const taskContainer = document.querySelector("#taskContainer") as HTMLElement;
   if (taskContainer) {
     taskContainer.innerHTML = "";
     const table = createTable();

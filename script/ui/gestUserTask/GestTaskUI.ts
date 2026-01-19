@@ -3,6 +3,7 @@ import User from "../../models/user/User.js";
 import showTask from "../task/TaskUI.js";
 import Task from "../../models/task/Task.js";
 import { getTasksByFilter } from "../../helpers/getTaskByFilter.js";
+import loadTaskPage from "../task/TaskPage.js";
 
 /* array global de utilizadores */
 let users: User[];
@@ -45,7 +46,7 @@ if (allTaskBtn) {
 
 /* Filtrar tarefas pendentes */
 const taskPendingBtn = document.querySelector(
-  "#taskPendingBtn",
+  "#taskPendingBtn"
 ) as HTMLImageElement;
 if (taskPendingBtn) {
   taskPendingBtn.title = "Mostrar tarefas pendentes";
@@ -67,7 +68,7 @@ if (taskPendingBtn) {
 
 /* Filtrar tarefas concluídos */
 const taskCompletedBtn = document.querySelector(
-  "#taskCompletedBtn",
+  "#taskCompletedBtn"
 ) as HTMLImageElement;
 if (taskCompletedBtn) {
   taskCompletedBtn.title = "Mostrar tarefas concluídas";
@@ -110,7 +111,7 @@ if (searchTask) {
 
 /* Ordenar tarefa pelo titulo */
 const sortTasksBtn = document.querySelector(
-  "#sortTasksBtn",
+  "#sortTasksBtn"
 ) as HTMLButtonElement;
 if (sortTasksBtn) {
   //Crie uma variável de controle
@@ -147,7 +148,7 @@ if (sortTasksBtn) {
 
 /* Remover todas as tarefas concluídas de todos os utilizadores */
 const removeAllCompletedTaskBtn = document.querySelector(
-  "#removeAllCompletedTaskBtn",
+  "#removeAllCompletedTaskBtn"
 ) as HTMLImageElement;
 if (removeAllCompletedTaskBtn) {
   removeAllCompletedTaskBtn.title = "Remover todas as tarefas concluídas";
@@ -178,6 +179,6 @@ if (removeAllCompletedTaskBtn) {
   });
 } else {
   console.warn(
-    "Elemento #removeAllCompletedTaskBtn não foi renderizado no DOM.",
+    "Elemento #removeAllCompletedTaskBtn não foi renderizado no DOM."
   );
 }
