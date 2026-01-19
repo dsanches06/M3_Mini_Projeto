@@ -305,12 +305,14 @@ main h2 {
 }
 
 #usersContainer .card .btnGroup button#removeBtn,
-.form-group button#removeAllCompletedTaskBtn {
+.form-group button#removeAllCompletedTaskBtn,
+.form-group button#removeCompletedTaskBtn {
   background-color: #dc3545;
 }
 
 #usersContainer .card .btnGroup button#removeBtn:hover,
-.form-group button#removeAllCompletedTaskBtn:hover {
+.form-group button#removeAllCompletedTaskBtn:hover,
+.form-group button#removeCompletedTaskBtn:hover {
   background-color: #c82333;
 }
 
