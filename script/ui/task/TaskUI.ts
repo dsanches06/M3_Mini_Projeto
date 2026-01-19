@@ -8,9 +8,9 @@ import {
 import loadTaskPage from "./TaskPage.js";
 
 /* Mostrar tarefas */
-export default function showTask(taskList: Task[]): void {
+export default function showTask(taskList: Task[],): void {
   limparContainer();
-  loadTaskPage();
+  //loadTaskPage();
   countAllUserTasks(taskList);
   countPendingUserTasks(taskList);
   countCompletedUserTasks(taskList);

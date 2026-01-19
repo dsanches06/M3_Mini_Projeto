@@ -1,3 +1,4 @@
+import User from "../../models/user/User.js";
 import { adicionarElementoNoContainer } from "../container/ContainerSection.js";
 import {
   createHeadingTitle,
@@ -8,7 +9,10 @@ import {
 } from "../container/CreatePage.js";
 import GestUserTask from "./../../models/gestUserTask/gestUserTask.js";
 
-export default function loadTaskPage(): void {
+export default function loadTaskPage(
+  testUserTask: GestUserTask,
+  user?: User
+): void {
   const titleHeading = createHeadingTitle(
     "GESTOR DE TAREFAS"
   ) as HTMLHeadingElement;
