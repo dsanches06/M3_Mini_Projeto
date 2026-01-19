@@ -17,6 +17,7 @@ body {
 }
 
 h1,
+h1 > a,
 h2,
 h3,
 h4 {
@@ -28,6 +29,7 @@ h4 {
 }
 
 h1:hover,
+h1 > a:hover,
 h2:hover,
 h3:hover,
 h4:hover,
