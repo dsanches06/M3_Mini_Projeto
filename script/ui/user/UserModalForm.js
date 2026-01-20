@@ -39,6 +39,11 @@ function setupFormLogic(gestUserTask, form, fields, errors, modal) {
             errors.nameErr.textContent = "O nome deve ter pelo menos 3 caracteres.";
             isValid = false;
         }
+        // Validação do Nome
+        if (fields.name.value.trim() === "") {
+            errors.nameErr.textContent = "O nome não pode estar vazio.";
+            isValid = false;
+        }
         //  Validação de Email com Regex
         // Esta regex valida: texto + @ + texto + . + extensão (2 ou mais caracteres)
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
