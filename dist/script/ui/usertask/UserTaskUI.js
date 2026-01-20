@@ -1,10 +1,10 @@
-import { countAllUserTasks, countCompletedUserTasks, countPendingUserTasks, } from "../task/TaskCounters.js";
+import { countAllTasks, countCompletedUserTasks, countPendingUserTasks, } from "../task/TaskCountersUI.js";
 import { styleTasks, userCompleteTask, userEditTitle } from "./UserTaskCRUD.js";
 /* Mostrar tarefas */
 export default function showUserTask(user, tasks) {
-    countAllUserTasks(tasks);
-    countPendingUserTasks(tasks);
-    countCompletedUserTasks(tasks);
+    countAllTasks("#totalTasks", tasks);
+    countPendingUserTasks("#pendingTasks", tasks);
+    countCompletedUserTasks("#completedTasks", tasks);
     showUserNameHeader(user);
     renderUserTask(user, tasks);
     styleTasks(tasks);

@@ -1,5 +1,5 @@
 import User from "../../models/user/User.js";
-import { closeModal } from "../../ui/modal/ModalUI.js";
+
 
 /* Modal para visualização de detalhes do utilizador */
 export function showUserDetails(user: User) {
@@ -23,8 +23,10 @@ export function showUserDetails(user: User) {
   modalContent.appendChild(userDetails);
   modal.appendChild(modalContent);
   document.body.appendChild(modal);
-  closeModal(modal, modal.id);
-}
+  closeBtn.onclick = () => {
+    modal.remove();
+  }  
+}   
 
 /* Função que cria o modal para mostrar detalhes do utilizador */
 function modalUserDetail(user: User): HTMLElement {

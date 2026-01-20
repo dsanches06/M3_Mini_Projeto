@@ -1,184 +1,137 @@
 import GestUserTask from "../../models/gestUserTask/gestUserTask.js";
 import User from "../../models/user/User.js";
-import showTask from "../task/TaskUI.js";
-import Task from "../../models/task/Task.js";
+import ITask from "../../models/task/ITask.js";
 import { getTasksByFilter } from "../../helpers/getTaskByFilter.js";
-import loadTaskPage from "../task/TaskPage.js";
+import { clearContainer } from "../dom/ContainerSection.js";
+import Task from "../../models/task/Task.js";
+import { searchUserByName } from "../gestUserTask/GestUserUI.js";
+import renderAllTasks from "../task/TaskUI.js";
+import { showTasksCounters } from "../task/TaskPage.js";
+import renderUsers from "../user/UserUI.js";
+import { showUsersCounters } from "../user/UserPage.js";
 
 /* array global de utilizadores */
 let users: User[];
-//array global para armazenar tarefas filtradas
+// array global para armazenar tarefas filtradas
 let tasksFiltered: Task[];
 
-/* Função principal para mostrar as tarefas de todos os utilizadores */
-export default function loadAllTask(gestUsersTask: GestUserTask): void {
-  //atribuir o valor ao array global de utilizadores
-  users = gestUsersTask.users as User[];
-  //inicializa o array para evitar repetiçoes de dados
-  tasksFiltered = [];
-  //por cada utilizador
-  for (const user of users) {
-    //filtra a procura de tarefas e adiciona ao array e retorna o mesmo array
-    tasksFiltered = getTasksByFilter(user, tasksFiltered, "all");
+/* Função helper para filtrar tarefas de todos os usuários, evitando duplicação */
+function filterTasksFromAllUsers(filterType: string, title?: string): Task[] {
+  if (!users || users.length === 0) {
+    console.warn("Nenhum usuário disponível para filtrar tarefas.");
+    return [];
   }
-  //mostrar todas as tarefas de todos os utilizadores
-  showTask(tasksFiltered);
+  let filtered: Task[] = [];
+  for (const user of users) {
+    filtered = getTasksByFilter(user, filtered, filterType, title);
+  }
+  return filtered;
 }
 
-/* Filtrar todas as tarefas */
-const allTaskBtn = document.querySelector("#allTaskBtn") as HTMLImageElement;
-if (allTaskBtn) {
-  allTaskBtn.title = "Mostrar todas as tarefas";
-  allTaskBtn.addEventListener("click", () => {
-    //inicializa o array para evitar repetiçoes de dados
-    tasksFiltered = [];
-    //por cada utilizador
-    for (const user of users) {
-      //filtra a procura de tarefas e adiciona ao array e retorna o mesmo array
-      tasksFiltered = getTasksByFilter(user, tasksFiltered, "all");
-    }
-    //mostrar todas as tarefas de todos os utilizadores
-    showTask(tasksFiltered);
-  });
-} else {
-  console.warn("Elemento #allTaskBtn não foi renderizado no DOM.");
+/* Função principal para mostrar as tarefas de todos os utilizadores */
+export function loadAllUsersTask(gestUsersTask: GestUserTask): void {
+  // atribuir o valor ao array global de utilizadores
+  users = gestUsersTask.users as User[];
+  // inicializa o array para evitar repetições de dados
+  tasksFiltered = [];
+  // filtra tarefas de todos os usuários
+  tasksFiltered = filterTasksFromAllUsers("all");
+  // Limpa o container antes de mostrar os utilizadores
+  clearContainer();
+  // carrega a pagina dinamica de utilizadores
+  loadTasksPage(gestUsersTask, tasksFiltered);
 }
 
-/* Filtrar tarefas pendentes */
-const taskPendingBtn = document.querySelector(
-  "#taskPendingBtn"
-) as HTMLImageElement;
-if (taskPendingBtn) {
-  taskPendingBtn.title = "Mostrar tarefas pendentes";
-  taskPendingBtn.addEventListener("click", () => {
-    //inicializa o array para evitar repetiçoes de dados
-    tasksFiltered = [];
-    //por cada utilizador
-    for (const user of users) {
-      //filtra a procura de tarefas pendentes e adiciona ao
-      //array e retorna o mesmo array
-      tasksFiltered = getTasksByFilter(user, tasksFiltered, "pending");
-    }
-    //mostrar todas as tarefas de todos os utilizadores
-    showTask(tasksFiltered);
-  });
-} else {
-  console.warn("Elemento #taskPendingBtn não foi renderizado no DOM.");
+/* */
+export function allUsersTasks(): ITask[] {
+  tasksFiltered = filterTasksFromAllUsers("all");
+  return tasksFiltered;
 }
 
-/* Filtrar tarefas concluídos */
-const taskCompletedBtn = document.querySelector(
-  "#taskCompletedBtn"
-) as HTMLImageElement;
-if (taskCompletedBtn) {
-  taskCompletedBtn.title = "Mostrar tarefas concluídas";
-  taskCompletedBtn.addEventListener("click", () => {
-    //inicializa o array para evitar repetiçoes de dados
-    tasksFiltered = [];
-    //por cada utilizador
-    for (const user of users) {
-      //filtra a procura de tarefas concluidas
-      // e adiciona ao array e retorna o mesmo array
-      tasksFiltered = getTasksByFilter(user, tasksFiltered, "completed");
-    }
-    //mostra apenas tarefas concluidas
-    showTask(tasksFiltered);
-  });
-} else {
-  console.warn("Elemento #taskCompletedBtn não foi renderizado no DOM.");
+export function pendingTasks(): ITask[] {
+  tasksFiltered = filterTasksFromAllUsers("pending");
+  return tasksFiltered;
 }
 
-/* Procurar tarefa por titulo */
-const searchTask = document.querySelector("#searchTask") as HTMLInputElement;
-if (searchTask) {
-  searchTask.addEventListener("input", () => {
-    //obter o titulo inserido no input em minusculas
-    const title = searchTask.value.toLowerCase();
-    //inicializa o array para evitar repetiçoes de dados
-    tasksFiltered = [];
-    //por cada utilizador
-    for (const user of users) {
-      //filtra a procura de tarefas pelo titulo
-      //e adiciona ao array e retorna o mesmo array
-      tasksFiltered = getTasksByFilter(user, tasksFiltered, "search", title);
-    }
-    //mostrar as tarefas filtrados pelo titulo
-    showTask(tasksFiltered);
-  });
-} else {
-  console.warn("Elemento #searchTask não foi renderizado no DOM.");
+export function completedTasks(): ITask[] {
+  tasksFiltered = filterTasksFromAllUsers("completed");
+  return tasksFiltered;
 }
 
-/* Ordenar tarefa pelo titulo */
-const sortTasksBtn = document.querySelector(
-  "#sortTasksBtn"
-) as HTMLButtonElement;
-if (sortTasksBtn) {
-  //Crie uma variável de controle
-  let isAscending = true;
-  sortTasksBtn.addEventListener("click", () => {
-    //array de ordenação
-    let sortTask: Task[] = [];
-    //inicializa o array para evitar repetiçoes de dados
-    tasksFiltered = [];
-    //por cada utilizador
-    for (const user of users) {
-      //filtra a procura de tarefas pelo titulo
-      //e adiciona ao array e retorna o mesmo array
-      tasksFiltered = getTasksByFilter(user, tasksFiltered, "all");
-    }
-    //Ordenar com base no estado atual
-    if (isAscending) {
-      //faz ordenção no estado ascendente
-      sortTask = tasksFiltered.sort((a, b) => a.title.localeCompare(b.title));
-    } else {
-      //faz ordenção no estado descendente
-      sortTask = tasksFiltered.sort((a, b) => b.title.localeCompare(a.title));
-    }
-    //Inverta o estado para o próximo clique
-    isAscending = !isAscending;
-    // Mostrar as tarefas ordenados conforme estado
-    showTask(sortTask);
-    // Atualize o texto ou ícone do botão
-    sortTasksBtn.textContent = isAscending ? "Ordenar A-Z" : "Ordenar Z-A";
-  });
-} else {
-  console.warn("Elemento #sortTaskBtn não foi renderizado no DOM.");
+export function searchTasksByTitle(title: string): ITask[] {
+  tasksFiltered = filterTasksFromAllUsers("search", title);
+  return tasksFiltered;
 }
 
-/* Remover todas as tarefas concluídas de todos os utilizadores */
-const removeAllCompletedTaskBtn = document.querySelector(
-  "#removeAllCompletedTaskBtn"
-) as HTMLImageElement;
-if (removeAllCompletedTaskBtn) {
-  removeAllCompletedTaskBtn.title = "Remover todas as tarefas concluídas";
-  removeAllCompletedTaskBtn.addEventListener("click", () => {
-    //inicializa o array para evitar repetiçoes de dados
-    tasksFiltered = [];
-    let usersFiltered: User[] = [];
-    //por cada utilizador
-    for (const user of users) {
-      //por cada tarefa do utilizador
-      for (const task of user.tasks as Task[]) {
-        //se estiver completa
-        if (task.completed) {
-          //remover da lista de tarefas do utilizador
-          user.removeTask(task.id);
-        } else {
-          //se não estiver concluida adicionar o utilizador ao array filtrado
-          usersFiltered.push(user);
-        }
+/* Ordenar utilizadores por nome */
+export function sortTasksByTitle(ascending: boolean = true): ITask[] {
+  tasksFiltered = allUsersTasks() as Task[];
+  let sortedTasks: Task[] = [];
+  if (ascending) {
+    sortedTasks = tasksFiltered.sort((a, b) => a.title.localeCompare(b.title));
+  } else {
+    sortedTasks = tasksFiltered.sort((a, b) => b.title.localeCompare(a.title));
+  }
+  return sortedTasks;
+}
+
+export function removeAllCompletedTask(): ITask[] {
+  if (!users || users.length === 0) {
+    console.warn("Nenhum usuário disponível para remover tarefas completas.");
+    return [];
+  }
+  // inicializa o array para evitar repetições de dados
+  tasksFiltered = [];
+  const usersWithPendingTasks = new Set<User>(); // Usar Set para evitar duplicatas
+  // por cada utilizador
+  for (const user of users) {
+    const tasks = user.tasks as Task[];
+    if (tasks && tasks.length > 0) {
+      // remover tarefas completas
+      const pendingTasks = tasks.filter(task => !task.completed);
+      // atualizar tarefas do usuário (assumindo que user.tasks é mutável)
+      user.tasks = pendingTasks;
+      // se houver tarefas pendentes, adicionar usuário ao set
+      if (pendingTasks.length > 0) {
+        usersWithPendingTasks.add(user);
       }
     }
-    //filtrar as tarefas não concluídas de todos os utilizadores
-    for (const user of usersFiltered) {
-      tasksFiltered = getTasksByFilter(user, tasksFiltered, "pending");
-    }
-    //mostrar todas as tarefas que não foram concluídas
-    showTask(tasksFiltered);
-  });
-} else {
-  console.warn(
-    "Elemento #removeAllCompletedTaskBtn não foi renderizado no DOM."
-  );
+  }
+  // filtrar as tarefas não concluídas de todos os utilizadores
+  for (const user of usersWithPendingTasks) {
+    tasksFiltered = getTasksByFilter(user, tasksFiltered, "pending");
+  }
+  return tasksFiltered;
+}
+
+export function loadTasksPage(gestUserTask: GestUserTask, tasksList: ITask[]): void {
+  // ...existing code...
+  const searchTask = document.querySelector("#searchTask") as HTMLInputElement;
+  if (searchTask) {
+    searchTask.addEventListener("input", () => {
+      const title = searchTask.value.toLowerCase();
+      const filteredTasks = searchTasksByTitle(title);
+      renderAllTasks(filteredTasks as Task[]);
+      showTasksCounters(filteredTasks as Task[]);
+    });
+  } else {
+    console.error("Elemento de busca de tarefas não encontrado.");
+  }
+  // ...existing code...
+}
+
+export function loadUsersPage(gestUserTask: GestUserTask): void {
+  // ...existing code...
+  const searchUser = document.querySelector("#searchUser") as HTMLInputElement;
+  if (searchUser) {
+    searchUser.addEventListener("input", () => {
+      const name = searchUser.value.toLowerCase();
+      const filteredUsers = searchUserByName(name);
+      renderUsers(filteredUsers as User[]);
+      showUsersCounters(filteredUsers as User[]);
+    });
+  } else {
+    console.error("Elemento de busca de utilizadores não encontrado.");
+  }
+  // ...existing code...
 }

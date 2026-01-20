@@ -3,7 +3,6 @@ import { getTasksByFilter } from "../../helpers/getTaskByFilter.js";
 import GestUserTask from "../../models/gestUserTask/gestUserTask.js";
 import Task from "../../models/task/Task.js";
 import User from "../../models/user/User.js";
-import { openFormModal } from "../modal/ModalUI.js";
 import {
   addNewUserTask,
   getUserIdFromURL,
@@ -138,7 +137,7 @@ const addTaskUserBtn = document.querySelector(
 ) as HTMLButtonElement;
 if (addTaskUserBtn) {
   addTaskUserBtn.addEventListener("click", () => {
-    openFormModal("modalUserTaskForm");
+
   });
 } else {
   console.warn("Elemento #addTaskUserBtn não foi renderizado no DOM.");

@@ -1,17 +1,17 @@
 import Task from "../../models/task/Task.js";
 import User from "../../models/user/User.js";
 import {
-  countAllUserTasks,
+  countAllTasks,
   countCompletedUserTasks,
   countPendingUserTasks,
-} from "../task/TaskCounters.js";
+} from "../task/TaskCountersUI.js";
 import { styleTasks, userCompleteTask, userEditTitle } from "./UserTaskCRUD.js";
 
 /* Mostrar tarefas */
 export default function showUserTask(user: User, tasks: Task[]): void {
-  countAllUserTasks(tasks as Task[]);
-  countPendingUserTasks(tasks as Task[]);
-  countCompletedUserTasks(tasks as Task[]);
+  countAllTasks("#totalTasks", tasks as Task[]);
+  countPendingUserTasks("#pendingTasks", tasks as Task[]);
+  countCompletedUserTasks("#completedTasks", tasks as Task[]);
   showUserNameHeader(user);
   renderUserTask(user, tasks as Task[]);
   styleTasks(tasks as Task[]);

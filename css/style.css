@@ -432,7 +432,7 @@ main {
   width: 90%;
   max-width: 550px;
   max-height: 500px;
-  border-radius: 12px;
+  border-radius: 8px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
   animation: slideIn 0.3s ease-out;
   position: relative;

@@ -1,38 +1,48 @@
-import User from "../../models/user/User.js";
-import { createSection } from "../dom/CreatePage.js";
+import IUser from "../../models/user/IUser.js";
+import { allUsers } from "../gestUserTask/GestUserUI.js";
 
 /* Contador de utilizadores ativos */
-export function countAtiveUsers(usersList: User[]): HTMLElement {
-  const sectionAtiveUsers = createSection("ativeUsersCount") as HTMLElement;
-  const ativeUsers = usersList.filter((user) => user.isAtive);
-  sectionAtiveUsers.textContent = `${ativeUsers.length}`;
-  return sectionAtiveUsers;
+export function countAtiveUsers(id: string, usersList: IUser[]): void {
+  const section = document.querySelector(`${id}`) as HTMLElement;
+  if (section) {
+    let arrayAtiveUsers = usersList.filter((user) => user.isAtive);
+    section.textContent = `${arrayAtiveUsers.length}`;
+  } else {
+    console.warn(`Elemento ${id} não foi encontrado no DOM.`);
+  }
 }
 
 /* Contador de utilizadores inativos */
-export function countUnableUsers(usersList: User[]): HTMLElement {
-  const sectionUnableUser = createSection("unableUsersCount") as HTMLElement;
-  const unableUsers = usersList.filter((user) => !user.isAtive);
-  sectionUnableUser.textContent = `${unableUsers.length}`;
-  return sectionUnableUser;
+export function countUnableUsers(id: string, usersList: IUser[]): void {
+  const section = document.querySelector(`${id}`) as HTMLElement;
+  if (section) {
+    let arrayUnableUsers = usersList.filter((user) => !user.isAtive);
+    section.textContent = `${arrayUnableUsers.length}`;
+  } else {
+    console.warn(`Elemento ${id} não foi encontrado no DOM.`);
+  }
 }
 
 /* Contador de utilizadores */
-export function countUsers(usersList: User[]): HTMLElement {
-  const sectionTotalUsers = createSection("allUsersCount") as HTMLElement;
-  sectionTotalUsers.textContent = `${usersList.length}`;
-  return sectionTotalUsers;
+export function countAllUsers(id: string, usersList: IUser[]): void {
+  const section = document.querySelector(`${id}`) as HTMLElement;
+  if (section) {
+    section.textContent = `${usersList.length}`;
+  } else {
+    console.warn(`Elemento ${id} não foi encontrado no DOM.`);
+  }
 }
 
 /* Percentagem de utilizadores ativos */
-export function countAtivePercentage(usersList: User[]): HTMLElement {
-  const sectionAtiveUsersPercentage = createSection(
-    "ativeUsersPercentageCount",
-  ) as HTMLElement;
-  const activeUsers = usersList.filter((user) => user.isAtive).length;
-  const totalUsers = usersList.length;
-  const percentage =
-    totalUsers > 0 ? ((activeUsers / totalUsers) * 100).toFixed(2) : 0;
-  sectionAtiveUsersPercentage.textContent = `${percentage}%`;
-  return sectionAtiveUsersPercentage;
+export function countAtivePercentage(id: string, usersList: IUser[]): void {
+  const section = document.querySelector(`${id}`) as HTMLElement;
+  if (section) {
+    const activeUsers = usersList.length;
+    const totalUsers = allUsers().length;
+    const percentage =
+      totalUsers > 0 ? ((activeUsers / totalUsers) * 100).toFixed(2) : 0;
+    section.textContent = `${percentage}%`;
+  } else {
+    console.warn(`Elemento ${id} não foi encontrado no DOM.`);
+  }
 }

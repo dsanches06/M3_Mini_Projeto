@@ -1,49 +1,31 @@
 import Task from "../../models/task/Task.js";
-import { clearContainer } from "../dom/ContainerSection.js";
-import {
-  countAllUserTasks,
-  countPendingUserTasks,
-  countCompletedUserTasks,
-} from "./TaskCounters.js";
-import loadTaskPage from "./TaskPage.js";
+import { createSection } from "../dom/CreatePage.js";
 
-
-/* Mostrar tarefas */
-export default function showTask(taskList: Task[]): void {
-  clearContainer();
-  //loadTaskPage();
-  countAllUserTasks(taskList);
-  countPendingUserTasks(taskList);
-  countCompletedUserTasks(taskList);
-  renderTask(taskList);
-}
+/* Container de tarefas */
+const taskContainer = createSection("taskContainer") as HTMLElement;
 
 /* Função de renderização de todas as tarefas */
-function renderTask(taskList: Task[]): void {
-  /* Container de tarefas */
-  const taskContainer = document.querySelector("#taskContainer") as HTMLElement;
-  if (taskContainer) {
-    taskContainer.innerHTML = "";
-    const table = createTable();
+export default function renderAllTasks(taskList: Task[]): HTMLElement {
+  taskContainer.innerHTML = "";
+  const table = createTable();
 
-    const caption = createTableCaption();
-    table.appendChild(caption);
+  const caption = createTableCaption();
+  table.appendChild(caption);
 
-    const thead = createTableHeader();
-    table.appendChild(thead);
+  const thead = createTableHeader();
+  table.appendChild(thead);
 
-    const tbody = createTableBody();
+  const tbody = createTableBody();
 
-    taskList.forEach((task) => {
-      const row = createTableRow(task as Task);
-      tbody.appendChild(row);
-    });
+  taskList.forEach((task) => {
+    const row = createTableRow(task as Task);
+    tbody.appendChild(row);
+  });
 
-    table.appendChild(tbody);
-    taskContainer.appendChild(table);
-  } else {
-    console.warn("Elemento #taskContainer não foi renderizado no DOM.");
-  }
+  table.appendChild(tbody);
+  taskContainer.appendChild(table);
+
+  return taskContainer;
 }
 
 /* Função para criar uma tabela */

@@ -1,6 +1,11 @@
 /* Função para criar um título de página (elemento h2) */
-export function createHeadingTitle(title: string): HTMLElement {
-  const titleElement = document.createElement("h2") as HTMLHeadingElement;
+export function createHeadingTitle(
+  element: string,
+  title: string,
+): HTMLElement {
+  const titleElement = document.createElement(
+    `${element}`,
+  ) as HTMLHeadingElement;
   titleElement.textContent = `${title}`;
   return titleElement;
 }

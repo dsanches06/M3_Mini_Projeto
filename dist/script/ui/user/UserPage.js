@@ -5,7 +5,8 @@ import { createSearchContainer, createStatisticsCounter, } from "../dom/SectionC
 import { countAtivePercentage, countAtiveUsers, countUnableUsers, countAllUsers, } from "./UserCountersUI.js";
 import renderUsers from "./UserUI.js";
 import { allUsers, sortUsersByName, allUsersAtive, allUsersUnable, } from "../gestUserTask/GestUserUI.js";
-import loadAllUsersTask from "../gestUserTask/GestUserUI.js";
+import { getTasksByFilter } from "../../helpers/getTaskByFilter.js";
+import { loadAllUsersTask } from "../gestUserTask/GestUserUI.js";
 let tasksFiltered;
 /* Lista de utilizadores */
 export default function loadUsersPage(gestUserTask) {
@@ -73,10 +74,17 @@ export default function loadUsersPage(gestUserTask) {
     //obter o menu task
     const menuTasks = document.querySelector("#menuTasks");
     menuTasks.addEventListener("click", () => {
+        //inicializa o array para evitar repetiçoes de dados
+        tasksFiltered = [];
+        //por cada utilizador
+        for (const user of gestUserTask.users) {
+            //filtra a procura de tarefas e adiciona ao array e retorna o mesmo array
+            tasksFiltered = getTasksByFilter(user, tasksFiltered, "all");
+        }
         //limpa o container
         clearContainer();
         //mostrar todas as tarefas de todos os utilizadores
-        loadAllUsersTask(gestUserTask);
+        loadAllUsersTask(gestUserTask, tasksFiltered);
     });
 }
 /* */

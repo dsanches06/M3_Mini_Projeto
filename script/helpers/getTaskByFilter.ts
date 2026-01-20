@@ -1,5 +1,5 @@
-import Task from "../models/task/Task";
-import User from "../models/user/User";
+import Task from "../models/task/Task.js";
+import User from "../models/user/User.js";
 
 /* Função para obter tarefas por filtro */
 export function getTasksByFilter(

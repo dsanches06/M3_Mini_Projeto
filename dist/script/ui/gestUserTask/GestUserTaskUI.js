@@ -1,6 +1,5 @@
 import { getLastId } from "../../helpers/getLastID.js";
 import { getTasksByFilter } from "../../helpers/getTaskByFilter.js";
-import { openFormModal } from "../modal/ModalUI.js";
 import { addNewUserTask, getUserIdFromURL, removeCompletedTasks, } from "../usertask/UserTaskCRUD.js";
 import showUserTask from "../usertask/UserTaskUI.js";
 /* instancia global de utilizador  */
@@ -121,7 +120,6 @@ else {
 const addTaskUserBtn = document.querySelector("#addTaskUserBtn");
 if (addTaskUserBtn) {
     addTaskUserBtn.addEventListener("click", () => {
-        openFormModal("modalUserTaskForm");
     });
 }
 else {
