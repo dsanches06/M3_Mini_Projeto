@@ -5,11 +5,11 @@ import { renderUserModal } from "./UserModalForm.js";
 /* Container de utilizadores */
 const usersContainer = createSection("usersContainer");
 /* Função de renderização */
-export default function renderUsers(usersList) {
+export default function renderUsers(gestUserTask, users) {
     usersContainer.innerHTML = "";
-    usersList.forEach((user) => 
+    users.forEach((user) => 
     //Para cada utilizador, cria um cartão HTML.
-    usersContainer.appendChild(createUserCard(user, usersList)));
+    usersContainer.appendChild(createUserCard(gestUserTask, user)));
     // Aplicar cores aos cartões
     applyCardColors(usersContainer);
     return usersContainer;
@@ -70,7 +70,7 @@ export function loadUsersPage(gestUserTask) {
         searchUser.addEventListener("input", () => {
             const name = searchUser.value.toLowerCase();
             const filteredUsers = searchUserByName(name);
-            renderUsers(filteredUsers);
+            renderUsers(gestUserTask, filteredUsers);
             showUsersCounters(filteredUsers);
         });
     }
@@ -95,5 +95,4 @@ export function loadUsersPage(gestUserTask) {
     else {
         console.warn("Elemento #addUserBtn não foi renderizado no DOM.");
     }
-    // ...existing code...
 }

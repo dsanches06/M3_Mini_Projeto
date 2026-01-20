@@ -130,6 +130,7 @@ main {
 }
 
 .users-counters,
+.tasks-counters,
 #taskCounters,
 #userCountersTask {
   display: flex;

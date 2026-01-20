@@ -22,6 +22,7 @@ import {
   sortUsersByName,
   allUsersAtive,
   allUsersUnable,
+  searchUserByName,
 } from "../gestUserTask/GestUserUI.js";
 import { getTasksByFilter } from "../../helpers/getTaskByFilter.js";
 import Task from "../../models/task/Task.js";
@@ -45,7 +46,7 @@ export default function loadUsersPage(gestUserTask: GestUserTask): void {
   addElementInContainer(searchContainer);
   //
 
-  const usersContainer = renderUsers(gestUserTask.users as User[]);
+  const usersContainer = renderUsers(gestUserTask, gestUserTask.users as User[]);
   addElementInContainer(usersContainer);
 
   // Adicionar event listeners aos botões de contador para filtrar
@@ -64,19 +65,19 @@ export default function loadUsersPage(gestUserTask: GestUserTask): void {
 
   allUsersBtn.addEventListener("click", () => {
     const users = allUsers();
-    renderUsers(users as User[]);
+    renderUsers(gestUserTask, users as User[]);
     showUsersCounters(users as User[]);
   });
 
   ativeUsersBtn.addEventListener("click", () => {
     const usersAtive = allUsersAtive();
-    renderUsers(usersAtive as User[]);
+    renderUsers(gestUserTask, usersAtive as User[]);
     showUsersCounters(usersAtive as User[]);
   });
 
   unableUsersBtn.addEventListener("click", () => {
     const usersUnable = allUsersUnable();
-    renderUsers(usersUnable as User[]);
+    renderUsers(gestUserTask, usersUnable as User[]);
     showUsersCounters(usersUnable as User[]);
   });
 
@@ -99,7 +100,7 @@ export default function loadUsersPage(gestUserTask: GestUserTask): void {
       //Inverta o estado para o próximo clique
       isAscending = !isAscending;
       // Mostrar os utilizadores ordenados
-      renderUsers(sortedUsers as User[]);
+      renderUsers(gestUserTask, sortedUsers as User[]);
       showUsersCounters(sortedUsers as User[]);
       // Atualize o texto ou ícone do botão
       sortUsersBtn.textContent = isAscending ? "Ordenar A-Z" : "Ordenar Z-A";
@@ -108,16 +109,19 @@ export default function loadUsersPage(gestUserTask: GestUserTask): void {
     console.warn("Elemento #sortUsersBtn não foi renderizado no DOM.");
   }
 
-  //obter o menu task
-  const menuTasks = document.querySelector("#menuTasks") as HTMLAnchorElement;
-  menuTasks.addEventListener("click", () => {
-    //limpa o container
-    clearContainer();
-    //mostrar todas as tarefas de todos os utilizadores
-    loadAllUsersTask(gestUserTask);
-  });
+  // ...existing code...
+  const searchUser = document.querySelector("#searchUser") as HTMLInputElement;
+  if (searchUser) {
+    searchUser.addEventListener("input", () => {
+      const name = searchUser.value.toLowerCase();
+      const filteredUsers = searchUserByName(name);
+      renderUsers(gestUserTask, filteredUsers as User[]);
+      showUsersCounters(filteredUsers as User[]);
+    });
+  } else {
+    console.error("Elemento de busca de utilizadores não encontrado.");
+  }
 }
-
 /* */
 function createUserCounter(id: string): HTMLElement {
   //

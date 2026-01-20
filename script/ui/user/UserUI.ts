@@ -10,11 +10,14 @@ import { renderUserModal } from "./UserModalForm.js";
 const usersContainer = createSection("usersContainer") as HTMLElement;
 
 /* Função de renderização */
-export default function renderUsers(usersList: User[]): HTMLElement {
+export default function renderUsers(
+  gestUserTask: GestUserTask,
+  users: User[],
+): HTMLElement {
   usersContainer.innerHTML = "";
-  usersList.forEach((user) =>
+  users.forEach((user) =>
     //Para cada utilizador, cria um cartão HTML.
-    usersContainer.appendChild(createUserCard(user, usersList)),
+    usersContainer.appendChild(createUserCard(gestUserTask, user)),
   );
   // Aplicar cores aos cartões
   applyCardColors(usersContainer);
@@ -68,7 +71,9 @@ function countPendingUserTasks(selector: string, taskList: ITask[]): void {
 
 function showUsersCounters(usersList: User[]): void {
   // Implementação básica, assumindo que você precisa contar usuários; ajuste conforme necessário
-  const allUsersElement = document.querySelector("#allUsersCounter") as HTMLElement;
+  const allUsersElement = document.querySelector(
+    "#allUsersCounter",
+  ) as HTMLElement;
   if (allUsersElement) {
     allUsersElement.textContent = usersList.length.toString();
   }
@@ -87,11 +92,13 @@ export function loadUsersPage(gestUserTask: GestUserTask): void {
     searchUser.addEventListener("input", () => {
       const name = searchUser.value.toLowerCase();
       const filteredUsers = searchUserByName(name);
-      renderUsers(filteredUsers as User[]);
+      renderUsers(gestUserTask, filteredUsers as User[]);
       showUsersCounters(filteredUsers as User[]);
     });
   }
-  const addTaskUserBtn = document.querySelector("#addTaskUserBtn") as HTMLButtonElement;
+  const addTaskUserBtn = document.querySelector(
+    "#addTaskUserBtn",
+  ) as HTMLButtonElement;
   if (addTaskUserBtn) {
     addTaskUserBtn.addEventListener("click", () => {
       const modal = document.querySelector("#modalUserTaskForm") as HTMLElement;
@@ -110,5 +117,5 @@ export function loadUsersPage(gestUserTask: GestUserTask): void {
   } else {
     console.warn("Elemento #addUserBtn não foi renderizado no DOM.");
   }
-  // ...existing code...
+ 
 }

@@ -1,22 +1,29 @@
 import GestUserTask from "../../models/gestUserTask/gestUserTask.js";
 import User from "../../models/user/User.js";
+import { clearContainer } from "../dom/ContainerSection.js";
 import { createHeadingTitle, createSection } from "../dom/CreatePage.js";
 import { removeUserByID, toggleUserState } from "../gestUserTask/GestUserUI.js";
+import loadUserTaskPage from "../usertask/UserTaskPage.js";
 import { showUserDetails } from "./UserDetailsModalUI.js";
 import { showUsersCounters } from "./UserPage.js";
 import renderUsers from "./UserUI.js";
 
 /* Criar cartão de utilizador */
-export function createUserCard(user: User, userList: User[]): HTMLElement {
+export function createUserCard(
+  gestUserTask: GestUserTask,
+  user: User,
+): HTMLElement {
   const divUserCard = createSection("section") as HTMLElement;
   divUserCard.className = "card";
   divUserCard.addEventListener("click", () => showUserDetails(user));
 
   const divUserCardTitle = userCardTitle(user);
-  divUserCardTitle.className = "title";
+  if (divUserCardTitle instanceof HTMLElement) {
+    divUserCardTitle.className = "title";
+  }
   divUserCard.appendChild(divUserCardTitle);
 
-  const divUserCardContent = userCardContent(user);
+  const divUserCardContent = userCardContent(gestUserTask, user);
   divUserCardContent.className = "content";
   divUserCard.appendChild(divUserCardContent);
 
@@ -44,7 +51,7 @@ function userCardTitle(user: User): HTMLElement {
 }
 
 /* Função para criar o conteúdo do cartão de usuário */
-function userCardContent(user: User): HTMLElement {
+function userCardContent(gestUserTask: GestUserTask, user: User): HTMLElement {
   const divCardName = document.createElement("p") as HTMLParagraphElement;
   divCardName.textContent = `${user.name}`;
 
@@ -71,6 +78,9 @@ function userCardContent(user: User): HTMLElement {
   divCardAddTaskBtn.title = "Visualizar tarefas do utilizador";
   divCardAddTaskBtn.addEventListener("click", (event) => {
     event.stopPropagation();
+    //
+    clearContainer();
+    loadUserTaskPage(gestUserTask, user);
   });
 
   const divCardUserTasks = document.createElement("section") as HTMLElement;
@@ -96,7 +106,7 @@ function userCardBtn(user: User): HTMLElement {
   bntToggle.addEventListener("click", (event) => {
     event.stopPropagation();
     const gestUsersTask = toggleUserState(user.id);
-    renderUsers(gestUsersTask.users as User[]);
+    renderUsers(gestUsersTask, gestUsersTask.users as User[]);
     showUsersCounters(gestUsersTask.users as User[]);
   });
 
@@ -108,7 +118,7 @@ function userCardBtn(user: User): HTMLElement {
     const updatedUserList = removeUserByID(user.id);
     if (updatedUserList) {
       //atualiza a lista de utilizadores
-      renderUsers(updatedUserList.users as User[]);
+      renderUsers(updatedUserList, updatedUserList.users as User[]);
       showUsersCounters(updatedUserList.users as User[]);
     }
   });

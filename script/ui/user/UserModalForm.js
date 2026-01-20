@@ -56,7 +56,7 @@ function setupFormLogic(gestUserTask, form, fields, errors, modal) {
             //adiciona a lista de utilizadores
             gestUserTask.addUser(user);
             //mostra todos os utilizadores
-            renderUsers(gestUserTask.users);
+            renderUsers(gestUserTask, gestUserTask.users);
             // atualizar contadores
             showUsersCounters(gestUserTask.users);
         }

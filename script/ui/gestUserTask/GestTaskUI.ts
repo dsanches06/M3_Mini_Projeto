@@ -6,7 +6,7 @@ import { clearContainer } from "../dom/ContainerSection.js";
 import Task from "../../models/task/Task.js";
 import { searchUserByName } from "../gestUserTask/GestUserUI.js";
 import renderAllTasks from "../task/TaskUI.js";
-import { showTasksCounters } from "../task/TaskPage.js";
+import loadTasksPage, { showTasksCounters } from "../task/TaskPage.js";
 import renderUsers from "../user/UserUI.js";
 import { showUsersCounters } from "../user/UserPage.js";
 
@@ -88,7 +88,7 @@ export function removeAllCompletedTask(): ITask[] {
     const tasks = user.tasks as Task[];
     if (tasks && tasks.length > 0) {
       // remover tarefas completas
-      const pendingTasks = tasks.filter(task => !task.completed);
+      const pendingTasks = tasks.filter((task) => !task.completed);
       // atualizar tarefas do usuário (assumindo que user.tasks é mutável)
       user.tasks = pendingTasks;
       // se houver tarefas pendentes, adicionar usuário ao set
@@ -104,34 +104,8 @@ export function removeAllCompletedTask(): ITask[] {
   return tasksFiltered;
 }
 
-export function loadTasksPage(gestUserTask: GestUserTask, tasksList: ITask[]): void {
-  // ...existing code...
-  const searchTask = document.querySelector("#searchTask") as HTMLInputElement;
-  if (searchTask) {
-    searchTask.addEventListener("input", () => {
-      const title = searchTask.value.toLowerCase();
-      const filteredTasks = searchTasksByTitle(title);
-      renderAllTasks(filteredTasks as Task[]);
-      showTasksCounters(filteredTasks as Task[]);
-    });
-  } else {
-    console.error("Elemento de busca de tarefas não encontrado.");
-  }
-  // ...existing code...
+/* Função para inicializar o array global de usuários */
+export function initUsers(gestUsersTask: GestUserTask): void {
+  users = gestUsersTask.users as User[];
 }
 
-export function loadUsersPage(gestUserTask: GestUserTask): void {
-  // ...existing code...
-  const searchUser = document.querySelector("#searchUser") as HTMLInputElement;
-  if (searchUser) {
-    searchUser.addEventListener("input", () => {
-      const name = searchUser.value.toLowerCase();
-      const filteredUsers = searchUserByName(name);
-      renderUsers(filteredUsers as User[]);
-      showUsersCounters(filteredUsers as User[]);
-    });
-  } else {
-    console.error("Elemento de busca de utilizadores não encontrado.");
-  }
-  // ...existing code...
-}

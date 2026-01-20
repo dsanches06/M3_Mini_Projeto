@@ -1,11 +1,10 @@
-import { addElementInContainer, clearContainer, } from "../dom/ContainerSection.js";
+import { addElementInContainer, } from "../dom/ContainerSection.js";
 import { createHeadingTitle, createSection } from "../dom/CreatePage.js";
 import { menuSelected } from "../dom/MenuSelected.js";
 import { createSearchContainer, createStatisticsCounter, } from "../dom/SectionCounter.js";
 import { countAtivePercentage, countAtiveUsers, countUnableUsers, countAllUsers, } from "./UserCountersUI.js";
 import renderUsers from "./UserUI.js";
-import { allUsers, sortUsersByName, allUsersAtive, allUsersUnable, } from "../gestUserTask/GestUserUI.js";
-import loadAllUsersTask from "../gestUserTask/GestUserUI.js";
+import { allUsers, sortUsersByName, allUsersAtive, allUsersUnable, searchUserByName, } from "../gestUserTask/GestUserUI.js";
 let tasksFiltered;
 /* Lista de utilizadores */
 export default function loadUsersPage(gestUserTask) {
@@ -22,7 +21,7 @@ export default function loadUsersPage(gestUserTask) {
     const searchContainer = showSearchContainer();
     addElementInContainer(searchContainer);
     //
-    const usersContainer = renderUsers(gestUserTask.users);
+    const usersContainer = renderUsers(gestUserTask, gestUserTask.users);
     addElementInContainer(usersContainer);
     // Adicionar event listeners aos botões de contador para filtrar
     const allUsersBtn = userCounterSection.querySelector("#allUsersBtn");
@@ -33,17 +32,17 @@ export default function loadUsersPage(gestUserTask) {
     unableUsersBtn.title = "Mostrar todos os utilizadores inativos";
     allUsersBtn.addEventListener("click", () => {
         const users = allUsers();
-        renderUsers(users);
+        renderUsers(gestUserTask, users);
         showUsersCounters(users);
     });
     ativeUsersBtn.addEventListener("click", () => {
         const usersAtive = allUsersAtive();
-        renderUsers(usersAtive);
+        renderUsers(gestUserTask, usersAtive);
         showUsersCounters(usersAtive);
     });
     unableUsersBtn.addEventListener("click", () => {
         const usersUnable = allUsersUnable();
-        renderUsers(usersUnable);
+        renderUsers(gestUserTask, usersUnable);
         showUsersCounters(usersUnable);
     });
     // Adicionar event listeners aos botões de busca
@@ -61,7 +60,7 @@ export default function loadUsersPage(gestUserTask) {
             //Inverta o estado para o próximo clique
             isAscending = !isAscending;
             // Mostrar os utilizadores ordenados
-            renderUsers(sortedUsers);
+            renderUsers(gestUserTask, sortedUsers);
             showUsersCounters(sortedUsers);
             // Atualize o texto ou ícone do botão
             sortUsersBtn.textContent = isAscending ? "Ordenar A-Z" : "Ordenar Z-A";
@@ -70,14 +69,19 @@ export default function loadUsersPage(gestUserTask) {
     else {
         console.warn("Elemento #sortUsersBtn não foi renderizado no DOM.");
     }
-    //obter o menu task
-    const menuTasks = document.querySelector("#menuTasks");
-    menuTasks.addEventListener("click", () => {
-        //limpa o container
-        clearContainer();
-        //mostrar todas as tarefas de todos os utilizadores
-        loadAllUsersTask(gestUserTask);
-    });
+    // ...existing code...
+    const searchUser = document.querySelector("#searchUser");
+    if (searchUser) {
+        searchUser.addEventListener("input", () => {
+            const name = searchUser.value.toLowerCase();
+            const filteredUsers = searchUserByName(name);
+            renderUsers(gestUserTask, filteredUsers);
+            showUsersCounters(filteredUsers);
+        });
+    }
+    else {
+        console.error("Elemento de busca de utilizadores não encontrado.");
+    }
 }
 /* */
 function createUserCounter(id) {

@@ -1,12 +1,10 @@
-import { addElementInContainer, clearContainer, } from "../dom/ContainerSection.js";
+import { addElementInContainer, } from "../dom/ContainerSection.js";
 import { createHeadingTitle, createSection } from "../dom/CreatePage.js";
 import { menuSelected } from "../dom/MenuSelected.js";
 import { createSearchContainer, createStatisticsCounter, } from "../dom/SectionCounter.js";
 import { countAtivePercentage, countAtiveUsers, countUnableUsers, countAllUsers, } from "./UserCountersUI.js";
 import renderUsers from "./UserUI.js";
-import { allUsers, sortUsersByName, allUsersAtive, allUsersUnable, } from "../gestUserTask/GestUserUI.js";
-import { getTasksByFilter } from "../../helpers/getTaskByFilter.js";
-import { loadAllUsersTask } from "../gestUserTask/GestUserUI.js";
+import { allUsers, sortUsersByName, allUsersAtive, allUsersUnable, searchUserByName, } from "../gestUserTask/GestUserUI.js";
 let tasksFiltered;
 /* Lista de utilizadores */
 export default function loadUsersPage(gestUserTask) {
@@ -71,21 +69,19 @@ export default function loadUsersPage(gestUserTask) {
     else {
         console.warn("Elemento #sortUsersBtn não foi renderizado no DOM.");
     }
-    //obter o menu task
-    const menuTasks = document.querySelector("#menuTasks");
-    menuTasks.addEventListener("click", () => {
-        //inicializa o array para evitar repetiçoes de dados
-        tasksFiltered = [];
-        //por cada utilizador
-        for (const user of gestUserTask.users) {
-            //filtra a procura de tarefas e adiciona ao array e retorna o mesmo array
-            tasksFiltered = getTasksByFilter(user, tasksFiltered, "all");
-        }
-        //limpa o container
-        clearContainer();
-        //mostrar todas as tarefas de todos os utilizadores
-        loadAllUsersTask(gestUserTask, tasksFiltered);
-    });
+    // ...existing code...
+    const searchUser = document.querySelector("#searchUser");
+    if (searchUser) {
+        searchUser.addEventListener("input", () => {
+            const name = searchUser.value.toLowerCase();
+            const filteredUsers = searchUserByName(name);
+            renderUsers(filteredUsers);
+            showUsersCounters(filteredUsers);
+        });
+    }
+    else {
+        console.error("Elemento de busca de utilizadores não encontrado.");
+    }
 }
 /* */
 function createUserCounter(id) {

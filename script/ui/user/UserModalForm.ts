@@ -87,7 +87,7 @@ function setupFormLogic(
       //adiciona a lista de utilizadores
       gestUserTask.addUser(user);
       //mostra todos os utilizadores
-      renderUsers(gestUserTask.users as User[]);
+      renderUsers(gestUserTask, gestUserTask.users as User[]);
       // atualizar contadores
       showUsersCounters(gestUserTask.users as User[]);
     } else {

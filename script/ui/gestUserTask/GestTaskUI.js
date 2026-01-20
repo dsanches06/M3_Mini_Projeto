@@ -1,10 +1,6 @@
 import { getTasksByFilter } from "../../helpers/getTaskByFilter.js";
 import { clearContainer } from "../dom/ContainerSection.js";
-import { searchUserByName } from "../gestUserTask/GestUserUI.js";
-import renderAllTasks from "../task/TaskUI.js";
-import { showTasksCounters } from "../task/TaskPage.js";
-import renderUsers from "../user/UserUI.js";
-import { showUsersCounters } from "../user/UserPage.js";
+import loadTasksPage from "../task/TaskPage.js";
 /* array global de utilizadores */
 let users;
 // array global para armazenar tarefas filtradas
@@ -76,7 +72,7 @@ export function removeAllCompletedTask() {
         const tasks = user.tasks;
         if (tasks && tasks.length > 0) {
             // remover tarefas completas
-            const pendingTasks = tasks.filter(task => !task.completed);
+            const pendingTasks = tasks.filter((task) => !task.completed);
             // atualizar tarefas do usuário (assumindo que user.tasks é mutável)
             user.tasks = pendingTasks;
             // se houver tarefas pendentes, adicionar usuário ao set
@@ -91,35 +87,7 @@ export function removeAllCompletedTask() {
     }
     return tasksFiltered;
 }
-export function loadTasksPage(gestUserTask, tasksList) {
-    // ...existing code...
-    const searchTask = document.querySelector("#searchTask");
-    if (searchTask) {
-        searchTask.addEventListener("input", () => {
-            const title = searchTask.value.toLowerCase();
-            const filteredTasks = searchTasksByTitle(title);
-            renderAllTasks(filteredTasks);
-            showTasksCounters(filteredTasks);
-        });
-    }
-    else {
-        console.error("Elemento de busca de tarefas não encontrado.");
-    }
-    // ...existing code...
-}
-export function loadUsersPage(gestUserTask) {
-    // ...existing code...
-    const searchUser = document.querySelector("#searchUser");
-    if (searchUser) {
-        searchUser.addEventListener("input", () => {
-            const name = searchUser.value.toLowerCase();
-            const filteredUsers = searchUserByName(name);
-            renderUsers(filteredUsers);
-            showUsersCounters(filteredUsers);
-        });
-    }
-    else {
-        console.error("Elemento de busca de utilizadores não encontrado.");
-    }
-    // ...existing code...
+/* Função para inicializar o array global de usuários */
+export function initUsers(gestUsersTask) {
+    users = gestUsersTask.users;
 }
