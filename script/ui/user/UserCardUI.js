@@ -89,7 +89,7 @@ function userCardBtn(user) {
     btnRemover.addEventListener("click", (event) => {
         event.stopPropagation();
         if (user.tasks.length > 0) {
-            showInfoBanner("Utilizador com tarefas pendentes não pode ser removido.", "alert-banner");
+            showInfoBanner("Utilizador com tarefas pendentes não pode ser removido.", "error-banner");
         }
         else {
             const updatedUserList = removeUserByID(user.id);

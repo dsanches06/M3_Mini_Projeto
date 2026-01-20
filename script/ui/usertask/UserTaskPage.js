@@ -1,4 +1,4 @@
-import { addElementInContainer } from "../dom/ContainerSection.js";
+import { addElementInContainer, } from "../dom/ContainerSection.js";
 import { createHeadingTitle, createSection } from "../dom/CreatePage.js";
 import { createSearchContainer, createStatisticsCounter, } from "../dom/SectionCounter.js";
 import { countCompletedUserTasks, countPendingUserTasks, countAllTasks, } from "../task/TaskCountersUI.js";
@@ -13,7 +13,7 @@ export default function loadUserTaskPage(gestUserTask, user) {
     const userTaskCounterSection = createUserTaskCounter("userTaskCounters");
     addElementInContainer(userTaskCounterSection);
     //
-    showUserTaskCounters(user.tasks);
+    showUserTaskCounters(user.allTasks());
     //
     const searchContainer = showUserTaskSearchContainer();
     addElementInContainer(searchContainer);
@@ -21,7 +21,7 @@ export default function loadUserTaskPage(gestUserTask, user) {
     const userTasksContainer = createSection("usersTaskContainer");
     addElementInContainer(userTasksContainer);
     //
-    showUserTask(user, user.tasks);
+    showUserTask(user, user.allTasks());
     // Adicionar event listeners aos botões de contador para filtrar
     const allUserTasksBtn = userTaskCounterSection.querySelector("#allUserTasksBtn");
     allUserTasksBtn.title = "Mostrar todas as tarefas";
@@ -30,34 +30,42 @@ export default function loadUserTaskPage(gestUserTask, user) {
     const completedUserTaskBtn = userTaskCounterSection.querySelector("#completedUserTaskBtn");
     completedUserTaskBtn.title = "Mostrar tarefas concluídas";
     allUserTasksBtn.addEventListener("click", () => {
-        showUserTask(user, user.tasks);
-        showUserTaskCounters(user.tasks);
+        showUserTask(user, user.allTasks());
+        showUserTaskCounters(user.allTasks());
     });
     pendingUserTaskBtn.addEventListener("click", () => {
-        const pendingTasks = user.tasks.filter((task) => !task.completed);
+        const pendingTasks = user.pendingTasks();
         showUserTask(user, pendingTasks);
         showUserTaskCounters(pendingTasks);
     });
     completedUserTaskBtn.addEventListener("click", () => {
-        const completedTasks = user.tasks.filter((task) => task.completed);
+        const completedTasks = user.completedTasks();
         showUserTask(user, completedTasks);
         showUserTaskCounters(completedTasks);
     });
     // Adicionar event listeners aos botões de busca
     const addUserTaskBtn = document.querySelector("#addUserTaskBtn");
-    addUserTaskBtn.addEventListener("click", () => {
-        // Abrir modal para adicionar tarefa
-        createAndAppendTaskForm("containerSection", user, gestUserTask);
-        const modal = document.getElementById("modalUserTaskForm");
-        if (modal)
-            modal.style.display = "block";
-    });
+    if (addUserTaskBtn) {
+        addUserTaskBtn.addEventListener("click", () => {
+            // Abrir modal para adicionar tarefa
+            createAndAppendTaskForm("containerSection", user, gestUserTask);
+            const modal = document.getElementById("modalUserTaskForm");
+            if (modal)
+                modal.style.display = "block";
+            // Atualizar a lista de tarefas para todos os utilizadores
+            showUserTask(user, user.allTasks());
+            showUserTaskCounters(user.allTasks());
+        });
+    }
+    else {
+        console.warn("Elemento #addUserTaskBtn não encontrado.");
+    }
     const sortUserTasksBtn = document.querySelector("#sortUserTasksBtn");
     if (sortUserTasksBtn) {
         //Crie uma variável de controle de estado
         let isAscending = true;
         sortUserTasksBtn.addEventListener("click", () => {
-            const sortedTasks = [...user.tasks].sort((a, b) => {
+            const sortedTasks = [...user.allTasks()].sort((a, b) => {
                 if (isAscending) {
                     return a.title.localeCompare(b.title);
                 }
@@ -83,7 +91,9 @@ export default function loadUserTaskPage(gestUserTask, user) {
     if (searchUserTask) {
         searchUserTask.addEventListener("input", () => {
             const name = searchUserTask.value.toLowerCase();
-            const filteredTasks = user.tasks.filter((task) => task.title.toLowerCase().includes(name));
+            const filteredTasks = user
+                .allTasks()
+                .filter((task) => task.title.toLowerCase().includes(name));
             showUserTask(user, filteredTasks);
             showUserTaskCounters(filteredTasks);
         });

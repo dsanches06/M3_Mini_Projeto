@@ -53,7 +53,7 @@ export default function createAndAppendTaskForm(
 
   const submitBtn = document.createElement("button");
   submitBtn.type = "submit";
-  submitBtn.textContent = "Adicionar Tarefa";
+  submitBtn.textContent = "Adicionar";
 
   // Montar a estrutura
   form.append(titleInput, categorySelect, submitBtn);
@@ -100,6 +100,6 @@ const handleFormSubmit = (
     if (modal) modal.style.display = "none";
     form.reset();
   } else {
-    showInfoBanner("Preencha o título da tarefa.", "alert-banner");
+    showInfoBanner("Preencha o título da tarefa.", "error-banner");
   }
 };

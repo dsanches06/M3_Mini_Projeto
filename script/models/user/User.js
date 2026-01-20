@@ -22,4 +22,13 @@ export default class User {
             this.tasks.splice(index, 1);
         }
     }
+    pendingTasks() {
+        return this.tasks.filter((task) => !task.completed);
+    }
+    completedTasks() {
+        return this.tasks.filter((task) => task.completed);
+    }
+    allTasks() {
+        return this.tasks;
+    }
 }

@@ -1,7 +1,10 @@
 import GestUserTask from "../../models/gestUserTask/gestUserTask.js";
 import User from "../../models/user/User.js";
 import Task from "../../models/task/Task.js";
-import { addElementInContainer } from "../dom/ContainerSection.js";
+import {
+  addElementInContainer,
+  clearContainer,
+} from "../dom/ContainerSection.js";
 import { createHeadingTitle, createSection } from "../dom/CreatePage.js";
 import {
   createSearchContainer,
@@ -29,7 +32,7 @@ export default function loadUserTaskPage(
   const userTaskCounterSection = createUserTaskCounter("userTaskCounters");
   addElementInContainer(userTaskCounterSection);
   //
-  showUserTaskCounters(user.tasks as Task[]);
+  showUserTaskCounters(user.allTasks() as Task[]);
   //
   const searchContainer = showUserTaskSearchContainer();
   addElementInContainer(searchContainer);
@@ -39,7 +42,7 @@ export default function loadUserTaskPage(
   addElementInContainer(userTasksContainer);
   //
 
-  showUserTask(user, user.tasks as Task[]);
+  showUserTask(user, user.allTasks() as Task[]);
 
   // Adicionar event listeners aos botões de contador para filtrar
   const allUserTasksBtn = userTaskCounterSection.querySelector(
@@ -56,18 +59,18 @@ export default function loadUserTaskPage(
   completedUserTaskBtn.title = "Mostrar tarefas concluídas";
 
   allUserTasksBtn.addEventListener("click", () => {
-    showUserTask(user, user.tasks as Task[]);
-    showUserTaskCounters(user.tasks as Task[]);
+    showUserTask(user, user.allTasks() as Task[]);
+    showUserTaskCounters(user.allTasks() as Task[]);
   });
 
   pendingUserTaskBtn.addEventListener("click", () => {
-    const pendingTasks = user.tasks.filter((task) => !task.completed);
+    const pendingTasks = user.pendingTasks();
     showUserTask(user, pendingTasks as Task[]);
     showUserTaskCounters(pendingTasks as Task[]);
   });
 
   completedUserTaskBtn.addEventListener("click", () => {
-    const completedTasks = user.tasks.filter((task) => task.completed);
+    const completedTasks = user.completedTasks();
     showUserTask(user, completedTasks as Task[]);
     showUserTaskCounters(completedTasks as Task[]);
   });
@@ -76,12 +79,19 @@ export default function loadUserTaskPage(
   const addUserTaskBtn = document.querySelector(
     "#addUserTaskBtn",
   ) as HTMLElement;
-  addUserTaskBtn.addEventListener("click", () => {
-    // Abrir modal para adicionar tarefa
-    createAndAppendTaskForm("containerSection", user, gestUserTask);
-    const modal = document.getElementById("modalUserTaskForm") as HTMLElement;
-    if (modal) modal.style.display = "block";
-  });
+  if (addUserTaskBtn) {
+    addUserTaskBtn.addEventListener("click", () => {
+      // Abrir modal para adicionar tarefa
+      createAndAppendTaskForm("containerSection", user, gestUserTask);
+      const modal = document.getElementById("modalUserTaskForm") as HTMLElement;
+      if (modal) modal.style.display = "block";
+      // Atualizar a lista de tarefas para todos os utilizadores
+      showUserTask(user, user.allTasks() as Task[]);
+      showUserTaskCounters(user.allTasks() as Task[]);
+    });
+  } else {
+    console.warn("Elemento #addUserTaskBtn não encontrado.");
+  }
 
   const sortUserTasksBtn = document.querySelector(
     "#sortUserTasksBtn",
@@ -91,7 +101,7 @@ export default function loadUserTaskPage(
     //Crie uma variável de controle de estado
     let isAscending = true;
     sortUserTasksBtn.addEventListener("click", () => {
-      const sortedTasks = [...user.tasks].sort((a, b) => {
+      const sortedTasks = [...user.allTasks()].sort((a, b) => {
         if (isAscending) {
           return a.title.localeCompare(b.title);
         } else {
@@ -118,9 +128,9 @@ export default function loadUserTaskPage(
   if (searchUserTask) {
     searchUserTask.addEventListener("input", () => {
       const name = searchUserTask.value.toLowerCase();
-      const filteredTasks = user.tasks.filter((task) =>
-        task.title.toLowerCase().includes(name),
-      );
+      const filteredTasks = user
+        .allTasks()
+        .filter((task) => task.title.toLowerCase().includes(name));
       showUserTask(user, filteredTasks as Task[]);
       showUserTaskCounters(filteredTasks as Task[]);
     });

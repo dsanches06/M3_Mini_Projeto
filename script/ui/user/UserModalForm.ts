@@ -79,18 +79,28 @@ function setupFormLogic(
 
     // Verificação Final
     if (isValid) {
-      modal.remove();
       //obter um novo id a partir do ultimo
       let newId: number = getLastId(gestUserTask.users) + 1;
       //cria um novo user com os dados inseridos no formulario
       const user: User = new User(newId, fields.name.value, fields.email.value);
       //adiciona a lista de utilizadores
       gestUserTask.addUser(user);
-      showInfoBanner(`${user.name} foi adicionado com sucesso.`, "info-banner");
+      if (user && user.name) {
+        showInfoBanner(
+          `${user.name} foi adicionado com sucesso.`,
+          "info-banner",
+        );
+      } else {
+        showInfoBanner(
+          `ERRO: ${fields.name.value} não foi adicionado.`,
+          "error-banner",
+        );
+      }
       //mostra todos os utilizadores
       renderUsers(gestUserTask, gestUserTask.users as User[]);
       // atualizar contadores
       showUsersCounters(gestUserTask.users as User[]);
+      modal.remove();
     } else {
       errors.banner.textContent =
         "Existem erros no formulário. Por favor, verifique os campos.";
@@ -141,7 +151,7 @@ export function renderUserModal(gestUserTask: GestUserTask): void {
 
   const submitBtn = createButton(
     "button",
-    "Adicionar Utilizador",
+    "Adicionar",
     "submit",
   ) as HTMLButtonElement;
 

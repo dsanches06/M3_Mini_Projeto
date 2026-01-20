@@ -97,7 +97,7 @@ ${task.category} - ${
     } else {
       showInfoBanner(
         "Utilizador com tarefas pendentes não pode ser removido.",
-        "alert-banner",
+        "error-banner",
       );
     }
   });

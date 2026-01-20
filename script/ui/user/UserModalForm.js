@@ -49,18 +49,23 @@ function setupFormLogic(gestUserTask, form, fields, errors, modal) {
         }
         // Verificação Final
         if (isValid) {
-            modal.remove();
             //obter um novo id a partir do ultimo
             let newId = getLastId(gestUserTask.users) + 1;
             //cria um novo user com os dados inseridos no formulario
             const user = new User(newId, fields.name.value, fields.email.value);
             //adiciona a lista de utilizadores
             gestUserTask.addUser(user);
-            showInfoBanner(`${user.name} foi adicionado com sucesso.`, "info-banner");
+            if (user && user.name) {
+                showInfoBanner(`${user.name} foi adicionado com sucesso.`, "info-banner");
+            }
+            else {
+                showInfoBanner(`ERRO: ${fields.name.value} não foi adicionado.`, "error-banner");
+            }
             //mostra todos os utilizadores
             renderUsers(gestUserTask, gestUserTask.users);
             // atualizar contadores
             showUsersCounters(gestUserTask.users);
+            modal.remove();
         }
         else {
             errors.banner.textContent =
@@ -89,7 +94,7 @@ export function renderUserModal(gestUserTask) {
     // Criação dos campos usando a função auxiliar
     const nameData = createInputGroup("Nome", "nameInput", "text", "inserir o nome");
     const emailData = createInputGroup("Email", "emailInput", "email", "inserir o email");
-    const submitBtn = createButton("button", "Adicionar Utilizador", "submit");
+    const submitBtn = createButton("button", "Adicionar", "submit");
     // Montagem
     form.append(nameData.section, emailData.section, submitBtn);
     content.append(closeBtn, title, errorBanner, form);

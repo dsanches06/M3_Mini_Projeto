@@ -149,9 +149,15 @@ const removeCompletedTaskBtn = document.querySelector(
   "#removeCompletedTaskBtn",
 ) as HTMLButtonElement;
 if (removeCompletedTaskBtn) {
-  removeCompletedTaskBtn.addEventListener("click", () =>
-    removeCompletedTasks(user),
-  );
+  removeCompletedTaskBtn.addEventListener("click", () => {
+    const hasPendingTasks = user.tasks?.some((task) => !task.completed);
+    if (hasPendingTasks) {
+      showInfoBanner("Não é possível remover tarefas. Existem tarefas pendentes.", "error-banner");
+      return;
+    }
+    removeCompletedTasks(user);
+    showUserTask(user, user.tasks as Task[]);
+  });
 } else {
   console.warn("Elemento #removeCompletedTaskBtn não foi renderizado no DOM.");
 }

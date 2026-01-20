@@ -35,4 +35,16 @@ export default class User implements IUser {
       this.tasks.splice(index, 1);
     }
   }
+
+  pendingTasks(): ITask[] {
+    return this.tasks.filter((task) => !task.completed);
+  }
+
+  completedTasks(): ITask[] {
+    return this.tasks.filter((task) => task.completed);
+  }
+
+  allTasks(): ITask[] {
+    return this.tasks;
+  }
 }

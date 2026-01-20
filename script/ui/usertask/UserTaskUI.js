@@ -77,7 +77,7 @@ ${task.category} - ${task.completeDate ? task.completeDate.toLocaleString("pt-PT
             showInfoBanner(`${user.name} removeu a tarefa ${task.title} com sucesso.`, "info-banner");
         }
         else {
-            showInfoBanner("Utilizador com tarefas pendentes não pode ser removido.", "alert-banner");
+            showInfoBanner("Utilizador com tarefas pendentes não pode ser removido.", "error-banner");
         }
     });
     buttonContainer.appendChild(editBtn);
