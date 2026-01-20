@@ -25,10 +25,10 @@ import {
   sortTasksByTitle,
   removeAllCompletedTask,
 } from "../gestUserTask/GestTaskUI.js";
+import { showInfoBanner } from "../../helpers/infoBanner.js";
 
 /* Lista de tarefas de utilizadores */
 export default function loadTasksPage(
-  gestUserTask: GestUserTask,
   tasksList: ITask[],
 ): void {
   /* ativa o menu tarefas */
@@ -80,15 +80,6 @@ export default function loadTasksPage(
     showTasksCounters(tasks as Task[]);
   });
 
-  // Adicionar event listeners aos botões de busca
-  const addTaskBtn = document.querySelector("#addTaskBtn") as HTMLElement;
-  addTaskBtn.addEventListener("click", () => {
-    // Lógica para adicionar tarefa (ex.: abrir modal ou navegar)
-    alert(
-      "Funcionalidade para adicionar tarefa - implementar modal ou navegação.",
-    );
-  });
-
   const sortTasksBtn = document.querySelector("#sortTasksBtn") as HTMLElement;
 
   if (sortTasksBtn) {
@@ -120,7 +111,7 @@ export default function loadTasksPage(
       showTasksCounters(filteredTasks as Task[]);
     });
   } else {
-    console.error("Elemento de busca de tarefas não encontrado.");
+    console.warn("Elemento de busca de tarefas não encontrado.");
   }
 
   // Adicionar event listeners aos botões de busca
@@ -135,7 +126,7 @@ export default function loadTasksPage(
         renderAllTasks(tasks as Task[]);
         showTasksCounters(tasks as Task[]);
       } else {
-        alert("Nenhuma tarefa concluída para remover.");
+        showInfoBanner("Nenhuma tarefa concluída para remover.", "info-banner");
       }
     });
   }
@@ -186,7 +177,6 @@ function showSearchTaskContainer(): HTMLElement {
     "searchTaskContainer",
     { id: "searchTask", placeholder: "Procurar tarefa..." },
     [
-      { id: "addTaskBtn", text: "Adicionar tarefa" },
       { id: "sortTasksBtn", text: "Ordenar A-Z" },
       { id: "removeAllCompletedTaskBtn", text: "Remover tarefas concluídas" },
     ],

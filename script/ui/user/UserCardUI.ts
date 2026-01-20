@@ -1,3 +1,4 @@
+import { showInfoBanner } from "../../helpers/infoBanner.js";
 import GestUserTask from "../../models/gestUserTask/gestUserTask.js";
 import User from "../../models/user/User.js";
 import { clearContainer } from "../dom/ContainerSection.js";
@@ -115,11 +116,15 @@ function userCardBtn(user: User): HTMLElement {
   btnRemover.id = "removeBtn";
   btnRemover.addEventListener("click", (event) => {
     event.stopPropagation();
-    const updatedUserList = removeUserByID(user.id);
-    if (updatedUserList) {
-      //atualiza a lista de utilizadores
-      renderUsers(updatedUserList, updatedUserList.users as User[]);
-      showUsersCounters(updatedUserList.users as User[]);
+    if (user.tasks.length > 0) {
+      showInfoBanner("Utilizador com tarefas pendentes não pode ser removido.", "alert-banner");
+    } else {
+      const updatedUserList = removeUserByID(user.id);
+      if (updatedUserList) {
+        //atualiza a lista de utilizadores
+        renderUsers(updatedUserList, updatedUserList.users as User[]);
+        showUsersCounters(updatedUserList.users as User[]);
+      }
     }
   });
 

@@ -5,8 +5,9 @@ import { createSearchContainer, createStatisticsCounter, } from "../dom/SectionC
 import { countCompletedUserTasks, countPendingUserTasks, countAllTasks, } from "./TaskCountersUI.js";
 import renderAllTasks from "./TaskUI.js";
 import { allUsersTasks, pendingTasks, completedTasks, searchTasksByTitle, sortTasksByTitle, removeAllCompletedTask, } from "../gestUserTask/GestTaskUI.js";
+import { showInfoBanner } from "../../helpers/infoBanner.js";
 /* Lista de tarefas de utilizadores */
-export default function loadTasksPage(gestUserTask, tasksList) {
+export default function loadTasksPage(tasksList) {
     /* ativa o menu tarefas */
     menuSelected("#menuTasks");
     //
@@ -44,12 +45,6 @@ export default function loadTasksPage(gestUserTask, tasksList) {
         renderAllTasks(tasks);
         showTasksCounters(tasks);
     });
-    // Adicionar event listeners aos botões de busca
-    const addTaskBtn = document.querySelector("#addTaskBtn");
-    addTaskBtn.addEventListener("click", () => {
-        // Lógica para adicionar tarefa (ex.: abrir modal ou navegar)
-        alert("Funcionalidade para adicionar tarefa - implementar modal ou navegação.");
-    });
     const sortTasksBtn = document.querySelector("#sortTasksBtn");
     if (sortTasksBtn) {
         //Crie uma variável de controle de estado
@@ -79,7 +74,7 @@ export default function loadTasksPage(gestUserTask, tasksList) {
         });
     }
     else {
-        console.error("Elemento de busca de tarefas não encontrado.");
+        console.warn("Elemento de busca de tarefas não encontrado.");
     }
     // Adicionar event listeners aos botões de busca
     const removeAllCompletedTaskBtn = document.querySelector("#removeAllCompletedTaskBtn");
@@ -92,7 +87,7 @@ export default function loadTasksPage(gestUserTask, tasksList) {
                 showTasksCounters(tasks);
             }
             else {
-                alert("Nenhuma tarefa concluída para remover.");
+                showInfoBanner("Nenhuma tarefa concluída para remover.", "info-banner");
             }
         });
     }
@@ -119,7 +114,6 @@ export function showTasksCounters(taskList) {
 /* */
 function showSearchTaskContainer() {
     const searchTaskContainer = createSearchContainer("searchTaskContainer", { id: "searchTask", placeholder: "Procurar tarefa..." }, [
-        { id: "addTaskBtn", text: "Adicionar tarefa" },
         { id: "sortTasksBtn", text: "Ordenar A-Z" },
         { id: "removeAllCompletedTaskBtn", text: "Remover tarefas concluídas" },
     ]);

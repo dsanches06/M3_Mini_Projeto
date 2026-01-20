@@ -1,3 +1,4 @@
+import { showInfoBanner } from "../../helpers/infoBanner.js";
 import Task from "../../models/task/Task.js";
 import User from "../../models/user/User.js";
 import {
@@ -6,6 +7,7 @@ import {
   countPendingUserTasks,
 } from "../task/TaskCountersUI.js";
 import { styleTasks, userCompleteTask, userEditTitle } from "./UserTaskCRUD.js";
+import { showUserTaskCounters } from "./UserTaskPage.js";
 
 /* Mostrar tarefas */
 export default function showUserTask(user: User, tasks: Task[]): void {
@@ -66,6 +68,7 @@ ${task.category} - ${
   editBtn.role = "button";
   editBtn.addEventListener("click", () => {
     userEditTitle(user, task.id);
+    showUserTaskCounters(user.tasks as Task[]);
   });
 
   // Botão Concluir
@@ -75,6 +78,7 @@ ${task.category} - ${
   completeBtn.role = "button";
   completeBtn.addEventListener("click", () => {
     userCompleteTask(user, task.id);
+    showUserTaskCounters(user.tasks as Task[]);
   });
 
   // Botão Remover
@@ -83,7 +87,19 @@ ${task.category} - ${
   deleteBtn.title = "Remover tarefa";
   deleteBtn.role = "button";
   deleteBtn.addEventListener("click", () => {
-    user.removeTask(task.id);
+    if (task.completed) {
+      user.removeTask(task.id);
+      showUserTaskCounters(user.tasks as Task[]);
+      showInfoBanner(
+        `${user.name} removeu a tarefa ${task.title} com sucesso.`,
+        "info-banner",
+      );
+    } else {
+      showInfoBanner(
+        "Utilizador com tarefas pendentes não pode ser removido.",
+        "alert-banner",
+      );
+    }
   });
 
   buttonContainer.appendChild(editBtn);

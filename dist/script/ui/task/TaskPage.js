@@ -93,6 +93,7 @@ export default function loadTasksPage(gestUserTask, tasksList) {
             }
             else {
                 alert("Nenhuma tarefa concluída para remover.");
+                
             }
         });
     }

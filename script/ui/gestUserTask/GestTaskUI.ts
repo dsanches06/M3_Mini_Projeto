@@ -4,11 +4,8 @@ import ITask from "../../models/task/ITask.js";
 import { getTasksByFilter } from "../../helpers/getTaskByFilter.js";
 import { clearContainer } from "../dom/ContainerSection.js";
 import Task from "../../models/task/Task.js";
-import { searchUserByName } from "../gestUserTask/GestUserUI.js";
-import renderAllTasks from "../task/TaskUI.js";
-import loadTasksPage, { showTasksCounters } from "../task/TaskPage.js";
-import renderUsers from "../user/UserUI.js";
-import { showUsersCounters } from "../user/UserPage.js";
+import loadTasksPage from "../task/TaskPage.js";
+import { showInfoBanner } from "../../helpers/infoBanner.js";
 
 /* array global de utilizadores */
 let users: User[];
@@ -39,7 +36,7 @@ export function loadAllUsersTask(gestUsersTask: GestUserTask): void {
   // Limpa o container antes de mostrar os utilizadores
   clearContainer();
   // carrega a pagina dinamica de utilizadores
-  loadTasksPage(gestUsersTask, tasksFiltered);
+  loadTasksPage(tasksFiltered);
 }
 
 /* */
@@ -77,7 +74,7 @@ export function sortTasksByTitle(ascending: boolean = true): ITask[] {
 
 export function removeAllCompletedTask(): ITask[] {
   if (!users || users.length === 0) {
-    console.warn("Nenhum usuário disponível para remover tarefas completas.");
+    showInfoBanner("Nenhum usuário disponível para remover tarefas completas.", "info-banner");
     return [];
   }
   // inicializa o array para evitar repetições de dados
@@ -108,4 +105,3 @@ export function removeAllCompletedTask(): ITask[] {
 export function initUsers(gestUsersTask: GestUserTask): void {
   users = gestUsersTask.users as User[];
 }
-

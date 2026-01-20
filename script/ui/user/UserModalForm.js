@@ -1,4 +1,5 @@
 import { getLastId } from "../../helpers/getLastID.js";
+import { showInfoBanner } from "../../helpers/infoBanner.js";
 import User from "../../models/user/User.js";
 import { createButton, createForm, createHeadingTitle, createSection, } from "../dom/CreatePage.js";
 import { showUsersCounters } from "./UserPage.js";
@@ -55,6 +56,7 @@ function setupFormLogic(gestUserTask, form, fields, errors, modal) {
             const user = new User(newId, fields.name.value, fields.email.value);
             //adiciona a lista de utilizadores
             gestUserTask.addUser(user);
+            showInfoBanner(`${user.name} foi adicionado com sucesso.`, "info-banner");
             //mostra todos os utilizadores
             renderUsers(gestUserTask, gestUserTask.users);
             // atualizar contadores

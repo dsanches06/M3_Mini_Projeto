@@ -300,13 +300,15 @@ main {
 
 #usersContainer .card .btnGroup button#removeBtn,
 .form-group button#removeAllCompletedTaskBtn,
-.form-group button#removeCompletedTaskBtn {
+.form-group button#removeCompletedTaskBtn,
+.form-group button#removeCompletedUserTaskBtn {
   background-color: #dc3545;
 }
 
 #usersContainer .card .btnGroup button#removeBtn:hover,
 .form-group button#removeAllCompletedTaskBtn:hover,
-.form-group button#removeCompletedTaskBtn:hover {
+.form-group button#removeCompletedTaskBtn:hover,
+.form-group button#removeCompletedUserTaskBtn:hover {
   background-color: #c82333;
 }
 
@@ -616,4 +618,274 @@ footer {
 footer p {
   margin: 0;
   font-size: 14px;
+}
+
+.alert-banner,
+.info-banner {
+  padding: 12px;
+  border-radius: 4px;
+  margin-top: 10px;
+  border: 1px solid #17a2b8;
+  display: block;
+  position: fixed;
+  top: 70px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 999;
+  width: 90%;
+  max-width: 550px;
+}
+
+.alert-banner {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.info-banner {
+  background-color: #f8d7da;
+  color: green;
+}
+
+/* Media Queries para Telemóvel */
+@media (max-width: 768px) {
+  body {
+    padding: 10px;
+  }
+
+  header {
+    padding: 10px;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  header > h1 {
+    font-size: 24px;
+  }
+
+  header nav ul {
+    gap: 10px;
+  }
+
+  header nav ul li a {
+    font-size: 16px;
+    padding: 5px;
+  }
+
+  main {
+    padding: 100px 10px 80px 10px;
+    gap: 15px;
+  }
+
+  .container {
+    gap: 20px;
+  }
+
+  .users-counters,
+  .tasks-counters,
+  #taskCounters,
+  #userCountersTask {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .statistics {
+    gap: 5px;
+  }
+
+  .counters-img {
+    width: 40px;
+    height: 40px;
+  }
+
+  #totalUsers,
+  #ativeUsers,
+  #unableUsers,
+  #ativeUserPercentage,
+  #totalTasks,
+  #pendingTasks,
+  #completedTasks,
+  #totalTasksUser,
+  #pendingUserTasks,
+  #completedUserTasks {
+    font-size: 14px;
+  }
+
+  .search-add-container {
+    gap: 15px;
+  }
+
+  #searchUser,
+  #searchTask,
+  #searchTaskUser {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  #usersContainer,
+  #taskContainer,
+  #usersTaskContainer {
+    width: 100%;
+    padding: 10px;
+  }
+
+  #usersContainer .card {
+    width: 250px;
+    height: 350px;
+    margin: 10px;
+  }
+
+  #usersContainer .card .title h2 {
+    padding: 20px 0;
+    font-size: 20px;
+  }
+
+  #usersContainer .card .content {
+    bottom: 35%;
+    padding: 10px;
+  }
+
+  #usersContainer .card .content p {
+    font-size: 14px;
+  }
+
+  #usersContainer .card .content .userTasks {
+    margin-top: 5px;
+  }
+
+  #usersContainer .card .content .userTasks a#addTaskIconBtn,
+  .task-buttons a {
+    width: 40px;
+    height: 40px;
+  }
+
+  #usersContainer .card .btnGroup {
+    bottom: 15px;
+    gap: 5px;
+  }
+
+  #usersContainer .card .btnGroup button {
+    padding: 8px 15px;
+    font-size: 14px;
+  }
+
+  #taskContainer table,
+  #usersTaskContainer #usersTaskList {
+    font-size: 14px;
+  }
+
+  #taskContainer table caption {
+    font-size: 18px;
+  }
+
+  #taskContainer table th,
+  #taskContainer table td {
+    padding: 10px;
+  }
+
+  #usersTaskContainer .user-task-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px;
+  }
+
+  #usersTaskContainer .task-buttons {
+    gap: 15px;
+  }
+
+  .task-buttons a {
+    width: 25px;
+    height: 25px;
+  }
+
+  .modal-content {
+    margin: 20px auto;
+    padding: 20px;
+    width: 95%;
+    max-width: none;
+    max-height: none;
+  }
+
+  .modal-content h2 {
+    margin-bottom: 15px;
+    font-size: 18px;
+  }
+
+  .close {
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+  }
+
+  #formUser,
+  #formTaskUser {
+    gap: 15px;
+  }
+
+  .form-group {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+
+  label {
+    min-width: auto;
+    font-size: 12px;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  select {
+    min-width: auto;
+    width: 100%;
+    padding: 10px;
+  }
+
+  button[type="submit"] {
+    padding: 10px 15px;
+    font-size: 14px;
+    margin-top: 15px;
+  }
+
+  .user-details {
+    padding: 15px;
+  }
+
+  .user-details h3 {
+    font-size: 16px;
+  }
+
+  .user-details p {
+    font-size: 12px;
+  }
+
+  .user-tasks-details {
+    margin-top: 15px;
+    line-height: 150%;
+  }
+
+  footer {
+    padding: 15px;
+  }
+
+  footer p {
+    font-size: 12px;
+  }
+
+  button {
+    width: 100%;
+    max-width: 200px;
+  }
+
+  div > input[type="text"],
+  div > input[type="email"] {
+    margin-right: 0;
+    width: 100%;
+  }
+
+  .alert-banner {
+    padding: 10px;
+    margin-top: 8px;
+    font-size: 13px;
+  }
 }

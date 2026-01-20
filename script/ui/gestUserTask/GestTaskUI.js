@@ -1,6 +1,7 @@
 import { getTasksByFilter } from "../../helpers/getTaskByFilter.js";
 import { clearContainer } from "../dom/ContainerSection.js";
 import loadTasksPage from "../task/TaskPage.js";
+import { showInfoBanner } from "../../helpers/infoBanner.js";
 /* array global de utilizadores */
 let users;
 // array global para armazenar tarefas filtradas
@@ -28,7 +29,7 @@ export function loadAllUsersTask(gestUsersTask) {
     // Limpa o container antes de mostrar os utilizadores
     clearContainer();
     // carrega a pagina dinamica de utilizadores
-    loadTasksPage(gestUsersTask, tasksFiltered);
+    loadTasksPage(tasksFiltered);
 }
 /* */
 export function allUsersTasks() {
@@ -61,7 +62,7 @@ export function sortTasksByTitle(ascending = true) {
 }
 export function removeAllCompletedTask() {
     if (!users || users.length === 0) {
-        console.warn("Nenhum usuário disponível para remover tarefas completas.");
+        showInfoBanner("Nenhum usuário disponível para remover tarefas completas.", "info-banner");
         return [];
     }
     // inicializa o array para evitar repetições de dados

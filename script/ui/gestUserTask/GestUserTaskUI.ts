@@ -1,5 +1,6 @@
 import { getLastId } from "../../helpers/getLastID.js";
 import { getTasksByFilter } from "../../helpers/getTaskByFilter.js";
+import { showInfoBanner } from "../../helpers/infoBanner.js";
 import GestUserTask from "../../models/gestUserTask/gestUserTask.js";
 import Task from "../../models/task/Task.js";
 import User from "../../models/user/User.js";
@@ -171,12 +172,6 @@ if (formTaskUser) {
     ) as HTMLSelectElement;
     const title = titleInput.value.trim();
     const category = taskCategory.value.trim();
-    // Obter elemento do banner de erro
-    const errorBanner = document.querySelector("#errorBanner") as HTMLElement;
-
-    // Limpar mensagens de erro anteriores
-    errorBanner.textContent = "";
-    errorBanner.style.display = "none";
 
     // Validações
     let isValid = true;
@@ -204,8 +199,7 @@ if (formTaskUser) {
 
     // Se não válido, mostrar banner de erro
     if (!isValid) {
-      errorBanner.textContent = errorMessages.join(" ");
-      errorBanner.style.display = "block";
+      showInfoBanner(errorMessages.join(" "), "error-banner");
       return;
     }
 
@@ -220,6 +214,7 @@ if (formTaskUser) {
       "#modalUserTaskForm",
     ) as HTMLElement;
     modalForm.style.display = "none";
+    showInfoBanner(`${user.name}, adicionou uma nova tarefa.`, "info-banner");
     //mostra todos os utilizadores
     showUserTask(user, user.tasks as Task[]);
   });

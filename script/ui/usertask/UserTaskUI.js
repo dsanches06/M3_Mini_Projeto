@@ -1,5 +1,7 @@
+import { showInfoBanner } from "../../helpers/infoBanner.js";
 import { countAllTasks, countCompletedUserTasks, countPendingUserTasks, } from "../task/TaskCountersUI.js";
 import { styleTasks, userCompleteTask, userEditTitle } from "./UserTaskCRUD.js";
+import { showUserTaskCounters } from "./UserTaskPage.js";
 /* Mostrar tarefas */
 export default function showUserTask(user, tasks) {
     countAllTasks("#totalTasks", tasks);
@@ -52,6 +54,7 @@ ${task.category} - ${task.completeDate ? task.completeDate.toLocaleString("pt-PT
     editBtn.role = "button";
     editBtn.addEventListener("click", () => {
         userEditTitle(user, task.id);
+        showUserTaskCounters(user.tasks);
     });
     // Botão Concluir
     const completeBtn = document.createElement("a");
@@ -60,6 +63,7 @@ ${task.category} - ${task.completeDate ? task.completeDate.toLocaleString("pt-PT
     completeBtn.role = "button";
     completeBtn.addEventListener("click", () => {
         userCompleteTask(user, task.id);
+        showUserTaskCounters(user.tasks);
     });
     // Botão Remover
     const deleteBtn = document.createElement("a");
@@ -67,7 +71,14 @@ ${task.category} - ${task.completeDate ? task.completeDate.toLocaleString("pt-PT
     deleteBtn.title = "Remover tarefa";
     deleteBtn.role = "button";
     deleteBtn.addEventListener("click", () => {
-        user.removeTask(task.id);
+        if (task.completed) {
+            user.removeTask(task.id);
+            showUserTaskCounters(user.tasks);
+            showInfoBanner(`${user.name} removeu a tarefa ${task.title} com sucesso.`, "info-banner");
+        }
+        else {
+            showInfoBanner("Utilizador com tarefas pendentes não pode ser removido.", "alert-banner");
+        }
     });
     buttonContainer.appendChild(editBtn);
     buttonContainer.appendChild(completeBtn);

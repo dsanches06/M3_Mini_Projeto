@@ -24,11 +24,7 @@ import {
   allUsersUnable,
   searchUserByName,
 } from "../gestUserTask/GestUserUI.js";
-import { getTasksByFilter } from "../../helpers/getTaskByFilter.js";
-import Task from "../../models/task/Task.js";
-import loadAllUsersTask from "../gestUserTask/GestUserUI.js";
-
-let tasksFiltered: Task[];
+import { renderUserModal } from "./UserModalForm.js";
 
 /* Lista de utilizadores */
 export default function loadUsersPage(gestUserTask: GestUserTask): void {
@@ -46,7 +42,10 @@ export default function loadUsersPage(gestUserTask: GestUserTask): void {
   addElementInContainer(searchContainer);
   //
 
-  const usersContainer = renderUsers(gestUserTask, gestUserTask.users as User[]);
+  const usersContainer = renderUsers(
+    gestUserTask,
+    gestUserTask.users as User[],
+  );
   addElementInContainer(usersContainer);
 
   // Adicionar event listeners aos botões de contador para filtrar
@@ -85,9 +84,7 @@ export default function loadUsersPage(gestUserTask: GestUserTask): void {
   const addUserBtn = document.querySelector("#addUserBtn") as HTMLElement;
   addUserBtn.addEventListener("click", () => {
     // Lógica para adicionar usuário (ex.: abrir modal ou navegar)
-    alert(
-      "Funcionalidade para adicionar usuário - implementar modal ou navegação.",
-    );
+    renderUserModal(gestUserTask);
   });
 
   const sortUsersBtn = document.querySelector("#sortUsersBtn") as HTMLElement;
@@ -107,6 +104,7 @@ export default function loadUsersPage(gestUserTask: GestUserTask): void {
     });
   } else {
     console.warn("Elemento #sortUsersBtn não foi renderizado no DOM.");
+
   }
 
   // ...existing code...
@@ -119,7 +117,7 @@ export default function loadUsersPage(gestUserTask: GestUserTask): void {
       showUsersCounters(filteredUsers as User[]);
     });
   } else {
-    console.error("Elemento de busca de utilizadores não encontrado.");
+    console.warn("Elemento de busca de utilizadores não encontrado.");
   }
 }
 /* */

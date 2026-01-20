@@ -5,7 +5,7 @@ import { createSearchContainer, createStatisticsCounter, } from "../dom/SectionC
 import { countAtivePercentage, countAtiveUsers, countUnableUsers, countAllUsers, } from "./UserCountersUI.js";
 import renderUsers from "./UserUI.js";
 import { allUsers, sortUsersByName, allUsersAtive, allUsersUnable, searchUserByName, } from "../gestUserTask/GestUserUI.js";
-let tasksFiltered;
+import { renderUserModal } from "./UserModalForm.js";
 /* Lista de utilizadores */
 export default function loadUsersPage(gestUserTask) {
     /* ativa o menu Users */
@@ -49,7 +49,7 @@ export default function loadUsersPage(gestUserTask) {
     const addUserBtn = document.querySelector("#addUserBtn");
     addUserBtn.addEventListener("click", () => {
         // Lógica para adicionar usuário (ex.: abrir modal ou navegar)
-        alert("Funcionalidade para adicionar usuário - implementar modal ou navegação.");
+        renderUserModal(gestUserTask);
     });
     const sortUsersBtn = document.querySelector("#sortUsersBtn");
     if (sortUsersBtn) {
@@ -80,7 +80,7 @@ export default function loadUsersPage(gestUserTask) {
         });
     }
     else {
-        console.error("Elemento de busca de utilizadores não encontrado.");
+        console.warn("Elemento de busca de utilizadores não encontrado.");
     }
 }
 /* */

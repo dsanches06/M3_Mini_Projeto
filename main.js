@@ -10,8 +10,6 @@ window.onload = () => {
     /* carregar utilizadores iniciais com as suas tarefas, vindo de fake data */
     loadInitialUsers(gestUserTask);
 };
-// /* mostrar apenas as tarefas de um utilizador */
-// loadUserTask(gestUserTask);
 //obter o menu task
 const menuUsers = document.querySelector("#menuUsers");
 menuUsers.addEventListener("click", () => {
@@ -35,5 +33,5 @@ menuTasks.addEventListener("click", () => {
     //limpa o container
     clearContainer();
     //mostrar todas as tarefas de todos os utilizadores
-    loadTasksPage(gestUserTask, tasksList);
+    loadTasksPage(tasksList);
 });
