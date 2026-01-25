@@ -1,20 +1,13 @@
 {
   "compilerOptions": {
-    "target": "ES6",
-    "module": "ES6",
-    "lib": ["ES6", "DOM", "DOM.Iterable"],
+    "target": "es6",
+    "module": "esnext",              
+    "moduleResolution": "node",
+    "baseUrl": "./src",
     "outDir": "./dist",
-    "rootDir": "./",
     "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": [
-    "**/*.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "**/*.js"
-  ]
+  "include": ["src/**/*"]
 }
+
