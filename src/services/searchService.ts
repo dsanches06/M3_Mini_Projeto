@@ -1,14 +1,15 @@
-import { IUser } from "../models/index.js";
-import { ITask, TaskStatus } from "../tasks/index.js";
+import { UserClass } from "./../models/UserClass";
+import { ITask } from "../tasks/ITask";
+import { TaskStatus } from "../tasks/TaskStatus";
 
 //Dicas:
 // Pesquisa por texto, utilizador e estado
 
 export class SearchService {
-  private users: IUser[];
+  private users: UserClass[];
   private tasks: ITask[];
 
-  constructor(users: IUser[], tasks: ITask[]) {
+  constructor(users: UserClass[], tasks: ITask[]) {
     this.users = users;
     this.tasks = tasks;
   }
@@ -18,7 +19,7 @@ export class SearchService {
   }
 
   searchByUser(userId: number) {
-    return this.users.find((u) => u.id === userId);
+    return this.users.find((u) => u.getId() === userId);
   }
 
   searchByStatus(status: TaskStatus) {

@@ -1,34 +1,32 @@
-import { BugTask, ITask } from "../tasks/index.js";
-import { Priority } from "../utils/index.js";
+import { ITask } from "../tasks/ITask";
+import { Priority } from "../utils/Priority";
 
 export class PriorityService {
   private tasks: ITask[];
-  private priority: Priority;
 
-  constructor(tasks: ITask[], priority: Priority) {
+  constructor(tasks: ITask[]) {
     this.tasks = tasks;
-    this.priority = priority;
   }
 
   setPriority(taskId: number, priority: Priority) {
     const task = this.tasks.find((t) => t.id === taskId);
     if (task) {
-      //task.setPriority(priority);
+      if (priority === Priority.LOW) {
+      } else if (priority === Priority.MEDIUM) {
+      } else if (priority === Priority.HIGH) {
+      } else if (priority === Priority.CRITICAL) {
+      }
     }
   }
 
   getPriority(taskId: number) {
     const task = this.tasks.find((t) => t.id === taskId);
     if (task) {
-      //return task.getPriority();
+      //o que fazer aqui
     }
   }
 
-  getHighPriorityTasks(): BugTask[] {
-    /* return this.tasks.filter((t) => {
-      const task = t as BugTask;
-      return task.getPriority() === this.priority;
-    }) as BugTask[];*/
+  getHighPriorityTasks() {
     return [];
   }
 }

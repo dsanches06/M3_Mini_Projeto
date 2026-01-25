@@ -1,36 +1,33 @@
-import { Attachment } from "../attachments/index.js";
-import { ITask } from "../tasks/index.js";
+import { Attachment } from "../attachments/Attachment";
+import { ITask } from "../tasks/ITask";
 
 export class AttachmentService {
   private tasks: ITask[];
+  private attachments: Attachment[];
 
   constructor(tasks: ITask[]) {
     this.tasks = tasks;
+    this.attachments = [];
   }
 
-  // Funções para gerenciar attachments relacionados a tasks
   addAttachment(taskId: number, attachment: Attachment) {
     const task = this.tasks.find((t) => t.id === taskId);
     if (task) {
-      //task.getAttachments().push(attachment);
+      this.attachments.push(attachment);
     }
   }
 
-  // Retorna todos os attachments de uma task específica
-  getAttachments(taskId: number): Attachment[] {
+  getAttachments(taskId: number) {
     const task = this.tasks.find((t) => t.id === taskId);
-    // return task.getAttachments();
-    return [];
+    if (task) {
+      return this.attachments.filter((a) => a.getTaskId() === taskId);
+    }
   }
 
-  // Remove um attachment específico
   removeAttachment(attachmentId: number) {
-    const attachment = this.getAttachments(attachmentId);
-    if (attachment) {
-      const index = attachment.findIndex((a) => a.getId() === attachmentId);
-      if (index !== -1) {
-        attachment.splice(index, 1);
-      }
+    const index = this.attachments.findIndex((a) => a.getId() === attachmentId);
+    if (index !== -1) {
+      this.attachments.splice(index, 1);
     }
   }
 }

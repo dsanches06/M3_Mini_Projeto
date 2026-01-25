@@ -8,19 +8,19 @@ export class Attachment {
   private count: number = 0;
 
   constructor(
-    id?: number,
-    taskId?: number,
-    fileName?: string,
-    size?: number,
-    url?: string,
-    uploadedAt?: Date,
+    id: number,
+    taskId: number,
+    fileName: string,
+    size: number,
+    url: string,
+    uploadedAt: Date,
   ) {
-    this.id = id || 0;
-    this.taskId = taskId || 0;
-    this.fileName = fileName || '';
-    this.size = size || 0;
-    this.url = url || '';
-    this.uploadedAt = uploadedAt || new Date();
+    this.id = id;
+    this.taskId = taskId;
+    this.fileName = fileName;
+    this.size = size;
+    this.url = url;
+    this.uploadedAt = uploadedAt;
   }
 
   getId(): number {

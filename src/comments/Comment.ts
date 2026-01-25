@@ -4,10 +4,9 @@ export class Comment {
   private userId: number;
   private message: string;
   private createdAt: Date;
-  private count: number = 0;
 
-  constructor(taskId: number, userId: number, message: string) {
-    this.id = this.count += 1;
+  constructor(id: number, taskId: number, userId: number, message: string) {
+    this.id = id;
     this.taskId = taskId;
     this.userId = userId;
     this.message = message;

@@ -1,28 +1,24 @@
-import { ITask } from "../tasks/index.js";
+import { ITask } from "../tasks/ITask";
 
 // Função para processar uma tarefa com base no seu tipo
 //ver isso
 export function processTask(task: ITask) {
-
   const type = task.getType();
-
-  if (type === "Bug") {
-    console.log(`Processing Bug Task: ${task.title}`);
-  } else if (type === "Feature") {
-    console.log(`Processing Feature Task: ${task.title}`);
-  } else {
-    console.log(`Processing Unknown Task Type: ${task.title}`);
-  }
-  //substituido pelo switch case
   switch (type) {
-    case "Bug":
-      console.log(`Processing Bug Task: ${task.title}`);
+    case "bug":
+      //bug → regras mais rígidas, mais validações, logs automáticos, mais notificações
+
       break;
-    case "Feature":
-      console.log(`Processing Feature Task: ${task.title}`);
+    case "feature":
+      //feature → regras mais flexíveis, menos validações
+
+      break;
+    case "task":
+      //task → comportamento genérico
+
       break;
     default:
-      console.log(`Processing Unknown Task Type: ${task.title}`);
+      //colocar um banner
       break;
   }
 }

@@ -1,20 +1,22 @@
-import { IUser } from "../models/index.js";
-import { Comment } from "../comments/index.js";
-import { ITask } from "../tasks/index.js";
+import { UserClass } from "./../models/UserClass";
+import { ITask } from "./../tasks/ITask";
+import { Comment } from "../comments/Comment";
 
 export class CommentService {
-  private users: IUser[];
+  private users: UserClass[];
   private tasks: ITask[];
   private comments: Comment[];
+  private count: number;
 
-  constructor(users: IUser[], tasks: ITask[]) {
+  constructor(users: UserClass[], tasks: ITask[]) {
     this.users = users;
     this.tasks = tasks;
     this.comments = [];
+    this.count = 0;
   }
 
   addComment(taskId: number, userId: number, message: string) {
-    this.comments.push(new Comment(taskId, userId, message));
+    this.comments.push(new Comment((this.count += 1), taskId, userId, message));
   }
 
   getComments(taskId: number) {
@@ -25,6 +27,8 @@ export class CommentService {
     const commentIndex = this.comments.findIndex(
       (c) => c.getId() === commentId,
     );
-    if (commentIndex !== -1) this.comments.splice(commentIndex, 1);
+    if (commentIndex !== -1) {
+      this.comments.splice(commentIndex, 1);
+    }
   }
 }

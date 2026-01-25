@@ -1,4 +1,4 @@
-import { UserRole } from "../security/index.js";
+import { UserRole } from "../security/UserRole";
 
 export function canCreatetask(role: UserRole): boolean {
   return (

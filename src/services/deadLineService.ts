@@ -1,4 +1,4 @@
-import { ITask } from "../tasks/index.js";
+import { ITask } from "../tasks/ITask";
 
 export class DeadlineService {
   //- Associar uma data limite a cada task
@@ -11,14 +11,22 @@ export class DeadlineService {
   setDeadline(taskId: number, date: Date) {
     const task = this.tasks.find((t) => t.id === taskId);
     if (task) {
-      //task.setDeadLine(date);
+      if (
+        task.getType() === "bug" ||
+        task.getType() === "feature" ||
+        task.getType() === "task"
+      ) {
+        return date;
+      }
     }
   }
 
   isExpired(taskId: number) {
     const task = this.tasks.find((t) => t.id === taskId);
     if (task) {
-      //return task.getTaskDeadLine().isExpired();
+      const deadline = this.setDeadline(taskId, new Date());
+      //verificar se a data limite ja passou
+      return deadline && deadline < new Date() ? true : false;
     }
     return false;
   }

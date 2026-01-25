@@ -1,32 +1,33 @@
-import { IUser } from "../models/index.js";
-import { ITask, TaskStatus } from "../tasks/index.js";
+import { UserClass } from "../models/UserClass";
+import { ITask } from "../tasks/ITask";
+import { TaskStatus } from "../tasks/TaskStatus";
 
 export class StatisticsService {
-  private users: IUser[];
+  private users: UserClass[];
   private tasks: ITask[];
 
-  constructor(users: IUser[], tasks: ITask[]) {
+  constructor(users: UserClass[], tasks: ITask[]) {
     this.users = users;
     this.tasks = tasks;
   }
 
-  countUsers(): number {
+  countUsers() {
     return this.users.length;
   }
 
-  countTasks(): number {
+  countTasks() {
     return this.tasks.length;
   }
 
-  countCompletedTasks(): number {
+  countCompletedTasks() {
     return this.tasks.filter((task) => task.completed).length;
   }
 
-  countActiveTasks(): number {
+  countActiveTasks() {
     return this.tasks.filter((task) => !task.completed).length;
   }
 
-  tasksByStatus(status: TaskStatus): number {
+  tasksByStatus(status: TaskStatus) {
     return this.tasks.filter((task) => task.status === status).length;
   }
 }

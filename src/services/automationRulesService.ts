@@ -1,39 +1,46 @@
-import { TaskStatus, ITask, BugTask } from "../tasks/index.js";
-import { IUser, UserClass } from "../models/index.js";
-import { HistoryLog } from "../logs/index.js";
-import { NotificationService } from "../services/index.js";
+import { NotificationService } from "./NotificationService";
+import { ITask } from "./../tasks/ITask";
+import { UserClass } from "../models/UserClass";
+import { TaskStatus } from "../tasks/TaskStatus";
+import { HistoryLog } from "../logs/HistoryLog";
 
 export class AutomationRulesService {
-  //construtor vazio
-  constructor() {}
+  /**
+   * Regras:
+- Se task ficar COMPLETED → criar log automático
+- Se task ficar BLOCKED → notificar
+- Se user ficar inactive → remover assignments
+- Se task expirar → mover para BLOCKED
+   */
 
-  //- Regras de automação relacionadas a tasks
+  private users: UserClass[];
+
+  constructor(users: UserClass[]) {
+    this.users = users;
+  }
+
   applyRules(task: ITask) {
     if (task.status === TaskStatus.COMPLETED) {
       const log = new HistoryLog();
       log.addLog(`Task ${task.id} completed on ${Date.now()}`);
-    } //
-    else if (task.status === TaskStatus.BLOCKED) {
-      //  const assignedUsers: IUser[] = task.getUsersFromTask();
-      //const usersId: number[] = assignedUsers.map((user) => user.getId());
-      // const notification = new NotificationService(assignedUsers);
-      // notification.notifyGroup(
-      //usersId,
-      // `Task ${task.id} is blocked. Please take action.`,
-      // );
     }
-    //- Se task expirar → mover para BLOCKED
-    // if (task.dueDate && new Date(task.dueDate) < new Date()) {
-    // task.status = TaskStatus.BLOCKED;
-    // }
+    //Se task expirar → mover para BLOCKED
+    else if (task.status === TaskStatus.BLOCKED) {
+      //criar notificação
+      const notificationService = new NotificationService(this.users);
+      //enviar notificação a quem
+    
+    }
+    //Se task expirar - ver isso
+    else if (task) {
+      // → mover para BLOCKED
+      task.moveTo(TaskStatus.BLOCKED);
+    }
   }
 
-  //- Se user ficar inactive → remover assignments
-  applyUserRules(user: IUser) {
-    //if (!user.isActive()) {
-    //  user.getTasksFromUser().forEach((task) => {
-    //  user.removeTask(task.id);
-    ////});
-    //}
+  applyUserRules(user: UserClass) {
+    if (!user.isActive()) {
+      // remover assignments ver isso
+    }
   }
 }
