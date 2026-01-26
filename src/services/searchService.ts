@@ -1,21 +1,21 @@
-import { UserClass } from "./../models/UserClass";
-import { ITask } from "../tasks/ITask";
+import IUser from "./../models/IUser";
+import ITask from "../tasks/ITask";
 import { TaskStatus } from "../tasks/TaskStatus";
 
 //Dicas:
 // Pesquisa por texto, utilizador e estado
 
 export class SearchService {
-  private users: UserClass[];
+  private users: IUser[];
   private tasks: ITask[];
 
-  constructor(users: UserClass[], tasks: ITask[]) {
+  constructor(users: IUser[], tasks: ITask[]) {
     this.users = users;
     this.tasks = tasks;
   }
 
   searchByTitle(text: string) {
-    return this.tasks.filter((task) => task.title.includes(text));
+    return this.tasks.filter((task) => task.getTitle().includes(text));
   }
 
   searchByUser(userId: number) {
@@ -23,24 +23,30 @@ export class SearchService {
   }
 
   searchByStatus(status: TaskStatus) {
-    return this.tasks.filter((task) => task.status === status);
+    return this.tasks.filter((task) => task.getStatus() === status);
   }
 
-  globalSearch(query: unknown) {
-    if (typeof query === "string") {
-      const trimmedQuery = query.trim();
-      if (trimmedQuery !== "") {
-        const tasksByTitle = this.searchByTitle(trimmedQuery);
-        return { tasksByTitle };
-      }
-    } else if (typeof query === "number") {
-      const user = this.searchByUser(Number(query));
-      return { user };
-    } else {
-      const tasksByStatus = isNaN(Number(query))
-        ? []
-        : this.searchByStatus(Number(query) as TaskStatus);
-      return { tasksByStatus };
+  globalSearch(query: any) {
+    let results: any = [];
+
+    if (query.title) {
+      results = results.concat(this.searchByTitle(query.title));
     }
+
+    if (query.userId) {
+      results = results.concat(this.searchByUser(query.userId));
+    }
+
+    if (query.status) {
+      results = results.concat(this.searchByStatus(query.status));
+    }
+    const uniqueIds = new Set();
+    const uniqueResults = results.filter((item: any) => {
+      const id = item.getId();
+      if (!uniqueIds.has(id)) {
+        uniqueIds.add(id);
+      }
+    });
+    return uniqueResults;
   }
 }

@@ -1,44 +1,48 @@
-import { UserClass } from "./../models/UserClass";
-import { ITask } from "../tasks/ITask";
+import UserClass from "models/UserClass";
+import IUser from "../models/IUser";
+import ITask from "./../tasks/ITask";
 
-export class AssignmentService {
-  //Uma task pode ter vários users
-  private users: UserClass[];
-  //Um user pode ter várias tasks
+export default class TaskAssignmentService {
+  private users: IUser[];
   private tasks: ITask[];
 
-  constructor(users: UserClass[], tasks: ITask[]) {
+  constructor(users: IUser[], tasks: ITask[]) {
     this.users = users;
     this.tasks = tasks;
   }
 
   assignUser(taskId: number, userId: number) {
-    const task = this.tasks.find((t) => t.id === taskId);
+    // Adicionar user à task
+    const task = this.tasks.find((t) => t.getId() === taskId);
     const user = this.users.find((u) => u.getId() === userId);
     if (task && user) {
-      // Lógica para atribuir o usuário à tarefa
+      // Implementar lógica de atribuição de usuário à tarefa
+      user.getTasks().push(task);
+      task.setUser(user);
     }
   }
 
   unassignUser(taskId: number, userId: number) {
-    const task = this.tasks.find((t) => t.id === taskId);
+    // Remover user da task
+    const task = this.tasks.find((t) => t.getId() === taskId);
     const user = this.users.find((u) => u.getId() === userId);
     if (task && user) {
-      // Lógica para desatribuir o usuário da tarefa
+      // Implementar lógica de remoção de usuário da tarefa
+      const taskIndex = user.getTasks().findIndex((t) => t.getId() === taskId);
+      if (taskIndex !== -1) {
+        user.getTasks().splice(taskIndex, 1);
+        task.setUser(null);
+      }
     }
   }
 
-  getUsersFromTask(taskId: number) {
-    const task = this.tasks.find((t) => t.id === taskId);
-    if (task) {
-      // Lógica para retornar os usuários atribuídos à tarefa
-    }
+  getUserFromTask(taskId: number) {
+    const task = this.tasks.find((t) => t.getId() === taskId);
+    return task ? task.getUser() : null;
   }
 
-  getTasksFromUser(userId: number) {
+  getTaskFromUser(userId: number) {
     const user = this.users.find((u) => u.getId() === userId);
-    if (user) {
-      // Lógica para retornar as tarefas atribuídas ao usuário
-    }
+    return user ? user.getTasks() : [];
   }
 }

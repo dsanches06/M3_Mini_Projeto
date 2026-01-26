@@ -1,11 +1,10 @@
-export class Attachment {
-  private id: number;
+import BaseEntity from "../models/BaseEntity";
+
+export default class Attachment extends BaseEntity {
   private taskId: number;
   private fileName: string;
   private size: number;
   private url: string;
-  private uploadedAt: Date;
-  private count: number = 0;
 
   constructor(
     id: number,
@@ -13,20 +12,32 @@ export class Attachment {
     fileName: string,
     size: number,
     url: string,
-    uploadedAt: Date,
   ) {
-    this.id = id;
+    super(id);
     this.taskId = taskId;
     this.fileName = fileName;
     this.size = size;
     this.url = url;
-    this.uploadedAt = uploadedAt;
   }
 
   getId(): number {
-    return this.id;
+    return super.getId();
   }
   getTaskId(): number {
     return this.taskId;
+  }
+
+  getCreatedAt(): Date {
+    return super.getCreatedAt();
+  }
+
+  getFileName(): string {
+    return this.fileName;
+  }
+  getSize(): number {
+    return this.size;
+  }
+  getUrl(): string {
+    return this.url;
   }
 }

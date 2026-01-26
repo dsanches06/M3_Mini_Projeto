@@ -1,11 +1,10 @@
-import { UserClass } from "../models/UserClass";
+import IUser from "../models/UserClass";
 import { UserRole } from "../security/UserRole";
 
 export class NotificationService {
-  
-  private users: UserClass[];
+  private users: IUser[];
 
-  constructor(users: UserClass[]) {
+  constructor(users: IUser[]) {
     this.users = users;
   }
 

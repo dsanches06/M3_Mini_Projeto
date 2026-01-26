@@ -1,33 +1,31 @@
-import { Attachment } from "../attachments/Attachment";
-import { ITask } from "../tasks/ITask";
+import Attachment from "../attachments/Attachment";
 
 export class AttachmentService {
-  private tasks: ITask[];
-  private attachments: Attachment[];
+  private attachments: Map<number, Attachment[]>;
 
-  constructor(tasks: ITask[]) {
-    this.tasks = tasks;
-    this.attachments = [];
+  constructor() {
+    this.attachments = new Map<number, Attachment[]>();
   }
 
   addAttachment(taskId: number, attachment: Attachment) {
-    const task = this.tasks.find((t) => t.id === taskId);
-    if (task) {
-      this.attachments.push(attachment);
+    if (!this.attachments.has(taskId)) {
+      this.attachments.set(taskId, []);
     }
+    this.attachments.get(taskId)?.push(attachment);
   }
 
   getAttachments(taskId: number) {
-    const task = this.tasks.find((t) => t.id === taskId);
-    if (task) {
-      return this.attachments.filter((a) => a.getTaskId() === taskId);
-    }
+    return this.attachments.get(taskId) || [];
   }
 
   removeAttachment(attachmentId: number) {
-    const index = this.attachments.findIndex((a) => a.getId() === attachmentId);
-    if (index !== -1) {
-      this.attachments.splice(index, 1);
+    for (const attachments of this.attachments.values()) {
+      const index = attachments.findIndex(
+        (att) => att.getId() === attachmentId,
+      );
+      if (index !== -1) {
+        attachments.splice(index, 1);
+      }
     }
   }
 }

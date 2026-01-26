@@ -1,25 +1,31 @@
-export class Comment {
-  private id: number;
+import BaseEntity from "../models/BaseEntity";
+
+export default class Comment extends BaseEntity {
   private taskId: number;
   private userId: number;
   private message: string;
-  private createdAt: Date;
 
   constructor(id: number, taskId: number, userId: number, message: string) {
-    this.id = id;
+    super(id);
     this.taskId = taskId;
     this.userId = userId;
     this.message = message;
-    this.createdAt = new Date();
   }
 
   getId(): number {
-    return this.id;
+    return super.getId();
   }
+
   getTaskId(): number {
     return this.taskId;
   }
   getUserId(): number {
     return this.userId;
+  }
+  getMessage(): string {
+    return this.message;
+  }
+  getCreatedAt(): Date {
+    return super.getCreatedAt();
   }
 }

@@ -1,16 +1,10 @@
-import { UserClass } from "./../models/UserClass";
-import { ITask } from "./../tasks/ITask";
-import { Comment } from "../comments/Comment";
+import Comment from "../comments/Comment";
 
 export class CommentService {
-  private users: UserClass[];
-  private tasks: ITask[];
   private comments: Comment[];
   private count: number;
 
-  constructor(users: UserClass[], tasks: ITask[]) {
-    this.users = users;
-    this.tasks = tasks;
+  constructor() {
     this.comments = [];
     this.count = 0;
   }

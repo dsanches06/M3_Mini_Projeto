@@ -1,32 +1,27 @@
-import { ITask } from "../tasks/ITask";
 import { Priority } from "../utils/Priority";
 
 export class PriorityService {
-  private tasks: ITask[];
+  private priorities: Map<number, Priority>;
 
-  constructor(tasks: ITask[]) {
-    this.tasks = tasks;
+  constructor() {
+    this.priorities = new Map<number, Priority>();
   }
 
   setPriority(taskId: number, priority: Priority) {
-    const task = this.tasks.find((t) => t.id === taskId);
-    if (task) {
-      if (priority === Priority.LOW) {
-      } else if (priority === Priority.MEDIUM) {
-      } else if (priority === Priority.HIGH) {
-      } else if (priority === Priority.CRITICAL) {
-      }
-    }
+    this.priorities.set(taskId, priority);
   }
 
   getPriority(taskId: number) {
-    const task = this.tasks.find((t) => t.id === taskId);
-    if (task) {
-      //o que fazer aqui
-    }
+    return this.priorities.get(taskId);
   }
 
   getHighPriorityTasks() {
-    return [];
+    const highPriorityTasks: number[] = [];
+    for (const [taskId, priority] of this.priorities.entries()) {
+      if (priority === Priority.HIGH || priority === Priority.CRITICAL) {
+        highPriorityTasks.push(taskId);
+      }
+    }
+    return highPriorityTasks;
   }
 }

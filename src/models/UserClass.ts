@@ -1,16 +1,23 @@
-import { BaseEntity } from "./BaseEntity";
+import BaseEntity from "./BaseEntity";
 import { UserRole } from "../security/UserRole";
+import ITask from "./../tasks/ITask";
 
-export class UserClass extends BaseEntity {
+export default class UserClass extends BaseEntity {
   private email: string;
   private active: boolean;
   private role: UserRole;
+  private tasks: ITask[];
 
   constructor(id: number, email: string, role: UserRole) {
     super(id);
     this.email = email;
     this.active = true;
     this.role = role;
+    this.tasks = [];
+  }
+
+  getId(): number {
+    return super.getId();
   }
 
   isActive(): boolean {
@@ -27,6 +34,10 @@ export class UserClass extends BaseEntity {
 
   getEmail(): string {
     return this.email;
+  }
+
+  getTasks(): ITask[] {
+    return this.tasks;
   }
 }
 

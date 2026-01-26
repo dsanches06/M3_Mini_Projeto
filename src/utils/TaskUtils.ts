@@ -1,4 +1,4 @@
-import { ITask } from "../tasks/ITask";
+import  ITask  from "../tasks/ITask";
 
 // Função para processar uma tarefa com base no seu tipo
 //ver isso

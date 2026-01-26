@@ -1,12 +1,11 @@
-import { UserClass } from "./../models/UserClass";
-import { ITask } from "../tasks/ITask";
-//- Exportar dados em objetos JSON
+import IUser from "./../models/UserClass";
+import ITask from "../tasks/ITask";
 
 export class BackupService {
-  private users: UserClass[];
+  private users: IUser[];
   private tasks: ITask[];
 
-  constructor(users: UserClass[], tasks: ITask[]) {
+  constructor(users: IUser[], tasks: ITask[]) {
     this.users = users;
     this.tasks = tasks;
   }
@@ -19,7 +18,11 @@ export class BackupService {
   }
 
   exportAssignments() {
-    // Supondo que cada task tenha um método getUsersFromTask()
+    const assignments = this.tasks.map((task) => ({
+      taskId: task.getId(),
+      assignedTo: task.getUser()?.getId() ?? null,
+    }));
+    return JSON.stringify(assignments);
   }
 
   exportAll() {

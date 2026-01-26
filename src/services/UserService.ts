@@ -1,14 +1,13 @@
-import { UserClass } from "../models/UserClass";
+import IUser from "../models/UserClass";
 
 export class UserService {
-  
-  private users: UserClass[];
+  private users: IUser[];
 
-  constructor(users: UserClass[]) {
+  constructor(users: IUser[]) {
     this.users = users;
   }
 
-  addUser(user: UserClass): void {
+  addUser(user: IUser): void {
     this.users.push(user);
   }
 
@@ -19,11 +18,11 @@ export class UserService {
     }
   }
 
-  getActiveUsers(): UserClass[] {
+  getActiveUsers(): IUser[] {
     return this.users.filter((u) => u.isActive());
   }
 
-  getAllUsers(): UserClass[] {
-    return [...this.users];
+  getAllUsers(): IUser[] {
+    return this.users;
   }
 }

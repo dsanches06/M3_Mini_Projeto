@@ -1,5 +1,5 @@
-import { UserClass } from "../models/UserClass";
-import { ITask } from "../tasks/ITask";
+import UserClass from "../models/UserClass";
+import ITask from "../tasks/ITask";
 import { TaskStatus } from "../tasks/TaskStatus";
 
 export class StatisticsService {
@@ -20,14 +20,14 @@ export class StatisticsService {
   }
 
   countCompletedTasks() {
-    return this.tasks.filter((task) => task.completed).length;
+    return this.tasks.filter((task) => task.getCompleted()).length;
   }
 
   countActiveTasks() {
-    return this.tasks.filter((task) => !task.completed).length;
+    return this.tasks.filter((task) => !task.getCompleted()).length;
   }
 
   tasksByStatus(status: TaskStatus) {
-    return this.tasks.filter((task) => task.status === status).length;
+    return this.tasks.filter((task) => task.getStatus() === status).length;
   }
 }

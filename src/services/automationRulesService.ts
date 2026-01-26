@@ -1,6 +1,6 @@
-import { NotificationService } from "./NotificationService";
-import { ITask } from "./../tasks/ITask";
-import { UserClass } from "../models/UserClass";
+import { NotificationService } from "./notificationService";
+import  ITask  from "./../tasks/ITask";
+import  IUser  from "../models/UserClass";
 import { TaskStatus } from "../tasks/TaskStatus";
 import { HistoryLog } from "../logs/HistoryLog";
 
@@ -13,22 +13,23 @@ export class AutomationRulesService {
 - Se task expirar → mover para BLOCKED
    */
 
-  private users: UserClass[];
+  private users: IUser[];
 
-  constructor(users: UserClass[]) {
+  constructor(users: IUser[]) {
     this.users = users;
   }
 
   applyRules(task: ITask) {
-    if (task.status === TaskStatus.COMPLETED) {
+    if (task.getStatus() === TaskStatus.COMPLETED) {
       const log = new HistoryLog();
-      log.addLog(`Task ${task.id} completed on ${Date.now()}`);
+      log.addLog(`Task ${task.getId()} completed on ${Date.now()}`);
     }
     //Se task expirar → mover para BLOCKED
-    else if (task.status === TaskStatus.BLOCKED) {
+    else if (task.getStatus() === TaskStatus.BLOCKED) {
       //criar notificação
       const notificationService = new NotificationService(this.users);
       //enviar notificação a quem
+
     
     }
     //Se task expirar - ver isso
@@ -38,7 +39,7 @@ export class AutomationRulesService {
     }
   }
 
-  applyUserRules(user: UserClass) {
+  applyUserRules(user: IUser) {
     if (!user.isActive()) {
       // remover assignments ver isso
     }

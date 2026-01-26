@@ -1,4 +1,4 @@
-export class BaseEntity {
+export default class BaseEntity {
   protected id: number;
   protected createdAt: Date;
 

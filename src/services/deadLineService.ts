@@ -1,37 +1,33 @@
-import { ITask } from "../tasks/ITask";
-
-export class DeadlineService {
+export default class DeadlineService {
   //- Associar uma data limite a cada task
-  private tasks: ITask[];
+  private deadlines: Map<number, Date>;
 
-  constructor(tasks: ITask[]) {
-    this.tasks = tasks;
+  constructor() {
+    this.deadlines = new Map<number, Date>();
   }
 
   setDeadline(taskId: number, date: Date) {
-    const task = this.tasks.find((t) => t.id === taskId);
-    if (task) {
-      if (
-        task.getType() === "bug" ||
-        task.getType() === "feature" ||
-        task.getType() === "task"
-      ) {
-        return date;
-      }
-    }
+    this.deadlines.set(taskId, date);
   }
 
   isExpired(taskId: number) {
-    const task = this.tasks.find((t) => t.id === taskId);
-    if (task) {
-      const deadline = this.setDeadline(taskId, new Date());
-      //verificar se a data limite ja passou
-      return deadline && deadline < new Date() ? true : false;
-    }
-    return false;
+    const deadline = this.deadlines.get(taskId);
+    if (!deadline) return false;
+    return deadline.getTime() < this.getCurrentTimestamp();
   }
 
   getExpiredTasks() {
-    return this.tasks.filter((task) => this.isExpired(task.id));
+    const now = this.getCurrentTimestamp();
+    const expiredTasks = [];
+    for (const [taskId, deadline] of this.deadlines.entries()) {
+      if (deadline.getTime() < now) {
+        expiredTasks.push(taskId);
+      }
+    }
+    return expiredTasks;
+  }
+
+  private getCurrentTimestamp() {
+    return Date.now();
   }
 }
