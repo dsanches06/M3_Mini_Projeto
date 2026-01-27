@@ -1,6 +1,6 @@
 import IUser from "../models/IUser.js";
 
-export class UserService {
+export default class UserService {
   private users: IUser[];
 
   constructor() {

@@ -28,9 +28,7 @@ import {
 import { showInfoBanner } from "../../helpers/infoBanner.js";
 
 /* Lista de tarefas de utilizadores */
-export default function loadTasksPage(
-  tasksList: ITask[],
-): void {
+export default function loadTasksPage(tasksList: ITask[]): void {
   /* ativa o menu tarefas */
   menuSelected("#menuTasks");
   //
@@ -121,12 +119,21 @@ export default function loadTasksPage(
   if (removeAllCompletedTaskBtn) {
     removeAllCompletedTaskBtn.addEventListener("click", () => {
       const removedTasks = removeAllCompletedTask();
+     
       if (removedTasks.length > 0) {
-        const tasks = allUsersTasks();
-        renderAllTasks(tasks as Task[]);
-        showTasksCounters(tasks as Task[]);
+         const completedTaskCount = removedTasks.filter(
+        (task) => task.completed,
+      ).length;
+        if (completedTaskCount <= 0) {
+          showInfoBanner(
+            "Não há tarefa concluída para remover.",
+            "error-banner",
+          );
+        }
+        renderAllTasks(removedTasks as Task[]);
+        showTasksCounters(removedTasks as Task[]);
       } else {
-        showInfoBanner("Nenhuma tarefa concluída para remover.", "info-banner");
+        showInfoBanner("Não há tarefa concluída para remover.", "error-banner");
       }
     });
   }
@@ -137,7 +144,7 @@ function createTaskCounter(id: string): HTMLElement {
   const allTasksBtn = createStatisticsCounter(
     "allTaskSection",
     "allTasksBtn",
-    "../../../images/tarefa.png",
+    "./images/tarefa.png",
     "tarefas",
     "allTasksCounter",
   ) as HTMLElement;
@@ -146,7 +153,7 @@ function createTaskCounter(id: string): HTMLElement {
   const pendingTaskBtn = createStatisticsCounter(
     "pendingTaskSection",
     "pendingTaskBtn",
-    "../../../images/pendente.png",
+    "./images/pendente.png",
     "pendentes",
     "pendingTasksCounter",
   ) as HTMLElement;
@@ -154,7 +161,7 @@ function createTaskCounter(id: string): HTMLElement {
   const completedTaskBtn = createStatisticsCounter(
     "completedTaskSection",
     "completedTaskBtn",
-    "../../../images/tarefa-concluida.png",
+    "./images/tarefa-concluida.png",
     "concluídos",
     "completedTaskCounter",
   ) as HTMLElement;

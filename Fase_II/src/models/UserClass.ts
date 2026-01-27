@@ -3,17 +3,23 @@ import { UserRole } from "../security/UserRole.js";
 import ITask from "./../tasks/ITask.js";
 
 export default class UserClass extends BaseEntity {
+  private name: string;
   private email: string;
   private active: boolean;
   private role: UserRole;
   private tasks: ITask[];
 
-  constructor(id: number, email: string, role: UserRole) {
+  constructor(id: number, name: string, email: string, role: UserRole) {
     super(id);
+    this.name = name;
     this.email = email;
     this.active = true;
     this.role = role;
     this.tasks = [];
+  }
+
+  getName(): string {
+    return this.name;
   }
 
   isActive(): boolean {

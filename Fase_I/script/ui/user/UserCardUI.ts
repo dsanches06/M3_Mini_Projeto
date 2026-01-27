@@ -14,7 +14,7 @@ export function createUserCard(
   gestUserTask: GestUserTask,
   user: User,
 ): HTMLElement {
-  const divUserCard = createSection("section") as HTMLElement;
+  const divUserCard = createSection("sectionCard") as HTMLElement;
   divUserCard.className = "card";
   divUserCard.addEventListener("click", () => showUserDetails(user));
 
@@ -43,7 +43,6 @@ function userCardTitle(user: User): HTMLElement {
     "h2",
     `${names[0]}`,
   ) as HTMLHeadingElement;
-  cardTitle.style.fontSize = "36px";
 
   const divCardTitle = document.createElement("section") as HTMLElement;
   divCardTitle.appendChild(cardTitle);
@@ -71,15 +70,23 @@ function userCardContent(gestUserTask: GestUserTask, user: User): HTMLElement {
   divCardStatus.style.fontWeight = "bold";
 
   const divCardTask = document.createElement("p") as HTMLParagraphElement;
-  divCardTask.textContent = `${user.tasks.length} tarefas atribuídas`;
+  divCardTask.textContent = `${user.tasks.length} tarefas`;
+
+  const eyeOpenIcon = document.createElement("i") as HTMLElement;
+  eyeOpenIcon.className = "fa-solid fa-eye fa-2xl";
+
+  const eyeCloseIcon = document.createElement("i") as HTMLElement;
+  eyeCloseIcon.className = "fa-solid fa-eye-slash fa-2xl";
+
+  const eyeIcon = user.tasks.length > 0 ? eyeOpenIcon : eyeCloseIcon;
 
   const divCardAddTaskBtn = document.createElement("a") as HTMLAnchorElement;
+  divCardAddTaskBtn.appendChild(eyeIcon);
   divCardAddTaskBtn.id = "addTaskIconBtn";
   divCardAddTaskBtn.role = "button";
   divCardAddTaskBtn.title = "Visualizar tarefas do utilizador";
   divCardAddTaskBtn.addEventListener("click", (event) => {
     event.stopPropagation();
-    //
     clearContainer();
     loadUserTaskPage(gestUserTask, user);
   });
@@ -101,9 +108,15 @@ function userCardContent(gestUserTask: GestUserTask, user: User): HTMLElement {
 
 /* Função para criar os botões do cartão de usuário */
 function userCardBtn(user: User): HTMLElement {
-  const bntToggle = document.createElement("button") as HTMLButtonElement;
-  bntToggle.textContent = user.isAtive ? "Desativar" : "Ativar ";
+  const toogleIcon = document.createElement("i") as HTMLElement;
+  toogleIcon.className = user.isAtive
+    ? "fa-solid fa-toggle-on fa-2xl"
+    : "fa-solid fa-toggle-off fa-2xl";
+
+  const bntToggle = document.createElement("span") as HTMLElement;
+  bntToggle.appendChild(toogleIcon);
   bntToggle.id = "toogleBtn";
+  bntToggle.title = "Ativar ou desativar utilizador";
   bntToggle.addEventListener("click", (event) => {
     event.stopPropagation();
     const gestUsersTask = toggleUserState(user.id);
@@ -111,13 +124,22 @@ function userCardBtn(user: User): HTMLElement {
     showUsersCounters(gestUsersTask.users as User[]);
   });
 
-  const btnRemover = document.createElement("button") as HTMLButtonElement;
-  btnRemover.textContent = "Remover";
+  const trashIcon = document.createElement("i") as HTMLElement;
+  trashIcon.className = "fa-solid fa-trash fa-2xl";
+
+  const btnRemover = document.createElement("span") as HTMLButtonElement;
+  btnRemover.appendChild(trashIcon);
   btnRemover.id = "removeBtn";
+  btnRemover.role = "button";
+  btnRemover.style.color = "#ff4c4c";
+  btnRemover.title = "Remover tarefas do utilizador";
   btnRemover.addEventListener("click", (event) => {
     event.stopPropagation();
     if (user.tasks.length > 0) {
-      showInfoBanner("Utilizador com tarefas pendentes não pode ser removido.", "error-banner");
+      showInfoBanner(
+        "Utilizador com tarefas pendentes não pode ser removido.",
+        "error-banner",
+      );
     } else {
       const updatedUserList = removeUserByID(user.id);
       if (updatedUserList) {

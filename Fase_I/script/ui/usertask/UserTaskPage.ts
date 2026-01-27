@@ -87,7 +87,7 @@ export default function loadUserTaskPage(
       if (modal) modal.style.display = "block";
       // Atualizar a lista de tarefas para todos os utilizadores
       showUserTask(user, user.allTasks() as Task[]);
-      showUserTaskCounters(user.allTasks() as Task[]);
+     showUserTaskCounters(user.allTasks() as Task[]);
     });
   } else {
     console.warn("Elemento #addUserTaskBtn não encontrado.");
@@ -112,7 +112,6 @@ export default function loadUserTaskPage(
       isAscending = !isAscending;
       // Mostrar as tarefas ordenadas
       showUserTask(user, sortedTasks as Task[]);
-      showUserTaskCounters(sortedTasks as Task[]);
       // Atualize o texto ou ícone do botão
       sortUserTasksBtn.textContent = isAscending
         ? "Ordenar A-Z"
@@ -145,7 +144,6 @@ export default function loadUserTaskPage(
   if (removeCompletedUserTaskBtn) {
     removeCompletedUserTaskBtn.addEventListener("click", () => {
       removeCompletedTasks(user);
-      showUserTaskCounters(user.tasks as Task[]);
     });
   }
 }
@@ -155,7 +153,7 @@ function createUserTaskCounter(id: string): HTMLElement {
   const allUserTasksBtn = createStatisticsCounter(
     "allUserTaskSection",
     "allUserTasksBtn",
-    "../../../images/tarefa.png",
+    "./images/tarefa.png",
     "tarefas",
     "allUserTasksCounter",
   ) as HTMLElement;
@@ -164,7 +162,7 @@ function createUserTaskCounter(id: string): HTMLElement {
   const pendingUserTaskBtn = createStatisticsCounter(
     "pendingUserTaskSection",
     "pendingUserTaskBtn",
-    "../../../images/pendente.png",
+    "./images/pendente.png",
     "pendentes",
     "pendingUserTasksCounter",
   ) as HTMLElement;
@@ -172,7 +170,7 @@ function createUserTaskCounter(id: string): HTMLElement {
   const completedUserTaskBtn = createStatisticsCounter(
     "completedUserTaskSection",
     "completedUserTaskBtn",
-    "../../../images/tarefa-concluida.png",
+    "./images/tarefa-concluida.png",
     "concluídos",
     "completedUserTaskCounter",
   ) as HTMLElement;

@@ -74,29 +74,22 @@ export function sortTasksByTitle(ascending: boolean = true): ITask[] {
 
 export function removeAllCompletedTask(): ITask[] {
   if (!users || users.length === 0) {
-    showInfoBanner("Nenhum usuário disponível para remover tarefas completas.", "info-banner");
+    showInfoBanner(
+      "Nenhum usuário disponível para remover tarefas completas.",
+      "info-banner",
+    );
     return [];
   }
-  // inicializa o array para evitar repetições de dados
   tasksFiltered = [];
-  const usersWithPendingTasks = new Set<User>(); // Usar Set para evitar duplicatas
-  // por cada utilizador
+  // Remove tarefas completas de todos os usuários e coleta as pendentes
   for (const user of users) {
     const tasks = user.tasks as Task[];
     if (tasks && tasks.length > 0) {
-      // remover tarefas completas
-      const pendingTasks = tasks.filter((task) => !task.completed);
-      // atualizar tarefas do usuário (assumindo que user.tasks é mutável)
-      user.tasks = pendingTasks;
-      // se houver tarefas pendentes, adicionar usuário ao set
-      if (pendingTasks.length > 0) {
-        usersWithPendingTasks.add(user);
+      user.tasks = tasks.filter((task) => !task.completed);
+      if (user.tasks.length > 0) {
+        tasksFiltered = getTasksByFilter(user, tasksFiltered, "pending");
       }
     }
-  }
-  // filtrar as tarefas não concluídas de todos os utilizadores
-  for (const user of usersWithPendingTasks) {
-    tasksFiltered = getTasksByFilter(user, tasksFiltered, "pending");
   }
   return tasksFiltered;
 }

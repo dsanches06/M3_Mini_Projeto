@@ -6,8 +6,12 @@ import {
   countCompletedUserTasks,
   countPendingUserTasks,
 } from "../task/TaskCountersUI.js";
-import { styleTasks, userCompleteTask, userEditTitle } from "./UserTaskCRUD.js";
-import { showUserTaskCounters } from "./UserTaskPage.js";
+import {
+  styleTasks,
+  userCompleteTask,
+  userEditTitle,
+  userRemoveTask,
+} from "./UserTaskCRUD.js";
 
 /* Mostrar tarefas */
 export default function showUserTask(user: User, tasks: Task[]): void {
@@ -68,7 +72,6 @@ ${task.category} - ${
   editBtn.role = "button";
   editBtn.addEventListener("click", () => {
     userEditTitle(user, task.id);
-    showUserTaskCounters(user.tasks as Task[]);
   });
 
   // Botão Concluir
@@ -78,7 +81,6 @@ ${task.category} - ${
   completeBtn.role = "button";
   completeBtn.addEventListener("click", () => {
     userCompleteTask(user, task.id);
-    showUserTaskCounters(user.tasks as Task[]);
   });
 
   // Botão Remover
@@ -88,8 +90,7 @@ ${task.category} - ${
   deleteBtn.role = "button";
   deleteBtn.addEventListener("click", () => {
     if (task.completed) {
-      user.removeTask(task.id);
-      showUserTaskCounters(user.tasks as Task[]);
+      userRemoveTask(user, task.id);
       showInfoBanner(
         `${user.name} removeu a tarefa ${task.title} com sucesso.`,
         "info-banner",

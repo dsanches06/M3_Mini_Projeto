@@ -37,10 +37,10 @@ function applyCardColors(usersContainer: HTMLElement): void {
       title.style.background = randomColor;
     }
     const contentA = card.querySelector(
-      ".btnGroup button#toogleBtn",
+      ".btnGroup span#toogleBtn",
     ) as HTMLElement;
     if (contentA) {
-      contentA.style.background = randomColor;
+      contentA.style.color = randomColor;
     }
   }
 }

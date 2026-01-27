@@ -1,9 +1,6 @@
 import GestUserTask from "../../models/gestUserTask/gestUserTask.js";
 import User from "../../models/user/User.js";
-import {
-  addElementInContainer,
-  clearContainer,
-} from "../dom/ContainerSection.js";
+import { addElementInContainer } from "../dom/ContainerSection.js";
 import { createHeadingTitle, createSection } from "../dom/CreatePage.js";
 import { menuSelected } from "../dom/MenuSelected.js";
 import {
@@ -11,7 +8,7 @@ import {
   createStatisticsCounter,
 } from "../dom/SectionCounter.js";
 import {
-  countAtivePercentage,
+  countAtiveInativePercentage,
   countAtiveUsers,
   countUnableUsers,
   countAllUsers,
@@ -36,7 +33,7 @@ export default function loadUsersPage(gestUserTask: GestUserTask): void {
   const userCounterSection = createUserCounter("userCounters");
   addElementInContainer(userCounterSection);
   //
-  showUsersCounters(gestUserTask.users as User[]);
+  showUsersCounters(gestUserTask.users as User[], "utilizadores");
   //
   const searchContainer = showSearchContainer();
   addElementInContainer(searchContainer);
@@ -77,7 +74,7 @@ export default function loadUsersPage(gestUserTask: GestUserTask): void {
   unableUsersBtn.addEventListener("click", () => {
     const usersUnable = allUsersUnable();
     renderUsers(gestUserTask, usersUnable as User[]);
-    showUsersCounters(usersUnable as User[]);
+    showUsersCounters(usersUnable as User[], "inativos");
   });
 
   // Adicionar event listeners aos botões de busca
@@ -104,10 +101,9 @@ export default function loadUsersPage(gestUserTask: GestUserTask): void {
     });
   } else {
     console.warn("Elemento #sortUsersBtn não foi renderizado no DOM.");
-
   }
 
-  // ...existing code...
+  //
   const searchUser = document.querySelector("#searchUser") as HTMLInputElement;
   if (searchUser) {
     searchUser.addEventListener("input", () => {
@@ -126,7 +122,7 @@ function createUserCounter(id: string): HTMLElement {
   const allUsersBtn = createStatisticsCounter(
     "allUserSection",
     "allUsersBtn",
-    "../../../images/users.png",
+    "./images/users.png",
     "utilizadores",
     "allUsersCounter",
   ) as HTMLElement;
@@ -135,7 +131,7 @@ function createUserCounter(id: string): HTMLElement {
   const ativeUsersBtn = createStatisticsCounter(
     "ativeUsers",
     "ativeUsersBtn",
-    "../../../images/ative.png",
+    "./images/ative.png",
     "ativos",
     "ativeUsersCounter",
   ) as HTMLElement;
@@ -143,19 +139,17 @@ function createUserCounter(id: string): HTMLElement {
   const unableUsersBtn = createStatisticsCounter(
     "unableUsers",
     "unableUsersBtn",
-    "../../../images/unable.png",
-    "Inativos",
+    "./images/unable.png",
+    "inativos",
     "unableUsersCounter",
   ) as HTMLElement;
-  //
   const ativeUsersPercentageBtn = createStatisticsCounter(
     "ativeUserPercentage",
     "ativeUsersPercentageBtn",
-    "../../../images/ative.png",
-    "ativos (%)",
+    "./images/ative.png",
+    "ativos %",
     "ativeUsersPercentageCounter",
   ) as HTMLElement;
-  //
   const sectionUsersCounter = createSection(`${id}`) as HTMLElement;
   sectionUsersCounter.classList.add("users-counters");
   sectionUsersCounter.append(
@@ -167,11 +161,11 @@ function createUserCounter(id: string): HTMLElement {
   return sectionUsersCounter;
 }
 
-export function showUsersCounters(userList: User[]): void {
+export function showUsersCounters(userList: User[], type?: string): void {
   countAllUsers("#allUsersCounter", userList);
   countAtiveUsers("#ativeUsersCounter", userList);
   countUnableUsers("#unableUsersCounter", userList);
-  countAtivePercentage("#ativeUsersPercentageCounter", userList);
+  countAtiveInativePercentage("#ativeUsersPercentageCounter", userList, type);
 }
 
 /* */

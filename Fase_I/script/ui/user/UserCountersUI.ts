@@ -34,14 +34,33 @@ export function countAllUsers(id: string, usersList: IUser[]): void {
 }
 
 /* Percentagem de utilizadores ativos */
-export function countAtivePercentage(id: string, usersList: IUser[]): void {
+export function countAtiveInativePercentage(
+  id: string,
+  usersList: IUser[],
+  type?: string,
+): void {
   const section = document.querySelector(`${id}`) as HTMLElement;
+
   if (section) {
-    const activeUsers = usersList.length;
+    const activeInativeUsers = usersList.length;
     const totalUsers = allUsers().length;
     const percentage =
-      totalUsers > 0 ? ((activeUsers / totalUsers) * 100).toFixed(2) : 0;
+      totalUsers > 0 ? ((activeInativeUsers / totalUsers) * 100).toFixed(2) : 0;
     section.textContent = `${percentage}%`;
+    const ativosPercentangeCaption = document.querySelector(
+      "#ativosPercentangeCaption",
+    ) as HTMLElement;
+    if (ativosPercentangeCaption) {
+      if (type === "inativos") {
+        ativosPercentangeCaption.textContent = "inativos %";
+      } else if (type === "utilizadores") {
+        ativosPercentangeCaption.textContent = "ativos %";
+      } else {
+        ativosPercentangeCaption.textContent = "ativos %";
+      }
+    } else {
+      console.warn(`Elemento ativosCaption não foi encontrado no DOM.`);
+    }
   } else {
     console.warn(`Elemento ${id} não foi encontrado no DOM.`);
   }

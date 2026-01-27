@@ -1,5 +1,6 @@
 import Task from "../models/task/Task.js";
 import User from "../models/user/User.js";
+import { showInfoBanner } from "./infoBanner.js";
 
 /* Função para obter tarefas por filtro */
 export function getTasksByFilter(
@@ -30,7 +31,8 @@ export function getTasksByFilter(
         }
         break;
       default:
-        console.warn(`Filtro desconhecido: ${filter}`);
+        showInfoBanner("Filtro desconhecido", "error");
+        break;
     }
   }
   return tasks;

@@ -5,7 +5,7 @@ import { TaskStatus } from "../tasks/TaskStatus.js";
 //Dicas:
 // Pesquisa por texto, utilizador e estado
 
-export class SearchService {
+export default class SearchService {
   private users: IUser[];
   private tasks: ITask[];
 

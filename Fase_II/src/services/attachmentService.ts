@@ -1,6 +1,6 @@
 import Attachment from "../attachments/Attachment.js";
 
-export class AttachmentService {
+export default class AttachmentService {
   private attachments: Map<number, Attachment[]>;
 
   constructor() {

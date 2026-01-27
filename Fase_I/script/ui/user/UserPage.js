@@ -86,7 +86,7 @@ export default function loadUsersPage(gestUserTask) {
 /* */
 function createUserCounter(id) {
     //
-    const allUsersBtn = createStatisticsCounter("allUserSection", "allUsersBtn", "../../../images/users.png", "utilizadores", "allUsersCounter");
+    const allUsersBtn = createStatisticsCounter("allUserSection", "allUsersBtn", "../images/users.png", "utilizadores", "allUsersCounter");
     //
     const ativeUsersBtn = createStatisticsCounter("ativeUsers", "ativeUsersBtn", "../../../images/ative.png", "ativos", "ativeUsersCounter");
     //

@@ -1,6 +1,6 @@
 import { Priority } from "../utils/Priority.js";
 
-export class PriorityService {
+export default class PriorityService {
   private priorities: Map<number, Priority>;
 
   constructor() {

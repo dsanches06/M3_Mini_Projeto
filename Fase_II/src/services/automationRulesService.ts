@@ -6,7 +6,7 @@ import HistoryLog  from "../logs/HistoryLog.js";
 import DeadlineService from "./deadLineService.js";
 import AssignmentService from "./assignmentService.js";
 
-export class AutomationRulesService {
+export default class AutomationRulesService {
   private users: IUser[];
   private tasks: ITask[];
   private deadlineService: DeadlineService;

@@ -21,6 +21,7 @@ export function createFigureWithImage(id, src, label) {
     img.tabIndex = 0;
     img.classList.add("counters-img");
     const figCaption = document.createElement("figcaption");
+    
     figCaption.textContent = label;
     // Adiciona a imagem e a legenda à figure
     figure.append(img, figCaption);

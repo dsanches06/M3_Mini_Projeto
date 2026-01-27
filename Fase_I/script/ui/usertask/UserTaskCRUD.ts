@@ -2,6 +2,8 @@ import { Category } from "./../../models/task/Category";
 import Task from "../../models/task/Task.js";
 import User from "../../models/user/User.js";
 import showUserTask from "./UserTaskUI.js";
+import { showUserTaskCounters } from "./UserTaskPage.js";
+import { showInfoBanner } from "../../helpers/infoBanner.js";
 
 /* Função para obter o ID do utilizador da URL */
 export function getUserIdFromURL(): number {
@@ -58,8 +60,14 @@ export function removeCompletedTasks(user: User): void {
     if (task.completed) {
       //remover a tarefa
       user.removeTask(task.id);
+    } else {
+      showInfoBanner(
+        "As tarefas não concluídas, não podem ser removidas.",
+        "error-banner",
+      );
     }
   });
+  showUserTaskCounters(user.tasks as Task[]);
   //atualizar a exibição das tarefas
   showUserTask(user, user.tasks as Task[]);
 }
@@ -74,6 +82,7 @@ export function userEditTitle(user: User, taskId: number): void {
     );
     if (newTitle !== null && newTitle.trim() !== "") {
       user.tasks[index].title = newTitle.trim();
+      showUserTaskCounters(user.tasks as Task[]);
       //atualizar a exibição das tarefas
       showUserTask(user, user.tasks as Task[]);
     }
@@ -89,6 +98,17 @@ export function userCompleteTask(user: User, taskId: number): void {
       //marcar a tarefa como concluída
       user.tasks[index].markCompleted();
     } //atualizar a exibição das tarefas
+    showUserTaskCounters(user.tasks as Task[]);
+    showUserTask(user, user.tasks as Task[]);
+  }
+}
+
+export function userRemoveTask(user: User, taskId: number): void {
+  const index = user.tasks.findIndex((t) => t.id === taskId);
+  if (index !== -1) {
+    user.removeTask(taskId);
+    showUserTaskCounters(user.tasks as Task[]);
+    //atualizar a exibição das tarefas
     showUserTask(user, user.tasks as Task[]);
   }
 }

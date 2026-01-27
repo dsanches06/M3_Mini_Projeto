@@ -1,4 +1,4 @@
-export class Notification {
+export default class Notification {
   
   private message: string;
 

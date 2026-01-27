@@ -34,7 +34,14 @@ export function createFigureWithImage(
   img.classList.add("counters-img");
 
   const figCaption = document.createElement("figcaption");
-  figCaption.textContent = label;
+  if (label === "ativos %") {
+    let ativeLabel = label.split(" ");
+    figCaption.id = `${ativeLabel[0].trim()}PercentangeCaption`;
+    figCaption.textContent = `${label}`;
+  } else {
+    figCaption.id = `${label}Caption`;
+    figCaption.textContent = `${label}`;
+  }
 
   // Adiciona a imagem e a legenda à figure
   figure.append(img, figCaption);

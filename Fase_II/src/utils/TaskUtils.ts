@@ -3,7 +3,7 @@ import NotificationService from "../services/notificationService.js";
 import HistoryLog from "../logs/HistoryLog.js";
 import { validTransitions } from "./ValidTransitions.js";
 import { TaskStatus } from "../tasks/TaskStatus.js";
-import { UserService } from "../services/userService.js";
+import UserService from "../services/userService.js";
 
 // Função para processar uma tarefa com base no seu tipo
 

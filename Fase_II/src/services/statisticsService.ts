@@ -2,7 +2,7 @@ import IUser from "../models/IUser.js";
 import ITask from "../tasks/ITask.js";
 import { TaskStatus } from "../tasks/TaskStatus.js";
 
-export class StatisticsService {
+export default class StatisticsService {
   private users: IUser[];
   private tasks: ITask[];
 

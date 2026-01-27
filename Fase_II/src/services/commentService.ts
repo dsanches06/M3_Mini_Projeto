@@ -1,6 +1,6 @@
 import Comment from "../comments/Comment.js";
 
-export class CommentService {
+export default class CommentService {
   private comments: Comment[];
   private count: number;
 

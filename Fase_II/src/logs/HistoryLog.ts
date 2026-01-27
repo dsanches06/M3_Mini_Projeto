@@ -7,7 +7,7 @@ export default class HistoryLog {
   }
 
   getLogs(): string[] {
-    return [...this.logs];
+    return this.logs;
   }
 
   clearLogs() {
