@@ -30,7 +30,18 @@ Clique no [Link do projeto GitHub](https://github.com/dsanches06/M3_Mini_Projeto
 
 ```bash
 git clone https://github.com/dsanches06/M3_Mini_Projeto.git
-cd m3_mini_projeto
+```
+
+#### Para projeto fase I
+
+```bash
+cd m3_mini_projeto/fase_I/
+```
+
+#### Para projeto fase II
+
+```bash
+cd m3_mini_projeto/fase_II/
 ```
 
 ### Executar o Projeto
@@ -38,7 +49,7 @@ cd m3_mini_projeto
 1 - No terminal execute
 
 ```bash
-tsc --target ES6 --module ES6 main.ts
+tsc
 ```
 
 2 - Depois, abra `index.html` com Live Server.
