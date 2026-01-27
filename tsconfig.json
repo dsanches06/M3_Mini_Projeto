@@ -8,5 +8,5 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["src/**/*"]
+  "include": ["main.ts", "src/**/*"]
 }

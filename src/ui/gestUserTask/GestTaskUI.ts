@@ -1,11 +1,9 @@
-import UserService from "../../services/userService.js";
-import IUser from "../../models/IUser.js";
-import ITask from "../../tasks/ITask.js";
-import { showInfoBanner } from "../../helpers/infoBanner.js";
-import { clearContainer } from "../dom/ContainerSection.js";
-import { getTasksByFilter } from "../../helpers/getTaskByFilter.js";
-import loadTasksPage from "../task/TaskPage.js";
-
+import { IUser } from "../../models/index.js";
+import { ITask } from "../../tasks/index.js";
+import { UserService } from "../../services/index.js";
+import { clearContainer } from "../dom/index.js";
+import { getTasksByFilter, showInfoBanner } from "../../helpers/index.js";
+import { loadTasksPage } from "../task/index.js";
 
 /* array global de utilizadores */
 let users: IUser[];
@@ -36,7 +34,7 @@ export function loadAllUsersTask(servicesUser: UserService): void {
   // Limpa o container antes de mostrar os utilizadores
   clearContainer();
   // carrega a pagina dinamica de utilizadores
-  loadTasksPage(tasksFiltered);
+  //loadTasksPage(tasksFiltered);
 }
 
 /* */
@@ -89,7 +87,7 @@ export function removeAllCompletedTask(): ITask[] {
   for (const user of users) {
     const tasks = user.getTasks();
     if (tasks && tasks.length > 0) {
-     /*  user.getTasks() = tasks.filter((task) => !task.getCompleted());
+      /*  user.getTasks() = tasks.filter((task) => !task.getCompleted());
       if (user.tasks.length > 0) {
         tasksFiltered = getTasksByFilter(user, tasksFiltered, "pending");
       } */

@@ -1,5 +1,4 @@
-export default class HistoryLog {
-
+export class HistoryLog {
   private logs: string[] = [];
 
   addLog(message: string) {

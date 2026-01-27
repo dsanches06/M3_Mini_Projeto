@@ -1,4 +1,4 @@
-import BaseEntity from "../models/BaseEntity.js";
+import {BaseEntity} from "../models/index.js";
 
 export default class Comment extends BaseEntity {
   private taskId: number;

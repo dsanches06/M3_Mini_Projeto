@@ -1,5 +1,5 @@
-import IUser from "../models/IUser.js";
-import ITask from "../tasks/ITask.js";
+import { IUser } from "../models/index.js";
+import { ITask } from "../tasks/index.js";
 import { showInfoBanner } from "./infoBanner.js";
 
 /* Função para obter tarefas por filtro */

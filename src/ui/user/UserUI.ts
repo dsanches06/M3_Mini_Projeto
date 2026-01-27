@@ -1,23 +1,23 @@
-import IUser from "../../models/IUser.js";
-import ITask from "../../tasks/ITask.js";
-import { createUserCard } from "./UserCardUI.js";
-import { createSection } from "../dom/CreatePage.js";
-import { searchUserByName } from "../gestUserTask/GestUserUI.js";
-import { renderUserModal } from "./UserModalForm.js";
-import UserService from "../../services/userService.js";
+import { IUser } from "../../models/index.js";
+import { ITask } from "../../tasks/index.js";
+import { UserService } from "../../services/index.js";
+import { createSection } from "../dom/index.js";
+import { createUserCard, renderUserModal } from "../user/index.js";
+import { searchUserByName } from "../gestUserTask/index.js";
 
 /* Container de utilizadores */
 const usersContainer = createSection("usersContainer") as HTMLElement;
 
 /* Função de renderização */
-export default function renderUsers(
+export function renderUsers(
   serviceUsers: UserService,
   users: IUser[],
 ): HTMLElement {
   usersContainer.innerHTML = "";
   users.forEach((user) =>
     //Para cada utilizador, cria um cartão HTML.
-    usersContainer.appendChild(createUserCard(serviceUsers, user)),
+    //    usersContainer.appendChild(createUserCard(serviceUsers, user)),
+    console.log(user),
   );
   // Aplicar cores aos cartões
   applyCardColors(usersContainer);

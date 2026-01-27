@@ -1,13 +1,14 @@
-import UserClass from "../../models/UserClass.js";
-import { createSection, createHeadingTitle } from "../dom/CreatePage.js";
-import { showUserDetails } from "./UserDetailsModalUI.js";
-import UserService from "../../services/userService.js";
-import { clearContainer } from "../dom/ContainerSection.js";
-import { showInfoBanner } from "../../helpers/infoBanner.js";
-import { removeUserByID, toggleUserState } from "../gestUserTask/GestUserUI.js";
-import loadUserTaskPage from "ui/usertask/UserTaskPage.js";
-import renderUsers from "./UserUI.js";
-import { showUsersCounters } from "./UserPage.js";
+import { UserService } from "../../services/index.js";
+import { UserClass } from "../../models/index.js";
+import { showInfoBanner } from "../../helpers/index.js";
+import { renderUsers, showUserDetails } from "./index.js";
+import {
+  createSection,
+  createHeadingTitle,
+  clearContainer,
+} from "../dom/index.js";
+import { removeUserByID, toggleUserState } from "../gestUserTask/index.js";
+import { loadUserTaskPage } from "../usertask/index.js";
 
 /* Criar cartão de utilizador */
 export function createUserCard(
@@ -124,7 +125,7 @@ function userCardBtn(user: UserClass): HTMLElement {
     event.stopPropagation();
     const servicesUser = toggleUserState(user.getId());
     renderUsers(servicesUser, servicesUser.getAllUsers() as UserClass[]);
-    showUsersCounters(servicesUser.getAllUsers() as UserClass[]);
+   // showUsersCounters(servicesUser.getAllUsers() as UserClass[]);
   });
 
   const trashIcon = document.createElement("i") as HTMLElement;
@@ -144,14 +145,13 @@ function userCardBtn(user: UserClass): HTMLElement {
         "error-banner",
       );
     } else {
-      const updatedUserList = removeUserByID(user.getId());
-      if (updatedUserList) {
+      const { serviceUsers, remove } = removeUserByID(user.getId());
+      if (remove) {
         //atualiza a lista de utilizadores
-        renderUsers(
-          updatedUserList,
-          updatedUserList.getAllUsers() as UserClass[],
-        );
-        showUsersCounters(updatedUserList.getAllUsers() as UserClass[]);
+        renderUsers(serviceUsers, serviceUsers.getAllUsers() as UserClass[]);
+      //  showUsersCounters(serviceUsers.getAllUsers() as UserClass[]);
+      } else {
+        showInfoBanner("O utilizador não foi removido", "error-banner");
       }
     }
   });

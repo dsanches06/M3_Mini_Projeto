@@ -1,11 +1,7 @@
-import IUser from "./../models/IUser.js";
-import ITask from "../tasks/ITask.js";
-import { TaskStatus } from "../tasks/TaskStatus.js";
+import { IUser } from "../models/index.js";
+import { ITask, TaskStatus } from "../tasks/index.js";
 
-//Dicas:
-// Pesquisa por texto, utilizador e estado
-
-export default class SearchService {
+export class SearchService {
   private users: IUser[];
   private tasks: ITask[];
 

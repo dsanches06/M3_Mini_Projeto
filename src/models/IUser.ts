@@ -1,7 +1,7 @@
-import { UserRole } from "./../security/UserRole.js";
-import ITask from "./../tasks/ITask.js";
+import { UserRole } from "../security/index.js";
+import { ITask } from "../tasks/index.js";
 
-export default interface IUser {
+export interface IUser {
   getId(): number;
   getName(): string;
   isActive(): boolean;

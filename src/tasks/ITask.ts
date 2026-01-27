@@ -1,10 +1,10 @@
-import IUser from "../models/IUser.js";
-import { TaskCategory } from "./TaskCategory.js";
-import { TaskStatus } from "./TaskStatus.js";
+import { IUser } from "../models/index.js";
+import { TaskCategory, TaskStatus } from "./index.js";
 
-export default interface ITask {
+export interface ITask {
   getId(): number;
   getCreatedAt(): Date;
+  setTitle(title: string): void;
   getTitle(): string;
   getCompleted(): boolean;
   getStatus(): TaskStatus;
@@ -13,5 +13,6 @@ export default interface ITask {
   getType(): string;
   getCompletedDate(): Date;
   getTaskCategory(): TaskCategory;
+  markCompleted(): void;
   moveTo(status: TaskStatus): void;
 }

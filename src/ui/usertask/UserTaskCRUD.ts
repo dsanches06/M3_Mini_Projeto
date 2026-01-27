@@ -1,11 +1,7 @@
-
-
-import Task from "../../tasks/Task.js";
-import User from "../../models/UserClass.js";
-import { TaskCategory } from "../../tasks/TaskCategory.js";
-import { showInfoBanner } from "../../helpers/infoBanner.js";
-import { showUserTaskCounters } from "./UserTaskPage.js";
-import showUserTask from "./UserTaskUI.js";
+import { showInfoBanner } from "../../helpers/index.js";
+import { IUser } from "../../models/index.js";
+import { ITask } from "../../tasks/index.js";
+import { showUserTask, showUserTaskCounters } from "../usertask/index.js";
 
 /* Função para obter o ID do utilizador da URL */
 export function getUserIdFromURL(): number {
@@ -22,13 +18,13 @@ export function getUserIdFromURL(): number {
 }
 
 /* Estilização por estado */
-export function styleTasks(tasList: Task[]): void {
+export function styleTasks(tasList: ITask[]): void {
   const taskListElement = document.querySelector(
     "#usersTaskList",
   ) as HTMLUListElement;
   const listItems = taskListElement.querySelectorAll("li");
   listItems.forEach((li, index) => {
-    if (tasList[index].completed) {
+    if (tasList[index].getCompleted()) {
       li.style.textDecoration = "line-through";
       li.style.color = "gray";
     } else {
@@ -39,7 +35,7 @@ export function styleTasks(tasList: Task[]): void {
 }
 
 /* Função para adicionar uma nova tarefa do utilizador */
-export function addNewUserTask(id: number, user: User): Task {
+export function addNewUserTask(id: number, user: IUser): ITask | undefined {
   //Lê os valores dos inputs.
   const titleInput = document.querySelector("#titleInput") as HTMLInputElement;
   const title = titleInput.value;
@@ -51,19 +47,18 @@ export function addNewUserTask(id: number, user: User): Task {
   titleInput.value = "";
   taskCategory.value = "";
   //retorna um novo objeto do tipo Task
-  const task = new Task(id, title, category as TaskCategory);
-  task.user = user;
-  return task;
+  //const task = new Task(id, title, category as TaskCategory);
+  return undefined;
 }
 
 /* Função para remover a tarefas concluidas de um utilizador  */
-export function removeCompletedTasks(user: User): void {
+export function removeCompletedTasks(user: IUser): void {
   //para cada tarefa do utilizador
-  user.tasks.forEach((task) => {
+  user.getTasks().forEach((task) => {
     //se a tarefa estiver concluída
-    if (task.completed) {
+    if (task.getCompleted()) {
       //remover a tarefa
-      user.removeTask(task.id);
+      user.removeTask(task.getId());
     } else {
       showInfoBanner(
         "As tarefas não concluídas, não podem ser removidas.",
@@ -71,48 +66,48 @@ export function removeCompletedTasks(user: User): void {
       );
     }
   });
-  showUserTaskCounters(user.tasks as Task[]);
+  showUserTaskCounters(user.getTasks() as ITask[]);
   //atualizar a exibição das tarefas
-  showUserTask(user, user.tasks as Task[]);
+  showUserTask(user, user.getTasks() as ITask[]);
 }
 
 /* Função Editar tarefa */
-export function userEditTitle(user: User, taskId: number): void {
-  const index = user.tasks.findIndex((t) => t.id === taskId);
+export function userEditTitle(user: IUser, taskId: number): void {
+  const index = user.getTasks().findIndex((t) => t.getId() === taskId);
   if (index !== -1) {
     const newTitle = prompt(
       "Digite o novo título da tarefa:",
-      user.tasks[index].title,
+      user.getTasks()[index].getTitle(),
     );
     if (newTitle !== null && newTitle.trim() !== "") {
-      user.tasks[index].title = newTitle.trim();
-      showUserTaskCounters(user.tasks as Task[]);
+      user.getTasks()[index].setTitle(newTitle.trim());
+      showUserTaskCounters(user.getTasks());
       //atualizar a exibição das tarefas
-      showUserTask(user, user.tasks as Task[]);
+      showUserTask(user, user.getTasks());
     }
   }
 }
 
 /* Função Concluir tarefa */
-export function userCompleteTask(user: User, taskId: number): void {
-  const index = user.tasks.findIndex((t) => t.id === taskId);
+export function userCompleteTask(user: IUser, taskId: number): void {
+  const index = user.getTasks().findIndex((t) => t.getId() === taskId);
   if (index !== -1) {
     //se a tarefa não estiver concluída
-    if (!user.tasks[index].completed) {
+    if (!user.getTasks()[index].getCompleted()) {
       //marcar a tarefa como concluída
-      user.tasks[index].markCompleted();
+      user.getTasks()[index].markCompleted();
     } //atualizar a exibição das tarefas
-    showUserTaskCounters(user.tasks as Task[]);
-    showUserTask(user, user.tasks as Task[]);
+    showUserTaskCounters(user.getTasks());
+    showUserTask(user, user.getTasks());
   }
 }
 
-export function userRemoveTask(user: User, taskId: number): void {
-  const index = user.tasks.findIndex((t) => t.id === taskId);
+export function userRemoveTask(user: IUser, taskId: number): void {
+  const index = user.getTasks().findIndex((t) => t.getId() === taskId);
   if (index !== -1) {
     user.removeTask(taskId);
-    showUserTaskCounters(user.tasks as Task[]);
+    showUserTaskCounters(user.getTasks());
     //atualizar a exibição das tarefas
-    showUserTask(user, user.tasks as Task[]);
+    showUserTask(user, user.getTasks());
   }
 }

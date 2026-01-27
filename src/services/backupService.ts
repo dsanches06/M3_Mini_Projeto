@@ -1,7 +1,7 @@
-import IUser from "./../models/UserClass.js";
-import ITask from "../tasks/ITask.js";
+import { IUser } from "../models/index.js";
+import { ITask } from "../tasks/index.js";
 
-export default class BackupService {
+export class BackupService {
   private users: IUser[];
   private tasks: ITask[];
 

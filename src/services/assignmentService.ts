@@ -1,8 +1,7 @@
-import IUser from "../models/IUser.js";
-import { TaskStatus } from "../tasks/TaskStatus.js";
-import ITask from "./../tasks/ITask.js";
+import { IUser } from "../models/index.js";
+import { ITask, TaskStatus } from "../tasks/index.js";
 
-export default class AssignmentService {
+export class AssignmentService {
   private users: IUser[];
   private tasks: ITask[];
 

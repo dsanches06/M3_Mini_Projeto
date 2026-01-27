@@ -1,18 +1,31 @@
-
-
-import UserService from "../../services/userService.js";
-import { menuSelected } from "../dom/MenuSelected.js";
-import { addElementInContainer } from "../dom/ContainerSection.js";
-import { createHeadingTitle, createSection } from "../dom/CreatePage.js";
-import { renderUsers, showUsersCounters } from "./UserUI.js";
-import User from "../../models/UserClass.js";
-import { renderUserModal } from "./UserModalForm.js";
-import { allUsers, allUsersAtive, allUsersUnable, sortUsersByName, searchUserByName } from "../gestUserTask/GestUserUI.js";
-import { createStatisticsCounter, createSearchContainer } from "../dom/SectionCounter.js";
-import { countAllUsers, countAtiveUsers, countUnableUsers, countAtiveInativePercentage } from "./UserCountersUI.js";
+import { UserClass } from "../../models/index.js";
+import { UserService } from "../../services/index.js";
+import {
+  addElementInContainer,
+  createSection,
+  menuSelected,
+  createHeadingTitle,
+  createStatisticsCounter,
+  createSearchContainer,
+} from "../dom/index.js";
+import {
+  countAllUsers,
+  renderUserModal,
+  countAtiveUsers,
+  countUnableUsers,
+  countAtiveInativePercentage,
+  renderUsers,
+} from "../user/index.js";
+import {
+  allUsers,
+  allUsersAtive,
+  allInactiveUsers,
+  sortUsersByName,
+  searchUserByName,
+} from "../gestUserTask/index.js";
 
 /* Lista de utilizadores */
-export default function loadUsersPage(userService: UserService): void {
+export function loadUsersPage(userServices: UserService): void {
   /* ativa o menu Users */
   menuSelected("#menuUsers");
   //
@@ -21,15 +34,15 @@ export default function loadUsersPage(userService: UserService): void {
   const userCounterSection = createUserCounter("userCounters");
   addElementInContainer(userCounterSection);
   //
-  showUsersCounters(userService.users as User[], "utilizadores");
+  showUsersCounters(userServices.getAllUsers() as UserClass[], "utilizadores");
   //
   const searchContainer = showSearchContainer();
   addElementInContainer(searchContainer);
   //
 
   const usersContainer = renderUsers(
-    userService,
-    userService.users as User[],
+    userServices,
+    userServices.getAllUsers() as UserClass[],
   );
   addElementInContainer(usersContainer);
 
@@ -49,27 +62,27 @@ export default function loadUsersPage(userService: UserService): void {
 
   allUsersBtn.addEventListener("click", () => {
     const users = allUsers();
-    renderUsers(UserService, users as User[]);
-    showUsersCounters(users as User[]);
+    renderUsers(userServices, users as UserClass[]);
+    showUsersCounters(users as UserClass[], "utilizadores");
   });
 
   ativeUsersBtn.addEventListener("click", () => {
     const usersAtive = allUsersAtive();
-    renderUsers(UserService, usersAtive as User[]);
-    showUsersCounters(usersAtive as User[]);
+    renderUsers(userServices, usersAtive as UserClass[]);
+    showUsersCounters(usersAtive as UserClass[], "activos");
   });
 
   unableUsersBtn.addEventListener("click", () => {
-    const usersUnable = allUsersUnable();
-    renderUsers(UserService, usersUnable as User[]);
-    showUsersCounters(usersUnable as User[], "inativos");
+    const usersInactive = allInactiveUsers();
+    renderUsers(userServices, usersInactive as UserClass[]);
+    showUsersCounters(usersInactive as UserClass[], "inactivos");
   });
 
   // Adicionar event listeners aos botões de busca
   const addUserBtn = document.querySelector("#addUserBtn") as HTMLElement;
   addUserBtn.addEventListener("click", () => {
     // Lógica para adicionar usuário (ex.: abrir modal ou navegar)
-    renderUserModal(UserService);
+    renderUserModal(userServices);
   });
 
   const sortUsersBtn = document.querySelector("#sortUsersBtn") as HTMLElement;
@@ -82,8 +95,8 @@ export default function loadUsersPage(userService: UserService): void {
       //Inverta o estado para o próximo clique
       isAscending = !isAscending;
       // Mostrar os utilizadores ordenados
-      renderUsers(UserService, sortedUsers as User[]);
-      showUsersCounters(sortedUsers as User[]);
+      renderUsers(userServices, sortedUsers as UserClass[]);
+      showUsersCounters(sortedUsers as UserClass[]);
       // Atualize o texto ou ícone do botão
       sortUsersBtn.textContent = isAscending ? "Ordenar A-Z" : "Ordenar Z-A";
     });
@@ -97,8 +110,8 @@ export default function loadUsersPage(userService: UserService): void {
     searchUser.addEventListener("input", () => {
       const name = searchUser.value.toLowerCase();
       const filteredUsers = searchUserByName(name);
-      renderUsers(UserService, filteredUsers as User[]);
-      showUsersCounters(filteredUsers as User[]);
+      renderUsers(userServices, filteredUsers as UserClass[]);
+      showUsersCounters(filteredUsers as UserClass[]);
     });
   } else {
     console.warn("Elemento de busca de utilizadores não encontrado.");
@@ -110,7 +123,7 @@ function createUserCounter(id: string): HTMLElement {
   const allUsersBtn = createStatisticsCounter(
     "allUserSection",
     "allUsersBtn",
-    "./images/users.png",
+    "/src/assets/users.png",
     "utilizadores",
     "allUsersCounter",
   ) as HTMLElement;
@@ -119,7 +132,7 @@ function createUserCounter(id: string): HTMLElement {
   const ativeUsersBtn = createStatisticsCounter(
     "ativeUsers",
     "ativeUsersBtn",
-    "./images/ative.png",
+    "/src/assets/active.png",
     "ativos",
     "ativeUsersCounter",
   ) as HTMLElement;
@@ -127,14 +140,15 @@ function createUserCounter(id: string): HTMLElement {
   const unableUsersBtn = createStatisticsCounter(
     "unableUsers",
     "unableUsersBtn",
-    "./images/unable.png",
+    "/src/assets/inactive.png",
     "inativos",
     "unableUsersCounter",
   ) as HTMLElement;
+
   const ativeUsersPercentageBtn = createStatisticsCounter(
     "ativeUserPercentage",
     "ativeUsersPercentageBtn",
-    "./images/ative.png",
+    "/src/assets/percentagem.png",
     "ativos %",
     "ativeUsersPercentageCounter",
   ) as HTMLElement;
@@ -149,7 +163,7 @@ function createUserCounter(id: string): HTMLElement {
   return sectionUsersCounter;
 }
 
-export function showUsersCounters(userList: User[], type?: string): void {
+function showUsersCounters(userList: UserClass[], type?: string): void {
   countAllUsers("#allUsersCounter", userList);
   countAtiveUsers("#ativeUsersCounter", userList);
   countUnableUsers("#unableUsersCounter", userList);
@@ -157,7 +171,7 @@ export function showUsersCounters(userList: User[], type?: string): void {
 }
 
 /* */
-function showSearchContainer(): HTMLElement {
+export function showSearchContainer(): HTMLElement {
   const searchUserContainer = createSearchContainer(
     "searchUserContainer",
     { id: "searchUser", placeholder: "Procurar utilizador..." },

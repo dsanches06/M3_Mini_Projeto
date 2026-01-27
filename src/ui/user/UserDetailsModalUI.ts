@@ -1,10 +1,6 @@
+import { UserClass } from "../../models/index.js";
 
-
-
-import User from "../../models/UserClass.js";
-
-/* Modal para visualização de detalhes do utilizador */
-export function showUserDetails(user: User) {
+export function showUserDetails(user: UserClass) {
   const modal = document.createElement("section") as HTMLElement;
   modal.id = "modalUserDetails";
   modal.className = "modal";
@@ -27,11 +23,11 @@ export function showUserDetails(user: User) {
   document.body.appendChild(modal);
   closeBtn.onclick = () => {
     modal.remove();
-  }  
-}   
+  };
+}
 
 /* Função que cria o modal para mostrar detalhes do utilizador */
-function modalUserDetail(user: User): HTMLElement {
+function modalUserDetail(user: UserClass): HTMLElement {
   const title = document.createElement("h3") as HTMLHeadingElement;
   title.id = "detailTitle";
   title.textContent = "Detalhes do Utilizador";
@@ -69,7 +65,7 @@ function modalUserDetail(user: User): HTMLElement {
 }
 
 /* Função que cria o modal para mostrar detalhes do tulizador */
-function modalUserTask(user: User): HTMLElement {
+function modalUserTask(user: UserClass): HTMLElement {
   //cria um subtítulo
   const sectionTitle = document.createElement("h4") as HTMLHeadingElement;
   sectionTitle.className = "detailTasksTitle";

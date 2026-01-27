@@ -1,11 +1,12 @@
-import { TaskStatus } from "../tasks/TaskStatus";
+import { TaskStatus } from "../tasks/TaskStatus.js";
 
 // - definir transições válidas
-export const validTransitions: Record<TaskStatus, TaskStatus[]> = {
-  [TaskStatus.CREATED]: [TaskStatus.ASSIGNED],
-  [TaskStatus.ASSIGNED]: [TaskStatus.IN_PROGRESS, TaskStatus.BLOCKED],
-  [TaskStatus.IN_PROGRESS]: [TaskStatus.BLOCKED, TaskStatus.COMPLETED],
-  [TaskStatus.BLOCKED]: [TaskStatus.ASSIGNED, TaskStatus.COMPLETED],
-  [TaskStatus.COMPLETED]: [TaskStatus.ARCHIVED],
-  [TaskStatus.ARCHIVED]: [],
-};
+export function validTransitions(
+  current: TaskStatus,
+  next: TaskStatus,
+): boolean {
+  //usa um State Machine Pattern
+  if (current === TaskStatus.COMPLETED && next !== TaskStatus.ARCHIVED)
+    return false;
+  return true;
+}

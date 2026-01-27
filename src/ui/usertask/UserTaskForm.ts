@@ -1,22 +1,16 @@
-
-
-import User from "../../models/UserClass.js";
-import UserService from "../../services/userService.js";
-import ITask from "../../tasks/ITask.js";
-import { getLastId } from "../../helpers/getLastID.js";
-import { addNewUserTask } from "./UserTaskCRUD.js";
-import { showUserTask } from "../usertask/UserTaskUI.js";
-import Task from "../../tasks/Task.js";
-import { showInfoBanner } from "../../helpers/infoBanner.js";
-
+import { IUser, UserClass } from "../../models/index.js";
+import { ITask } from "../../tasks/index.js";
+import { UserService } from "../../services/index.js";
+import { addNewUserTask, showUserTask } from "../usertask/index.js";
+import { getLastID, showInfoBanner } from "../../helpers/index.js";
 
 /**
  * 1. Função para criar e montar o formulário no DOM
  */
-export default function createAndAppendTaskForm(
+export function createAndAppendTaskForm(
   containerId: string,
-  user: User,
-  UserService: UserService,
+  user: UserClass,
+  serviceUsers: UserService,
 ): void {
   const container = document.getElementById(containerId);
   if (!container) return;
@@ -70,7 +64,7 @@ export default function createAndAppendTaskForm(
     if (event.target === modal) modal.style.display = "none";
   });
   form.addEventListener("submit", (e) =>
-    handleFormSubmit(e, user, UserService),
+    handleFormSubmit(e, user, serviceUsers),
   );
 }
 
@@ -79,8 +73,8 @@ export default function createAndAppendTaskForm(
  */
 const handleFormSubmit = (
   event: Event,
-  user: User,
-  UserService: UserService,
+  user: IUser,
+  serviceUsers: UserService,
 ): void => {
   event.preventDefault();
 
@@ -92,12 +86,14 @@ const handleFormSubmit = (
 
   if (title.trim()) {
     const allTasks: ITask[] = [];
-    (UserService.getAllUsers() as User[]).forEach((u) => allTasks.push(...u.getTasks()));
-    const newId = getLastId(allTasks) + 1;
-    const newTask = addNewUserTask(newId, user);
+    (serviceUsers.getAllUsers() as UserClass[]).forEach((u) =>
+      allTasks.push(...u.getTasks()),
+    );
+    const newId = getLastID(allTasks) + 1;
+    const newTask = addNewUserTask(newId, user) as ITask;
     user.createTask(newTask);
     // Atualizar exibição
-    showUserTask(user, user.getTasks() as Task[]);
+    showUserTask(user, user.getTasks() as ITask[]);
     // Fechar modal
     const modal = document.getElementById("modalUserTaskForm") as HTMLElement;
     if (modal) modal.style.display = "none";

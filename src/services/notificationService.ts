@@ -1,7 +1,7 @@
-import IUser from "../models/IUser.js";
-import { UserRole } from "../security/UserRole.js";
+import { UserRole } from "./../security/index.js";
+import { IUser } from "../models/index.js";
 
-export default class NotificationService {
+export class NotificationService {
   private users: IUser[];
 
   constructor(users: IUser[]) {

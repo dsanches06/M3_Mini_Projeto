@@ -1,4 +1,4 @@
-export default class TagService {
+export  class TagService {
   private tagsToTask: Map<number, string[]>;
 
   constructor() {

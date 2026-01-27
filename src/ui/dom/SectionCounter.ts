@@ -3,7 +3,7 @@ import {
   createFigureWithImage,
   createInput,
   createSection,
-} from "./CreatePage.js";
+} from "./index.js";
 
 /**
  * Cria qualquer seção de contador de tarefas (Total, Pendentes ou Concluídas)

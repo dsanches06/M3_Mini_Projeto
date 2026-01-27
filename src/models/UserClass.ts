@@ -1,9 +1,8 @@
-import BaseEntity from "./BaseEntity.js";
-import { UserRole } from "../security/UserRole.js";
-import ITask from "./../tasks/ITask.js";
-import IUser from "./IUser";
+import { BaseEntity, IUser } from "./index.js";
+import { UserRole } from "../security/index.js";
+import { ITask } from "../tasks/index.js";
 
-export default class UserClass extends BaseEntity implements IUser {
+export class UserClass extends BaseEntity implements IUser {
   private name: string;
   private email: string;
   private active: boolean;

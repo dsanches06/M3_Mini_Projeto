@@ -1,12 +1,13 @@
-import NotificationService from "./notificationService.js";
-import ITask from "./../tasks/ITask.js";
-import IUser from "../models/UserClass.js";
-import { TaskStatus } from "../tasks/TaskStatus.js";
-import HistoryLog  from "../logs/HistoryLog.js";
-import DeadlineService from "./deadLineService.js";
-import AssignmentService from "./assignmentService.js";
+import { IUser } from "../models/index.js";
+import { ITask, TaskStatus } from "../tasks/index.js";
+import {
+  DeadlineService,
+  AssignmentService,
+  NotificationService,
+} from "./index.js";
+import { HistoryLog } from "../logs/HistoryLog.js";
 
-export default class AutomationRulesService {
+export class AutomationRulesService {
   private users: IUser[];
   private tasks: ITask[];
   private deadlineService: DeadlineService;

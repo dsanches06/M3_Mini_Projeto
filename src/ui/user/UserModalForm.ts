@@ -1,15 +1,14 @@
+import {
+  createButton,
+  createForm,
+  createSection,
+  createHeadingTitle,
+} from "../dom/index.js";
+import { UserService } from "../../services/index.js";
+import { IUser, UserClass } from "../../models/index.js";
+import { showInfoBanner, getLastID } from "../../helpers/index.js";
+import { renderUsers } from "./index.js";
 
-
-import UserService from "../../services/userService.js";
-import { getLastId } from "../../helpers/getLastID.js";
-import User from "../../models/UserClass.js";
-import { showInfoBanner } from "../../helpers/infoBanner.js";
-import { renderUsers, showUsersCounters } from "./UserUI.js";
-import { createSection, createHeadingTitle, createForm, createButton } from "../dom/CreatePage.js";
-
-/**
- * . Função Auxiliar: Cria os grupos de input (Label + Input + Erro)
- */
 function createInputGroup(
   labelStr: string,
   id: string,
@@ -41,7 +40,7 @@ function createInputGroup(
  * Gere a submissão e validação com Regex para Email
  */
 function setupFormLogic(
-  UserService: UserService,
+  serviceUsers: UserService,
   form: HTMLFormElement,
   fields: { name: HTMLInputElement; email: HTMLInputElement },
   errors: { nameErr: HTMLElement; emailErr: HTMLElement; banner: HTMLElement },
@@ -63,7 +62,7 @@ function setupFormLogic(
       isValid = false;
     }
 
-     // Validação do Nome
+    // Validação do Nome
     if (fields.name.value.trim() === "") {
       errors.nameErr.textContent = "O nome não pode estar vazio.";
       isValid = false;
@@ -82,11 +81,15 @@ function setupFormLogic(
     // Verificação Final
     if (isValid) {
       //obter um novo id a partir do ultimo
-      let newId: number = getLastId(UserService.users) + 1;
+      let newId: number = getLastID(serviceUsers.getAllUsers()) + 1;
       //cria um novo user com os dados inseridos no formulario
-      const user: User = new User(newId, fields.name.value, fields.email.value);
+      const user: IUser = new UserClass(
+        newId,
+        fields.name.value,
+        fields.email.value,
+      );
       //adiciona a lista de utilizadores
-      UserService.addUser(user);
+      serviceUsers.addUser(user);
       if (user && user.getName()) {
         showInfoBanner(
           `${user.getName()} foi adicionado com sucesso.`,
@@ -99,9 +102,9 @@ function setupFormLogic(
         );
       }
       //mostra todos os utilizadores
-      renderUsers(UserService, UserService.users as User[]);
+      renderUsers(serviceUsers, serviceUsers.getAllUsers() as UserClass[]);
       // atualizar contadores
-      showUsersCounters(UserService.users as User[]);
+    //  showUsersCounters(serviceUsers.getAllUsers() as UserClass[]);
       modal.remove();
     } else {
       errors.banner.textContent =
@@ -114,7 +117,7 @@ function setupFormLogic(
 /**
  *  Função Principal: Monta o Modal no DOM
  */
-export function renderUserModal(UserService: UserService): void {
+export function renderUserModal(serviceUsers: UserService): void {
   const modal = createSection("modalUserForm") as HTMLElement;
   modal.classList.add("modal");
 
@@ -165,7 +168,7 @@ export function renderUserModal(UserService: UserService): void {
 
   // Ligar a lógica ao formulário
   setupFormLogic(
-    UserService,
+    serviceUsers,
     form,
     { name: nameData.input, email: emailData.input },
     {

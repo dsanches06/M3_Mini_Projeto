@@ -1,32 +1,30 @@
-import User from "../../models/UserClass.js";
-import Task from "../../tasks/Task.js";
+import { showInfoBanner } from "../../helpers/index.js";
+import { IUser, UserClass } from "../../models/index.js";
+import { ITask } from "../../tasks/index.js";
 import {
   countAllTasks,
   countPendingUserTasks,
   countCompletedUserTasks,
-} from "../task/TaskCountersUI.js";
+} from "../task/index.js";
 import {
   styleTasks,
   userEditTitle,
   userCompleteTask,
   userRemoveTask,
-} from "./UserTaskCRUD.js";
-import { showInfoBanner } from "../../helpers/infoBanner.js";
-import IUser from "../../models/IUser.js";
-import ITask from "../../tasks/ITask.js";
+} from "./index.js";
 
 /* Mostrar tarefas */
-export default function showUserTask(user: IUser, tasks: ITask[]): void {
-  countAllTasks("#totalTasks", tasks as Task[]);
-  countPendingUserTasks("#pendingTasks", tasks as Task[]);
-  countCompletedUserTasks("#completedTasks", tasks as Task[]);
-  showUserNameHeader(user);
-  renderUserTask(user as User, tasks as Task[]);
-  styleTasks(tasks as Task[]);
+export function showUserTask(user: IUser, tasks: ITask[]): void {
+//  countAllTasks("#totalTasks", tasks);
+  //countPendingUserTasks("#pendingTasks", tasks);
+  //countCompletedUserTasks("#completedTasks", tasks);
+ // showUserNameHeader(user);
+  renderUserTask(user as UserClass, tasks);
+  styleTasks(tasks);
 }
 
 /* Função de renderizar apenas as tarefas do utilizador */
-function renderUserTask(user: User, taskList: Task[]) {
+function renderUserTask(user: UserClass, taskList: ITask[]) {
   /* Container de tarefas do utilizador */
   const usersTaskContainer = document.querySelector(
     "#usersTaskContainer",
@@ -40,7 +38,7 @@ function renderUserTask(user: User, taskList: Task[]) {
     //Para cada tarefa na lista de tarefas.
     taskList.forEach((task) => {
       //Cria um item de lista para a tarefa.
-      const listItem = createTaskItem(user, task as Task);
+      const listItem = createTaskItem(user, task as ITask);
       //Adiciona o item de lista à lista não ordenada.
       ul.appendChild(listItem);
     });
@@ -52,14 +50,16 @@ function renderUserTask(user: User, taskList: Task[]) {
 }
 
 /* Função para criar um item de lista de tarefa */
-function createTaskItem(user: User, task: Task): HTMLLIElement {
+function createTaskItem(user: UserClass, task: ITask): HTMLLIElement {
   const listItem = document.createElement("li");
   listItem.className = "user-task-item";
   let result: string = "";
   result = `${task.getId()} - ${task.getTitle()} -
 ${task.getCompleted() ? "Concluída" : "Pendente"} -
 ${task.getTaskCategory()} - ${
-    task.getCompletedDate() ? task.getCompletedDate().toLocaleString("pt-PT") : "N/A"
+    task.getCompletedDate()
+      ? task.getCompletedDate().toLocaleString("pt-PT")
+      : "N/A"
   }`;
   listItem.textContent = result;
 

@@ -1,4 +1,4 @@
-export default class DeadlineService {
+export class DeadlineService {
   //- Associar uma data limite a cada task
   private deadlines: Map<number, Date>;
 

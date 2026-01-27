@@ -1,4 +1,4 @@
-import { createSection } from "../ui/dom/CreatePage.js";
+import { createSection } from "../ui/dom/index.js";
 
 export function showInfoBanner(message: string, className: string): void {
   const banner = createSection("banner") as HTMLElement;

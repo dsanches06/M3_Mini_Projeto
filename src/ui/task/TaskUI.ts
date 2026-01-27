@@ -1,13 +1,11 @@
-
-
-import { createSection } from "../dom/CreatePage.js";
-import Task from "../../tasks/Task.js";
+import { createSection } from "../dom/index.js";
+import { ITask } from "../../tasks/index.js";
 
 /* Container de tarefas */
 const taskContainer = createSection("taskContainer") as HTMLElement;
 
 /* Função de renderização de todas as tarefas */
-export default function renderAllTasks(taskList: Task[]): HTMLElement {
+export function renderAllTasks(taskList: ITask[]): HTMLElement {
   taskContainer.innerHTML = "";
   const table = createTable();
 
@@ -20,7 +18,7 @@ export default function renderAllTasks(taskList: Task[]): HTMLElement {
   const tbody = createTableBody();
 
   taskList.forEach((task) => {
-    const row = createTableRow(task as Task);
+    const row = createTableRow(task as ITask);
     tbody.appendChild(row);
   });
 
@@ -73,7 +71,7 @@ function createTableBody(): HTMLTableSectionElement {
 }
 
 // Ajuste a sua função de criação para retornar apenas a TR
-function createTableRow(task: Task): HTMLTableRowElement {
+function createTableRow(task: ITask): HTMLTableRowElement {
   const row = document.createElement("tr");
   row.innerHTML = `
                 <td>${task.getId()}</td>

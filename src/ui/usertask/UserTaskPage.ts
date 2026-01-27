@@ -1,24 +1,23 @@
-import UserService from "../../services/userService.js";
-import UserClass from "../../models/UserClass.js";
-import { addElementInContainer } from "../dom/ContainerSection.js";
-import { createHeadingTitle, createSection } from "../dom/CreatePage.js";
-import Task from "../../tasks/Task.js";
-import showUserTask from "./UserTaskUI.js";
-import createAndAppendTaskForm from "./UserTaskForm.js";
-import { removeCompletedTasks } from "./UserTaskCRUD.js";
-import {
-  createStatisticsCounter,
-  createSearchContainer,
-} from "../dom/SectionCounter.js";
+import { UserClass } from "../../models/index.js";
+import { ITask } from "../../tasks/index.js";
 import {
   countAllTasks,
-  countCompletedUserTasks,
   countPendingUserTasks,
-} from "../task/TaskCountersUI.js";
-import ITask from "tasks/ITask.js";
+  countCompletedUserTasks,
+} from "../task/index.js";
+import { createAndAppendTaskForm, removeCompletedTasks } from "./index.js";
+import { UserService } from "../../services/index.js";
+import { showUserTask } from "../usertask/index.js";
+import {
+  addElementInContainer,
+  createHeadingTitle,
+  createSearchContainer,
+  createSection,
+  createStatisticsCounter,
+} from "../dom/index.js";
 
 /* Lista de tarefas do utilizador */
-export default function loadUserTaskPage(
+export function loadUserTaskPage(
   serviceUsers: UserService,
   user: UserClass,
 ): void {
@@ -57,20 +56,20 @@ export default function loadUserTaskPage(
   completedUserTaskBtn.title = "Mostrar tarefas concluídas";
 
   allUserTasksBtn.addEventListener("click", () => {
-    showUserTask(user, user.getTasks() as Task[]);
-    showUserTaskCounters(user.getTasks() as Task[]);
+    showUserTask(user, user.getTasks());
+    showUserTaskCounters(user.getTasks());
   });
 
   pendingUserTaskBtn.addEventListener("click", () => {
     const pendingTasks = user.pendingTasks();
-    showUserTask(user, pendingTasks as Task[]);
-    showUserTaskCounters(pendingTasks as Task[]);
+    showUserTask(user, pendingTasks);
+    showUserTaskCounters(pendingTasks);
   });
 
   completedUserTaskBtn.addEventListener("click", () => {
     const completedTasks = user.completedTasks();
-    showUserTask(user, completedTasks as Task[]);
-    showUserTaskCounters(completedTasks as Task[]);
+    showUserTask(user, completedTasks);
+    showUserTaskCounters(completedTasks);
   });
 
   // Adicionar event listeners aos botões de busca
@@ -84,8 +83,8 @@ export default function loadUserTaskPage(
       const modal = document.getElementById("modalUserTaskForm") as HTMLElement;
       if (modal) modal.style.display = "block";
       // Atualizar a lista de tarefas para todos os utilizadores
-      showUserTask(user, user.getTasks() as Task[]);
-      showUserTaskCounters(user.getTasks() as Task[]);
+      showUserTask(user, user.getTasks());
+      showUserTaskCounters(user.getTasks());
     });
   } else {
     console.warn("Elemento #addUserTaskBtn não encontrado.");
@@ -109,7 +108,7 @@ export default function loadUserTaskPage(
       //Inverta o estado para o próximo clique
       isAscending = !isAscending;
       // Mostrar as tarefas ordenadas
-      showUserTask(user, sortedTasks as Task[]);
+      showUserTask(user, sortedTasks);
       // Atualize o texto ou ícone do botão
       sortUserTasksBtn.textContent = isAscending
         ? "Ordenar A-Z"
@@ -128,8 +127,8 @@ export default function loadUserTaskPage(
       const filteredTasks = user
         .getTasks()
         .filter((task) => task.getTitle().toLowerCase().includes(name));
-      showUserTask(user, filteredTasks as Task[]);
-      showUserTaskCounters(filteredTasks as Task[]);
+      showUserTask(user, filteredTasks);
+      showUserTaskCounters(filteredTasks);
     });
   } else {
     console.warn("Elemento de busca de tarefas do utilizador não encontrado.");
@@ -151,7 +150,7 @@ function createUserTaskCounter(id: string): HTMLElement {
   const allUserTasksBtn = createStatisticsCounter(
     "allUserTaskSection",
     "allUserTasksBtn",
-    "./images/tarefa.png",
+    "/src/assets/tarefa.png",
     "tarefas",
     "allUserTasksCounter",
   ) as HTMLElement;
@@ -160,7 +159,7 @@ function createUserTaskCounter(id: string): HTMLElement {
   const pendingUserTaskBtn = createStatisticsCounter(
     "pendingUserTaskSection",
     "pendingUserTaskBtn",
-    "./images/pendente.png",
+    "/src/assets/pendente.png",
     "pendentes",
     "pendingUserTasksCounter",
   ) as HTMLElement;
@@ -168,7 +167,7 @@ function createUserTaskCounter(id: string): HTMLElement {
   const completedUserTaskBtn = createStatisticsCounter(
     "completedUserTaskSection",
     "completedUserTaskBtn",
-    "./images/tarefa-concluida.png",
+    "/src/assets/tarefa-concluida.png",
     "concluídos",
     "completedUserTaskCounter",
   ) as HTMLElement;
@@ -184,9 +183,9 @@ function createUserTaskCounter(id: string): HTMLElement {
 }
 
 export function showUserTaskCounters(tasks: ITask[]): void {
-  countAllTasks("#allUserTasksCounter", tasks);
-  countCompletedUserTasks("#completedUserTaskCounter", tasks);
-  countPendingUserTasks("#pendingUserTasksCounter", tasks);
+  // countAllTasks("#allUserTasksCounter", tasks);
+  // countCompletedUserTasks("#completedUserTaskCounter", tasks);
+  // countPendingUserTasks("#pendingUserTasksCounter", tasks);
 }
 
 /* */

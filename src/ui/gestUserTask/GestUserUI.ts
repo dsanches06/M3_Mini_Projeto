@@ -1,20 +1,20 @@
-import { fakeUsersData } from "../../helpers/fakeData.js";
-import UserService from "../../services/userService.js";
-import UserClass from "../../models/UserClass.js";
-import IUser from "../../models/IUser.js";
-import { clearContainer } from "../../ui/dom/ContainerSection.js";
+import { IUser, UserClass } from "../../models/index.js";
+import { UserService } from "../../services/index.js";
+import { clearContainer } from "../dom/index.js";
+import { fakeUsersData } from "../../helpers/index.js";
+import { loadUsersPage, renderUserModal } from "../user/index.js";
 
 /* Instância da classe userService  */
 let serviceUsers: UserService;
 
 /* Função principal para carregar utilizadores iniciais */
-export default function loadInitialUsers(userService: UserService): void {
+export function loadInitialUsers(userService: UserService): void {
   //atribuir a instância recebida ao escopo global
   serviceUsers = userService;
   // Usar um ciclo para converter os dados em instâncias da classe
   for (const userData of fakeUsersData) {
     const user = new UserClass(userData.id, userData.name, userData.email);
-    userService.addUser(user);
+    serviceUsers.addUser(user);
   }
   //Limpa o container antes de mostrar os utilizadores
   clearContainer();
@@ -23,24 +23,16 @@ export default function loadInitialUsers(userService: UserService): void {
 }
 
 /* Remover utilizador */
-export function removeUserByID(userID: number): UserService {
-  const index = serviceUsers
-    .getAllUsers()
-    .findIndex((user) => user.getId() === userID);
-  if (index !== -1) {
-    //remover o utilizador da lista
-    serviceUsers.getAllUsers().splice(index, 1);
-  }
+export function removeUserByID(id: number) {
+  let remove = serviceUsers.removeUser(id);
   //retorna o gestor com lista atualizada
-  return serviceUsers;
+  return { serviceUsers, remove };
 }
 
 /* Alternar estado (ativo / inativo) */
-export function toggleUserState(userID: number): UserService {
+export function toggleUserState(id: number): UserService {
   //encontra o utilizador pelo ID
-  const user = serviceUsers
-    .getAllUsers()
-    .find((user) => user.getId() === userID);
+  const user = serviceUsers.getUserById(id);
   //se o utilizador for encontrado
   if (user) {
     //alternar o estado do utilizador
@@ -61,12 +53,12 @@ export function allUsers(): IUser[] {
 
 /* Obter todos os utilizadores ativos */
 export function allUsersAtive(): IUser[] {
-  return serviceUsers.getAllUsers().filter((user) => user.isActive());
+  return serviceUsers.getActiveUsers();
 }
 
 /* Obter todos os utilizadores inativos */
-export function allUsersUnable(): IUser[] {
-  return serviceUsers.getAllUsers().filter((user) => !user.isActive());
+export function allInactiveUsers(): IUser[] {
+  return serviceUsers.getInactiveUsers();
 }
 
 /* Procurar utilizador por nome */
@@ -76,6 +68,7 @@ export function searchUserByName(name: string): IUser[] {
     .getAllUsers()
     .filter((user) => user.getName().toLowerCase().includes(lowerCaseName));
 }
+
 /* Ordenar utilizadores por nome */
 export function sortUsersByName(ascending: boolean = true): IUser[] {
   const sortedUsers = [...serviceUsers.getAllUsers()];

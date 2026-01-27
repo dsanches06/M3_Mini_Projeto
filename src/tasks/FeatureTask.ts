@@ -1,11 +1,9 @@
-import ITask from "./ITask.js";
-import { TaskStatus } from "./TaskStatus.js";
-import { validTransitions } from "../utils/ValidTransitions.js";
-import BaseEntity from "../models/BaseEntity.js";
-import IUser from "../models/IUser.js";
-import { TaskCategory } from "./TaskCategory.js";
+import { validTransitions } from "../utils/index.js";
+import { IUser, BaseEntity } from "../models/index.js";
+import { ITask, TaskCategory, TaskStatus } from "./index.js";
+import { showInfoBanner } from "../helpers/infoBanner.js";
 
-export default class FeatureTask extends BaseEntity implements ITask {
+export class FeatureTask extends BaseEntity implements ITask {
   private title: string;
   private completed: boolean;
   private completeDate?: Date;
@@ -30,12 +28,20 @@ export default class FeatureTask extends BaseEntity implements ITask {
     return this.title;
   }
 
+  setTitle(title: string): void {
+    this.title = title;
+  }
+
   getCompleted(): boolean {
     return this.completed;
   }
 
   getStatus(): TaskStatus {
     return this.status;
+  }
+
+  setStatus(status: TaskStatus): void {
+    this.status = status;
   }
 
   getType(): string {
@@ -62,11 +68,26 @@ export default class FeatureTask extends BaseEntity implements ITask {
     this.completeDate = date;
   }
 
+  markCompleted(): void {
+    this.completed = true;
+  }
+
   moveTo(status: TaskStatus): void {
-    if (validTransitions[this.status].indexOf(status) !== -1) {
-      this.status = status;
-      if (this.status === TaskStatus.COMPLETED) {
-        this.completed = true;
+    try {
+      const canTransition = validTransitions(this.getStatus(), status);
+      // Validar transição
+      // (Ex: Não voltar de COMPLETED para CREATED)
+      if (canTransition) {
+        this.setStatus(status);
+      }
+    } catch (error) {
+      showInfoBanner(
+        `Transição de ${TaskStatus[this.getStatus()]} para ${TaskStatus[status]} não é permitida. ${error}`,
+        "error-banner",
+      );
+    } finally {
+      if (status === TaskStatus.COMPLETED) {
+        this.markCompleted();
         this.setCompletedDate(new Date());
       }
     }

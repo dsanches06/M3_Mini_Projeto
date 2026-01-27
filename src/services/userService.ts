@@ -1,28 +1,35 @@
-import IUser from "../models/IUser.js";
+import { IUser } from "../models/index.js";
 
-export default class UserService {
-  private users: IUser[];
+export class UserService {
+  private users: Map<number, IUser>;
 
   constructor() {
-    this.users = [];
+    this.users = new Map<number, IUser>();
   }
 
   addUser(user: IUser): void {
-    this.users.push(user);
-  }
-
-  removeUser(id: number): void {
-    const index = this.users.findIndex((u) => u.getId() === id);
-    if (index !== -1) {
-      this.users.splice(index, 1);
+    if (!this.users.has(user.getId())) {
+      this.users.set(user.getId(), user);
     }
   }
 
+  removeUser(id: number): boolean {
+    return this.users.delete(id);
+  }
+
   getActiveUsers(): IUser[] {
-    return this.users.filter((u) => u.isActive());
+    return Array.from(this.users.values()).filter((user) => user.isActive());
+  }
+
+  getInactiveUsers(): IUser[] {
+    return Array.from(this.users.values()).filter((user) => !user.isActive());
   }
 
   getAllUsers(): IUser[] {
-    return this.users;
+    return Array.from(this.users.values());
+  }
+
+  getUserById(id: number): IUser | undefined {
+    return this.users.get(id);
   }
 }

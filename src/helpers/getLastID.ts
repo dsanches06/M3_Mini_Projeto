@@ -1,8 +1,8 @@
-import IUser from "../models/IUser.js";
-import ITask from "../tasks/ITask.js";
+import { IUser } from "../models/index.js";
+import { ITask } from "../tasks/index.js";
 
 /* Obter o último ID de utilizador */
-export function getLastId(list: IUser[] | ITask[]): number {
+export function getLastID(list: IUser[] | ITask[]): number {
   //inicializar a variável do último ID
   let lastUserID: number = 0;
   //obter o ultimo elemento no array

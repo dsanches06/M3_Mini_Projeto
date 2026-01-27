@@ -1,27 +1,26 @@
+import { IUser } from "../../models/index.js";
+import { ITask } from "../../tasks/index.js";
+import { UserService } from "../../services/index.js";
+import { getLastID, getTasksByFilter, showInfoBanner } from "../../helpers/index.js";
+import { showUserTask, getUserIdFromURL,addNewUserTask} from "../usertask/index.js";
 
-
-import User from "../../models/UserClass.js";
-import Task from "../../tasks/Task.js";
-import UserService from "../../services/userService.js";
-import { getUserIdFromURL } from "../usertask/UserTaskCRUD.js";
-import { showUserTask } from "../usertask/UserTaskUI.js";
-import { getTasksByFilter } from "../../helpers/getTaskByFilter.js";
-
-/* instancia global de utilizador  */
-let user: User;
+/* instancia global de   */
+let user: IUser | undefined;
 //array para armazena tarefas filtradas
-let tasksFiltered: Task[];
+let tasksFiltered: ITask[];
 
 /* Função principal para mostrar as tarefas apenas de um utilizador */
-export default function loadUserTask(servicesUser: UserService): void {
+export function loadUserTask(servicesUser: UserService): void {
   //obter o id capturado de url
   let id = getUserIdFromURL();
   //se o id for diferente de - 1
   if (id !== -1) {
     //atribuir o valor do utilizador encontrado pelo id
-    user = servicesUser.users.find((user) => user.id === id) as User;
+    user = servicesUser.getUserById(id);
     //mostra as ttarefas do utilizador atual
-    showUserTask(user, user.tasks as Task[]);
+    if (user) {
+      showUserTask(user, user.getTasks());
+    }
   }
 }
 
@@ -33,9 +32,9 @@ if (allTaskBtn) {
     //inicializa o array para evitar repetiçoes de dados
     tasksFiltered = [];
     //filtra a procura de tarefas e adiciona ao array e retorna o mesmo array
-    tasksFiltered = getTasksByFilter(user, tasksFiltered, "all");
+    //tasksFiltered = getTasksByFilter(user, tasksFiltered, "all");
     //mostra as ttarefas do utilizador atual
-    showUserTask(user, tasksFiltered);
+   // showUserTask(user, tasksFiltered);
   });
 } else {
   console.warn("Elemento #allTaskBtn não foi renderizado no DOM.");
@@ -51,9 +50,9 @@ if (taskPendingBtn) {
     //inicializa o array para evitar repetiçoes de dados
     tasksFiltered = [];
     //filtra a procura de tarefas e adiciona ao array e retorna o mesmo array
-    tasksFiltered = getTasksByFilter(user, tasksFiltered, "pending");
+  //  tasksFiltered = getTasksByFilter(user, tasksFiltered, "pending");
     //mostra as ttarefas do utilizador atual
-    showUserTask(user, tasksFiltered);
+    //showUserTask(user, tasksFiltered);
   });
 } else {
   console.warn("Elemento #taskPendingBtn não foi renderizado no DOM.");
@@ -69,9 +68,9 @@ if (taskCompletedBtn) {
     //inicializa o array para evitar repetiçoes de dados
     tasksFiltered = [];
     //filtra a procura de tarefas e adiciona ao array e retorna o mesmo array
-    tasksFiltered = getTasksByFilter(user, tasksFiltered, "completed");
+    //tasksFiltered = getTasksByFilter(user, tasksFiltered, "completed");
     //mostra as ttarefas do utilizador atual
-    showUserTask(user, tasksFiltered);
+   // showUserTask(user, tasksFiltered);
   });
 } else {
   console.warn("Elemento #taskCompletedBtn não foi renderizado no DOM.");
@@ -86,9 +85,9 @@ if (searchTask) {
     //inicializa o array para evitar repetiçoes de dados
     tasksFiltered = [];
     //filtra a procura de tarefas e adiciona ao array e retorna o mesmo array
-    tasksFiltered = getTasksByFilter(user, tasksFiltered, "search", title);
+   // tasksFiltered = getTasksByFilter(user, tasksFiltered, "search", title);
     //mostra as ttarefas do utilizador atual
-    showUserTask(user, tasksFiltered);
+   // showUserTask(user, tasksFiltered);
   });
 } else {
   console.warn("Elemento #searchTask não foi renderizado no DOM.");
@@ -103,24 +102,24 @@ if (sortTasksUserBtn) {
   let isAscending = true;
   sortTasksUserBtn.addEventListener("click", () => {
     //array de ordenação
-    let sortTask: Task[] = [];
+    let sortTask: ITask[] = [];
     //inicializa o array para evitar repetiçoes de dados
     tasksFiltered = [];
     //filtra a procura de tarefas pelo titulo
     //e adiciona ao array e retorna o mesmo array
-    tasksFiltered = getTasksByFilter(user, tasksFiltered, "all");
+   // tasksFiltered = getTasksByFilter(user, tasksFiltered, "all");
     //Ordenar com base no estado atual
     if (isAscending) {
       //faz ordenção no estado ascendente
-      sortTask = tasksFiltered.sort((a, b) => a.title.localeCompare(b.title));
+      sortTask = tasksFiltered.sort((a, b) => a.getTitle().localeCompare(b.getTitle()));
     } else {
       //faz ordenção no estado descendente
-      sortTask = tasksFiltered.sort((a, b) => b.title.localeCompare(a.title));
+      sortTask = tasksFiltered.sort((a, b) => b.getTitle().localeCompare(a.getTitle()));
     }
     //Inverta o estado para o próximo clique
     isAscending = !isAscending;
     // Mostrar as tarefas ordenados conforme estado
-    showUserTask(user, sortTask);
+   // showUserTask(user, sortTask);
     // Atualize o texto ou ícone do botão
     sortTasksUserBtn.textContent = isAscending ? "Ordenar A-Z" : "Ordenar Z-A";
   });
@@ -133,9 +132,7 @@ const addTaskUserBtn = document.querySelector(
   "#addTaskUserBtn",
 ) as HTMLButtonElement;
 if (addTaskUserBtn) {
-  addTaskUserBtn.addEventListener("click", () => {
-
-  });
+  addTaskUserBtn.addEventListener("click", () => {});
 } else {
   console.warn("Elemento #addTaskUserBtn não foi renderizado no DOM.");
 }
@@ -146,13 +143,16 @@ const removeCompletedTaskBtn = document.querySelector(
 ) as HTMLButtonElement;
 if (removeCompletedTaskBtn) {
   removeCompletedTaskBtn.addEventListener("click", () => {
-    const hasPendingTasks = user.tasks?.some((task) => !task.completed);
+    const hasPendingTasks = user?.getTasks()?.some((task) => !task.getCompleted());
     if (hasPendingTasks) {
-      showInfoBanner("Não é possível remover tarefas. Existem tarefas pendentes.", "error-banner");
+      showInfoBanner(
+        "Não é possível remover tarefas. Existem tarefas pendentes.",
+        "error-banner",
+      );
       return;
     }
-    removeCompletedTasks(user);
-    showUserTask(user, user.tasks as Task[]);
+   // removeCompletedTasks(user);
+   // showUserTask(user, user?.getTasks() as ITask[]);
   });
 } else {
   console.warn("Elemento #removeCompletedTaskBtn não foi renderizado no DOM.");
@@ -204,21 +204,22 @@ if (formTaskUser) {
       showInfoBanner(errorMessages.join(" "), "error-banner");
       return;
     }
+    
 
     //obter um novo id a partir do ultimo
-    let newId: number = getLastId(user.tasks) + 1;
+    //let newId: number = getLastID(user?.getTasks()) + 1;
     //cria um novo user com os dados inseridos no formulario
-    const task: Task = addNewUserTask(newId, user);
+    //const task: ITask = addNewUserTask(newId, user);
     //adiciona a lista de utilizadores
-    user.createTask(task);
+    //user?.createTask(task);
     //fecha o modal
     const modalForm = document.querySelector(
       "#modalUserTaskForm",
     ) as HTMLElement;
     modalForm.style.display = "none";
-    showInfoBanner(`${user.name}, adicionou uma nova tarefa.`, "info-banner");
+    showInfoBanner(`${user?.getName()}, adicionou uma nova tarefa.`, "info-banner");
     //mostra todos os utilizadores
-    showUserTask(user, user.tasks as Task[]);
+   // showUserTask(user, user?.getTasks() as ITask[]);
   });
 } else {
   console.warn("Elemento #formTaskUser não foi renderizado no DOM.");
