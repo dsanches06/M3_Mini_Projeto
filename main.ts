@@ -1,18 +1,19 @@
-import loadInitialUsers from "./script/ui/gestUserTask/GestUserUI.js";
-import GestUserTask from "./script/models/gestUserTask/gestUserTask.js";
-import { clearContainer } from "./script/ui/dom/ContainerSection.js";
-import loadUsersPage from "./script/ui/user/UserPage.js";
-import loadTasksPage from "./script/ui/task/TaskPage.js";
-import ITask from "./script/models/task/ITask.js";
-import User from "./script/models/user/User.js";
-import { initUsers } from "./script/ui/gestUserTask/GestTaskUI.js";
+import UserService from './src/services/userService';
+import ITask from './src/tasks/ITask.js';
+import {clearContainer} from "./src/ui/dom/ContainerSection.js"
 
-/* Instância da classe GestUserTask */
-const gestUserTask: GestUserTask = new GestUserTask();
+import UserService from './src/services/userService';
+import ITask from './src/tasks/ITask.js';
+import {clearContainer} from "./src/ui/dom/ContainerSection.js"
+import { loadInitialUsers, loadUsersPage } from './src/ui/gestUserTask/GestUserUI.js';
+import { loadAllUsersTask, initUsers } from './src/ui/gestUserTask/GestTaskUI.js';
+
+/* Instância da classe UserService */
+const userService = new UserService();
 
 window.onload = () => {
   /* carregar utilizadores iniciais com as suas tarefas, vindo de fake data */
-  loadInitialUsers(gestUserTask);
+  loadInitialUsers(userService);
 };
 
 //obter o menu task
@@ -21,7 +22,7 @@ menuUsers.addEventListener("click", () => {
   //Limpa o container antes de mostrar os utilizadores
   clearContainer();
   // carrega a pagina dinamica de utilizadores
-  loadUsersPage(gestUserTask);
+  loadUsersPage(userService);
 });
 
 //obter o menu task
@@ -29,13 +30,13 @@ const menuTasks = document.querySelector("#menuTasks") as HTMLAnchorElement;
 menuTasks.addEventListener("click", () => {
   //
   let tasksList: ITask[] = [];
-  for (const user of gestUserTask.users as User[]) {
-    for (const task of user.tasks as ITask[]) {
+  for (const user of userService.getAllUsers()) {
+    for (const task of user.getTasks()) {
       tasksList.push(task);
     }
   }
   // Inicializar usuários para as funções de tarefa
-  initUsers(gestUserTask);
+  initUsers(userService);
 
   //limpa o container
   clearContainer();
