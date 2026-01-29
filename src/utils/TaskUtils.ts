@@ -3,6 +3,7 @@ import { ITask } from "../tasks/index.js";
 import { NotificationService } from "../services/index.js";
 import { SystemLogger } from "../logs/SystemLogger.js";
 import { TaskStatus } from "../tasks/index.js";
+import { UserClass } from "models/UserClass.js";
 
 // Função para processar uma tarefa com base no seu tipo
 const taskStatusMap = new Map<number, TaskStatus>();
@@ -10,6 +11,7 @@ const taskStatusMap = new Map<number, TaskStatus>();
 export function processTask(task: ITask) {
   const taskId = task.getId();
   const type = task.getType();
+  const user = task.getUser() as UserClass;
   const previousStatus = taskStatusMap.get(taskId) || TaskStatus.CREATED;
 
   switch (type) {
@@ -17,30 +19,42 @@ export function processTask(task: ITask) {
       //bug → regras mais rígidas, mais validações, logs automáticos, mais notificações
       try {
         if (validTransitions(previousStatus, task.getStatus())) {
-          SystemLogger.log(`Bug task ${taskId} processed`);
-          NotificationService.notifyAdmins(`Bug task ${taskId} foi processada`);
+          SystemLogger.log(
+            `INFO: A tarefa ${task.getTitle()} do tipo ${type} atribuido ao ${user?.getName()} foi processado [${previousStatus.toString()} -> ${task.getStatus().toString()}].`,
+          );
+          NotificationService.notifyUser(
+            user?.getId(),
+            `A tarefa ${task.getTitle()} do tipo ${type} atribuido ao ${user?.getName()} foi processado [${previousStatus.toString()} -> ${task.getStatus().toString()}].`,
+          );
           taskStatusMap.set(taskId, task.getStatus());
+        } else {
+          SystemLogger.log(
+            `ERRO: Transição ${previousStatus} para ${task.getStatus()} não é permitida.`,
+          );
         }
       } catch (error) {
         SystemLogger.log(
-          `Invalid status transition from ${previousStatus} to ${task.getStatus()} - ${error}`,
+          `ERRO: Transição ${previousStatus} para ${task.getStatus()} não é permitida.`,
         );
       }
 
       break;
     case "Feature":
       //feature → regras mais flexíveis, menos validações
-      SystemLogger.log(`Feature task ${taskId} processed`);
+      SystemLogger.log(
+        `INFO: A tarefa ${task.getTitle()} do tipo ${type} atribuido ao ${user?.getName()} foi processado [${previousStatus.toString()} -> ${task.getStatus().toString()}].`,
+      );
       taskStatusMap.set(taskId, task.getStatus());
       break;
     case "Task":
       //task → comportamento genérico
-      SystemLogger.log(`Task ${taskId} processed`);
+      SystemLogger.log(
+        `INFO: A tarefa ${task.getTitle()} do tipo ${type} atribuido ao ${user?.getName()} foi processado [${previousStatus.toString()} -> ${task.getStatus().toString()}].`,
+      );
       taskStatusMap.set(taskId, task.getStatus());
       break;
     default:
-      //colocar um banner
-      console.warn("Tipo de tarefa desconhecido");
+      SystemLogger.log("ERRO: Tipo de tarefa desconhecido");
       break;
   }
 }

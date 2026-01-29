@@ -19,7 +19,6 @@ import {
   FeatureTask,
   Task,
   TaskCategory,
-  TaskStatus,
 } from "./src/tasks/index.js";
 
 // IMPLEMENTAR UM FLUXO REAL:
@@ -27,97 +26,101 @@ import {
 SystemConfig.appName = "Task Management System";
 SystemConfig.version = "1.0.0";
 SystemConfig.setEnvironment("development");
-console.log(SystemConfig.getInfo());
+
+SystemLogger.log("\n--- RELATÓRIO --- \n");
+SystemLogger.log(SystemConfig.getInfo());
+SystemLogger.log("");
 
 //isUserValidar dados e criar no utilizador sem role
-let isUserValid = true;
-do {
-  for (const user of fakeUsersData) {
-    // - isUserValidar dados
-    if (!GlobalValidators.isNonEmpty(user.name)) {
-      SystemLogger.log("O nome não pode estar vazio.");
-      isUserValid = false;
-    }
-
-    if (!GlobalValidators.minLength(user.name, 3)) {
-      SystemLogger.log("O nome deve ter pelo menos 3 caracteres.");
-      isUserValid = false;
-    }
-
-    if (!GlobalValidators.isValidEmail(user.email)) {
-      SystemLogger.log(
-        "Introduza um endereço de email válido (ex: nome@email.com)",
-      );
-      isUserValid = false;
-    }
-
-    if (isUserValid === true) {
-      const Id = IdGenerator.generate();
-      UserService.addUser(new UserClass(Id, user.name, user.email));
-      SystemLogger.log(`Utilizador ${user.name} foi adicionado com sucesso.`);
-    }
+for (const user of fakeUsersData) {
+  let isUserValid = true;
+  // - isUserValidar dados
+  if (!GlobalValidators.isNonEmpty(user.name)) {
+    SystemLogger.log("ERRO: O nome não pode estar vazio.");
+    isUserValid = false;
   }
-} while (isUserValid !== true);
+
+  if (!GlobalValidators.minLength(user.name, 3)) {
+    SystemLogger.log(
+      `ERRO: O nome ${user.name} deve ter pelo menos 3 caracteres.`,
+    );
+    isUserValid = false;
+  }
+
+  if (!GlobalValidators.isValidEmail(user.email)) {
+    SystemLogger.log(
+      `ERRO: O email ${user.email} não é válido (ex: nome@email.com)`,
+    );
+    isUserValid = false;
+  }
+
+  if (isUserValid === true) {
+    const Id = IdGenerator.generate();
+    UserService.addUser(new UserClass(Id, user.name, user.email));
+    SystemLogger.log(`INFO: ${user.name} foi adicionado com sucesso.`);
+  }
+}
+
+//dar espaço entre logs
+SystemLogger.log("");
 
 //criar os 3 tipos de Tasks
-let isTaskValid = true;
-do {
-  for (const task of fakeTasksData) {
-    // - validar dados
-    if (!BusinessRules.isValidTitle(task.title)) {
-      SystemLogger.log("O título deve ter pelo menos 3 caracteres.");
-      isTaskValid = false;
+for (const task of fakeTasksData) {
+  let isTaskValid = true;
+  // - validar dados
+  if (!BusinessRules.isValidTitle(task.title)) {
+    SystemLogger.log(
+      `ERRO: O título ${task.title} deve ter pelo menos 3 caracteres.`,
+    );
+    isTaskValid = false;
+  }
+
+  if (!GlobalValidators.isNonEmpty(task.title)) {
+    SystemLogger.log("ERRO: O título não pode estar vazio.");
+    isTaskValid = false;
+  }
+
+  if (!GlobalValidators.isNonEmpty(task.category)) {
+    SystemLogger.log("ERRO: A categoria não pode estar vazio.");
+    isTaskValid = false;
+  }
+
+  if (!GlobalValidators.isNonEmpty(task.type)) {
+    SystemLogger.log("ERRO: O tipo não pode estar vazio.");
+    isTaskValid = false;
+  }
+
+  let newTask: ITask | undefined;
+  let category: TaskCategory = TaskCategory.PERSONAL;
+
+  if (isTaskValid === true) {
+    const Id = IdGenerator.generate();
+
+    if (task.category === "Trabalho") {
+      category = TaskCategory.WORKED;
+    } else if (task.category === "Pessoal") {
+      category = TaskCategory.PERSONAL;
+    } else if (task.category === "Estudo") {
+      category = TaskCategory.STUDY;
     }
 
-    if (!GlobalValidators.isNonEmpty(task.title)) {
-      SystemLogger.log("O título não pode estar vazio.");
-      isTaskValid = false;
+    if (task.type === "Bugs") {
+      newTask = new BugTask(Id, task.title, category);
+    } else if (task.type === "Feature") {
+      newTask = new FeatureTask(Id, task.title, category);
+    } else if (task.type === "Task") {
+      newTask = new Task(Id, task.title, category);
     }
-
-    if (!GlobalValidators.isNonEmpty(task.category)) {
-      SystemLogger.log("A categoria não pode estar vazio.");
-      isTaskValid = false;
-    }
-
-    if (!GlobalValidators.isNonEmpty(task.type)) {
-      SystemLogger.log("O tipo não pode estar vazio.");
-      isTaskValid = false;
-    }
-
-    let newTask: ITask | undefined;
-    let category: TaskCategory = TaskCategory.PERSONAL;
-
-    if (isTaskValid === true) {
-      const Id = IdGenerator.generate();
-
-      if (task.category === "Trabalho") {
-        category = TaskCategory.WORKED;
-      } else if (task.category === "Pessoal") {
-        category = TaskCategory.PERSONAL;
-      } else if (task.category === "Estudo") {
-        category = TaskCategory.STUDY;
-      }
-
-      if (task.type === "Bugs") {
-        newTask = new BugTask(Id, task.title, category);
-      } else if (task.type === "Feature") {
-        newTask = new FeatureTask(Id, task.title, category);
-      } else if (task.type === "Task") {
-        newTask = new Task(Id, task.title, category);
-      }
-      if (newTask) {
-        TaskService.addTask(newTask);
-        SystemLogger.log(`Tarefa ${task.title} foi adicionada com sucesso.`);
-      }
+    if (newTask) {
+      TaskService.addTask(newTask);
+      SystemLogger.log(
+        `INFO: A tarefa ${newTask.getTitle()} do tipo ${newTask.getType()} foi adicionada com sucesso.`,
+      );
     }
   }
-} while (isTaskValid !== true);
-
-// - aplicar regras
-TaskService.getAllTasks().forEach((task) => {
-  processTask(task);
-});
-
+}
+//dar espaço entre logs
+SystemLogger.log("\nASSIGNMENTS E COMPLETIONS...\n");
 //verificar se tarefas podem ser associados ao utilizador
 TaskService.getAllTasks().forEach((task) => {
   const total = UserService.getAllUsers().length;
@@ -129,7 +132,7 @@ TaskService.getAllTasks().forEach((task) => {
     if (canAssign) {
       AssignmentService.assignUser(task.getId(), user.getId());
       SystemLogger.log(
-        `Tarefa ${task.getTitle()} foi atribuída ao utilizador ${user.getName()}.`,
+        `INFO: A tarefa ${task.getTitle()} foi atribuída para ${user.getName()}.`,
       );
     }
     //verificar se o task pode ser completado
@@ -141,7 +144,7 @@ TaskService.getAllTasks().forEach((task) => {
         if (t.getId() === task.getId()) {
           t.markCompleted();
           SystemLogger.log(
-            `Tarefa ${task.getTitle()} foi completada pelo utilizador ${user.getName()}.`,
+            `INFO: A tarefa ${task.getTitle()} foi completada pelo ${user.getName()}.`,
           );
         }
       });
@@ -149,7 +152,19 @@ TaskService.getAllTasks().forEach((task) => {
   }
 });
 
-//verificar se o utilziador pode ser desativado
+// - aplicar regras
+SystemLogger.log(
+  "\nPROCESSANDO TAREFAS... " +
+    TaskService.getAllTasks().length +
+    " tarefas encontradas.\n",
+);
+TaskService.getAllTasks().forEach((task) => {
+  processTask(task);
+});
+
+//dar espaço entre logs
+SystemLogger.log("\nVERIFICANDO DESATIVAÇÕES DE USUÁRIOS...\n");
+//verificar se o utilizador pode ser desativado
 UserService.getAllUsers().forEach((user) => {
   const activeTasks = AssignmentService.getTasksFromUser(user.getId()).filter(
     (task) => task.getCompleted() === false,
@@ -158,14 +173,15 @@ UserService.getAllUsers().forEach((user) => {
   const canDeactivate = BusinessRules.canUserBeDeactivated(activeTasks);
   if (canDeactivate) {
     user.toggleActive();
-    SystemLogger.log(`Utilizador ${user.getName()} foi desativado.`);
+    SystemLogger.log(
+      `INFO: ${user.getName()} não tem tarefas pendentes e foi desativado.`,
+    );
   } else {
     SystemLogger.log(
-      `Utilizador ${user.getName()} não pode ser desativado, pois possui tarefas pendentes.`,
+      `INFO: ${user.getName()} não pode ser desativado, pois possui tarefas pendentes.`,
     );
   }
 });
 
 // - imprimir resultados
-SystemLogger.log("\n--- Relatório ---");
 SystemLogger.getLogs().forEach((log) => console.log(log));

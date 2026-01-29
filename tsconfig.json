@@ -9,5 +9,5 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["main.ts", "mainUI.ts", "src/**/*"]
+  "include": ["main.ts", "src/**/*"]
 }
