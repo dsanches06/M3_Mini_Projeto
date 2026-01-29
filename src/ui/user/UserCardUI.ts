@@ -1,7 +1,7 @@
 import { UserService } from "../../services/index.js";
 import { UserClass } from "../../models/index.js";
 import { showInfoBanner } from "../../helpers/index.js";
-import { renderUsers, showUserDetails } from "./index.js";
+import { renderUsers, showUserDetails, showUsersCounters } from "./index.js";
 import {
   createSection,
   createHeadingTitle,
@@ -11,10 +11,7 @@ import { removeUserByID, toggleUserState } from "../gestUserTask/index.js";
 import { loadUserTaskPage } from "../usertask/index.js";
 
 /* Criar cartão de utilizador */
-export function createUserCard(
-  serviceUsers: UserService,
-  user: UserClass,
-): HTMLElement {
+export function createUserCard(user: UserClass): HTMLElement {
   const divUserCard = createSection("sectionCard") as HTMLElement;
   divUserCard.className = "card";
   divUserCard.addEventListener("click", () => showUserDetails(user));
@@ -25,7 +22,7 @@ export function createUserCard(
   }
   divUserCard.appendChild(divUserCardTitle);
 
-  const divUserCardContent = userCardContent(serviceUsers, user);
+  const divUserCardContent = userCardContent(user);
   divUserCardContent.className = "content";
   divUserCard.appendChild(divUserCardContent);
 
@@ -52,10 +49,7 @@ function userCardTitle(user: UserClass): HTMLElement {
 }
 
 /* Função para criar o conteúdo do cartão de usuário */
-function userCardContent(
-  serviceUsers: UserService,
-  user: UserClass,
-): HTMLElement {
+function userCardContent(user: UserClass): HTMLElement {
   const divCardName = document.createElement("p") as HTMLParagraphElement;
   divCardName.textContent = `${user.getName()}`;
 
@@ -92,7 +86,7 @@ function userCardContent(
   divCardAddTaskBtn.addEventListener("click", (event) => {
     event.stopPropagation();
     clearContainer();
-    loadUserTaskPage(serviceUsers, user);
+    loadUserTaskPage(user);
   });
 
   const divCardUserTasks = document.createElement("section") as HTMLElement;
@@ -123,9 +117,9 @@ function userCardBtn(user: UserClass): HTMLElement {
   bntToggle.title = "Ativar ou desativar utilizador";
   bntToggle.addEventListener("click", (event) => {
     event.stopPropagation();
-    const servicesUser = toggleUserState(user.getId());
-    renderUsers(servicesUser, servicesUser.getAllUsers() as UserClass[]);
-   // showUsersCounters(servicesUser.getAllUsers() as UserClass[]);
+    toggleUserState(user.getId());
+    renderUsers(UserService.getAllUsers() as UserClass[]);
+    showUsersCounters("utilizadores", UserService.getAllUsers() as UserClass[]);
   });
 
   const trashIcon = document.createElement("i") as HTMLElement;
@@ -145,11 +139,11 @@ function userCardBtn(user: UserClass): HTMLElement {
         "error-banner",
       );
     } else {
-      const { serviceUsers, remove } = removeUserByID(user.getId());
+      const remove = removeUserByID(user.getId());
       if (remove) {
         //atualiza a lista de utilizadores
-        renderUsers(serviceUsers, serviceUsers.getAllUsers() as UserClass[]);
-      //  showUsersCounters(serviceUsers.getAllUsers() as UserClass[]);
+        renderUsers(UserService.getAllUsers() as UserClass[]);
+        showUsersCounters("utilizadores", UserService.getAllUsers());
       } else {
         showInfoBanner("O utilizador não foi removido", "error-banner");
       }

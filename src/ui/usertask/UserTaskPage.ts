@@ -1,12 +1,5 @@
 import { UserClass } from "../../models/index.js";
-import { ITask } from "../../tasks/index.js";
-import {
-  countAllTasks,
-  countPendingUserTasks,
-  countCompletedUserTasks,
-} from "../task/index.js";
-import { createAndAppendTaskForm, removeCompletedTasks } from "./index.js";
-import { UserService } from "../../services/index.js";
+import { removeCompletedTasks } from "./index.js";
 import { showUserTask } from "../usertask/index.js";
 import {
   addElementInContainer,
@@ -15,21 +8,21 @@ import {
   createSection,
   createStatisticsCounter,
 } from "../dom/index.js";
+import { showTasksCounters } from "../task/index.js";
+import { renderModal } from "../../ui/task/index.js";
 
 /* Lista de tarefas do utilizador */
-export function loadUserTaskPage(
-  serviceUsers: UserService,
-  user: UserClass,
-): void {
-  //
-  addElementInContainer(
-    createHeadingTitle("h2", `TAREFAS DE ${user.getName().toUpperCase()}`),
+export function loadUserTaskPage(user: UserClass): void {
+  const headTitle = createHeadingTitle(
+    "h2",
+    `TAREFAS DE ${user.getName().toUpperCase()}`,
   );
+  addElementInContainer(headTitle);
   //
   const userTaskCounterSection = createUserTaskCounter("userTaskCounters");
   addElementInContainer(userTaskCounterSection);
   //
-  showUserTaskCounters(user.getTasks());
+  showTasksCounters("all", user.getTasks());
   //
   const searchContainer = showUserTaskSearchContainer();
   addElementInContainer(searchContainer);
@@ -57,19 +50,19 @@ export function loadUserTaskPage(
 
   allUserTasksBtn.addEventListener("click", () => {
     showUserTask(user, user.getTasks());
-    showUserTaskCounters(user.getTasks());
+    showTasksCounters("all", user.getTasks());
   });
 
   pendingUserTaskBtn.addEventListener("click", () => {
     const pendingTasks = user.pendingTasks();
     showUserTask(user, pendingTasks);
-    showUserTaskCounters(pendingTasks);
+    showTasksCounters("pending", pendingTasks);
   });
 
   completedUserTaskBtn.addEventListener("click", () => {
     const completedTasks = user.completedTasks();
     showUserTask(user, completedTasks);
-    showUserTaskCounters(completedTasks);
+    showTasksCounters("completed", completedTasks);
   });
 
   // Adicionar event listeners aos botões de busca
@@ -78,13 +71,9 @@ export function loadUserTaskPage(
   ) as HTMLElement;
   if (addUserTaskBtn) {
     addUserTaskBtn.addEventListener("click", () => {
-      // Abrir modal para adicionar tarefa
-      createAndAppendTaskForm("containerSection", user, serviceUsers);
-      const modal = document.getElementById("modalUserTaskForm") as HTMLElement;
-      if (modal) modal.style.display = "block";
-      // Atualizar a lista de tarefas para todos os utilizadores
+      renderModal(user);
       showUserTask(user, user.getTasks());
-      showUserTaskCounters(user.getTasks());
+      showTasksCounters("all", user.getTasks());
     });
   } else {
     console.warn("Elemento #addUserTaskBtn não encontrado.");
@@ -109,6 +98,7 @@ export function loadUserTaskPage(
       isAscending = !isAscending;
       // Mostrar as tarefas ordenadas
       showUserTask(user, sortedTasks);
+      showTasksCounters("filtered", sortedTasks);
       // Atualize o texto ou ícone do botão
       sortUserTasksBtn.textContent = isAscending
         ? "Ordenar A-Z"
@@ -128,7 +118,7 @@ export function loadUserTaskPage(
         .getTasks()
         .filter((task) => task.getTitle().toLowerCase().includes(name));
       showUserTask(user, filteredTasks);
-      showUserTaskCounters(filteredTasks);
+      showTasksCounters("filtered", filteredTasks);
     });
   } else {
     console.warn("Elemento de busca de tarefas do utilizador não encontrado.");
@@ -180,12 +170,6 @@ function createUserTaskCounter(id: string): HTMLElement {
     completedUserTaskBtn,
   );
   return sectionUserTasksCounter;
-}
-
-export function showUserTaskCounters(tasks: ITask[]): void {
-  // countAllTasks("#allUserTasksCounter", tasks);
-  // countCompletedUserTasks("#completedUserTaskCounter", tasks);
-  // countPendingUserTasks("#pendingUserTasksCounter", tasks);
 }
 
 /* */

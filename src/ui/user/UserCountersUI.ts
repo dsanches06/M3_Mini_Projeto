@@ -1,49 +1,75 @@
+import { UserService } from "../../services/index.js";
 import { IUser } from "../../models/index.js";
-import { allUsers } from "../gestUserTask/index.js";
+
+export function showUsersCounters(type?: string, filteredUser?: IUser[]): void {
+  countAllUsers("#allUsersCounter");
+  countAtiveUsers("#ativeUsersCounter");
+  countUnableUsers("#unableUsersCounter");
+  countFilterUsers("#filterUsersCounter", type!, filteredUser);
+  countAtiveInativePercentage("#ativeUsersPercentageCounter", type!);
+}
 
 /* Contador de utilizadores ativos */
-export function countAtiveUsers(id: string, usersList: IUser[]): void {
+function countAtiveUsers(id: string): void {
   const section = document.querySelector(`${id}`) as HTMLElement;
   if (section) {
-    let arrayAtiveUsers = usersList.filter((user) => user.isActive());
-    section.textContent = `${arrayAtiveUsers.length}`;
+    section.textContent = `${UserService.getActiveUsers().length}`;
   } else {
     console.warn(`Elemento ${id} não foi encontrado no DOM.`);
   }
 }
 
 /* Contador de utilizadores inativos */
-export function countUnableUsers(id: string, usersList: IUser[]): void {
+function countUnableUsers(id: string): void {
   const section = document.querySelector(`${id}`) as HTMLElement;
   if (section) {
-    let arrayUnableUsers = usersList.filter((user) => !user.isActive());
-    section.textContent = `${arrayUnableUsers.length}`;
+    section.textContent = `${UserService.getInactiveUsers().length}`;
+  } else {
+    console.warn(`Elemento ${id} não foi encontrado no DOM.`);
+  }
+}
+
+/* Contador de utilizadores filtrados por nome */
+function countFilterUsers(
+  id: string,
+  type: string,
+  filteredUser?: IUser[],
+): void {
+  const section = document.querySelector(`${id}`) as HTMLElement;
+  if (section) {
+    if (type === "userFiltered") {
+      section.textContent = `${filteredUser?.length}`;
+    } else {
+      section.textContent = "0";
+    }
   } else {
     console.warn(`Elemento ${id} não foi encontrado no DOM.`);
   }
 }
 
 /* Contador de utilizadores */
-export function countAllUsers(id: string, usersList: IUser[]): void {
+function countAllUsers(id: string): void {
   const section = document.querySelector(`${id}`) as HTMLElement;
   if (section) {
-    section.textContent = `${usersList.length}`;
+    section.textContent = `${UserService.getAllUsers().length}`;
   } else {
     console.warn(`Elemento ${id} não foi encontrado no DOM.`);
   }
 }
 
 /* Percentagem de utilizadores ativos */
-export function countAtiveInativePercentage(
-  id: string,
-  usersList: IUser[],
-  type?: string,
-): void {
+function countAtiveInativePercentage(id: string, type: string): void {
   const section = document.querySelector(`${id}`) as HTMLElement;
+  let activeInativeUsers;
 
   if (section) {
-    const activeInativeUsers = usersList.length;
-    const totalUsers = allUsers().length;
+    if (type === "inactivos") {
+      activeInativeUsers = UserService.getInactiveUsers().length;
+    } else {
+      activeInativeUsers = UserService.getActiveUsers().length;
+    }
+
+    const totalUsers = UserService.getAllUsers().length;
     const percentage =
       totalUsers > 0 ? ((activeInativeUsers / totalUsers) * 100).toFixed(2) : 0;
     section.textContent = `${percentage}%`;

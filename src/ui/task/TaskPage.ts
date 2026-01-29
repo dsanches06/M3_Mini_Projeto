@@ -1,14 +1,7 @@
-import { ITask } from "../../tasks/index.js";
 import { showInfoBanner } from "../../helpers/index.js";
-import { TaskService } from "../../services/index.js";
+import { showTasksCounters, renderAllTasks } from "./index.js";
 import {
-  countAllTasks,
-  countCompletedUserTasks,
-  countPendingUserTasks,
-  renderAllTasks,
-} from "./index.js";
-import {
-  allUsersTasks,
+  allTasks,
   completedTasks,
   pendingTasks,
   removeAllCompletedTask,
@@ -22,25 +15,27 @@ import {
   createHeadingTitle,
   createStatisticsCounter,
   createSearchContainer,
+  clearContainer,
 } from "../dom/index.js";
+import { ITask } from "../../tasks/index.js";
 
 /* Lista de tarefas  */
-export function loadTasksPage(serviceTask: TaskService): void {
+export function loadTasksPage(tasksList: ITask[]): void {
   /* ativa o menu tarefas */
   menuSelected("#menuTasks");
-  //
+
+  clearContainer();
   addElementInContainer(createHeadingTitle("h2", "GESTÃO DE TAREFAS"));
-  //
+
   const taskCounterSection = createTaskCounter("taskCounters") as HTMLElement;
   addElementInContainer(taskCounterSection);
-  //
-  //showTasksCounters(serviceTask.getAllTasks());
-  //
+
+  showTasksCounters("all", tasksList);
+
   const searchContainer = showSearchTaskContainer();
   addElementInContainer(searchContainer);
-  //
 
-  const tasksContainer = renderAllTasks(serviceTask.getAllTasks());
+  const tasksContainer = renderAllTasks(tasksList);
   addElementInContainer(tasksContainer);
 
   // Adicionar event listeners aos botões de contador para filtrar
@@ -58,35 +53,38 @@ export function loadTasksPage(serviceTask: TaskService): void {
   completedTaskBtn.title = "Mostrar tarefas concluídas";
 
   allTasksBtn.addEventListener("click", () => {
-    const tasks = allUsersTasks();
+    const tasks = allTasks(tasksList);
+    loadTasksPage(tasks);
     renderAllTasks(tasks);
-    //showTasksCounters(tasks);
+    showTasksCounters("all", tasks);
   });
 
   pendingTaskBtn.addEventListener("click", () => {
-    const tasks = pendingTasks();
+    const tasks = pendingTasks(tasksList);
+    loadTasksPage(tasks);
     renderAllTasks(tasks);
-    // showTasksCounters(tasks);
+    showTasksCounters("pending", tasks);
   });
 
   completedTaskBtn.addEventListener("click", () => {
-    const tasks = completedTasks();
+    const tasks = completedTasks(tasksList);
+    loadTasksPage(tasks);
     renderAllTasks(tasks);
-    // showTasksCounters(tasks);
+    showTasksCounters("completed", tasks);
   });
 
   const sortTasksBtn = document.querySelector("#sortTasksBtn") as HTMLElement;
-
   if (sortTasksBtn) {
     //Crie uma variável de controle de estado
     let isAscending = true;
     sortTasksBtn.addEventListener("click", () => {
-      const sortedTasks = sortTasksByTitle(isAscending);
+      const sortedTasks = sortTasksByTitle(tasksList, isAscending);
       //Inverta o estado para o próximo clique
       isAscending = !isAscending;
       // Mostrar as tarefas ordenadas
+      loadTasksPage(sortedTasks);
       renderAllTasks(sortedTasks);
-      // showTasksCounters(sortedTasks);
+      showTasksCounters("filtrados", sortedTasks);
       // Atualize o texto ou ícone do botão
       sortTasksBtn.textContent = isAscending ? "Ordenar A-Z" : "Ordenar Z-A";
     });
@@ -101,9 +99,10 @@ export function loadTasksPage(serviceTask: TaskService): void {
   if (searchTaskInput) {
     searchTaskInput.addEventListener("input", () => {
       const searchTerm = searchTaskInput.value;
-      const filteredTasks = searchTasksByTitle(searchTerm);
+      const filteredTasks = searchTasksByTitle(tasksList, searchTerm);
+      loadTasksPage(filteredTasks);
       renderAllTasks(filteredTasks);
-      //showTasksCounters(filteredTasks);
+      showTasksCounters("filtrados", filteredTasks);
     });
   } else {
     console.warn("Elemento de busca de tarefas não encontrado.");
@@ -115,7 +114,7 @@ export function loadTasksPage(serviceTask: TaskService): void {
   ) as HTMLElement;
   if (removeAllCompletedTaskBtn) {
     removeAllCompletedTaskBtn.addEventListener("click", () => {
-      const removedTasks = removeAllCompletedTask();
+      const removedTasks = removeAllCompletedTask(tasksList);
 
       if (removedTasks.length > 0) {
         const completedTaskCount = removedTasks.filter((task) =>
@@ -128,7 +127,7 @@ export function loadTasksPage(serviceTask: TaskService): void {
           );
         }
         renderAllTasks(removedTasks);
-        //showTasksCounters(removedTasks);
+        showTasksCounters("all", removedTasks);
       } else {
         showInfoBanner("Não há tarefa concluída para remover.", "error-banner");
       }
@@ -162,17 +161,20 @@ function createTaskCounter(id: string): HTMLElement {
     "concluídos",
     "completedTaskCounter",
   ) as HTMLElement;
+
+  const filteredTaskBtn = createStatisticsCounter(
+    "filterTasksSection",
+    "filterTasksCounter",
+    "/src/assets/tarefa-concluida.png",
+    "filtrados",
+    "filterTasksCounter",
+  ) as HTMLElement;
+
   //
   const sectionTasksCounter = createSection(`${id}`) as HTMLElement;
   sectionTasksCounter.classList.add("tasks-counters");
   sectionTasksCounter.append(allTasksBtn, pendingTaskBtn, completedTaskBtn);
   return sectionTasksCounter;
-}
-
-export function showTasksCounters(serviceTask: TaskService): void {
-  countAllTasks("#allTasksCounter", serviceTask);
-  countCompletedUserTasks("#completedTaskCounter", serviceTask);
-  countPendingUserTasks("#pendingTasksCounter", serviceTask);
 }
 
 /* */

@@ -1,12 +1,13 @@
 {
   "compilerOptions": {
     "target": "es6",
-    "module": "esnext",                
+    "module": "esnext",
+    "lib": ["ES2015", "DOM"],
     "moduleResolution": "node",
     "baseUrl": "./src",
     "outDir": "./dist",
     "strict": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["main.ts", "src/**/*"]
+  "include": ["main.ts", "mainUI.ts", "src/**/*"]
 }

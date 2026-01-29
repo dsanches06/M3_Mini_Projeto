@@ -1,102 +1,79 @@
-import { IUser } from "../../models/index.js";
 import { ITask } from "../../tasks/index.js";
-import { UserService } from "../../services/index.js";
+import { UserService, TaskService } from "../../services/index.js";
 import { clearContainer } from "../dom/index.js";
-import { getTasksByFilter, showInfoBanner } from "../../helpers/index.js";
+import { showInfoBanner } from "../../helpers/index.js";
 import { loadTasksPage } from "../task/index.js";
 
-/* array global de utilizadores */
-let users: IUser[];
 // array global para armazenar tarefas filtradas
 let tasksFiltered: ITask[];
 
-/* Função helper para filtrar tarefas de todos os usuários, evitando duplicação */
-function filterTasksFromAllUsers(filterType: string, title?: string): ITask[] {
-  if (!users || users.length === 0) {
-    console.warn("Nenhum usuário disponível para filtrar tarefas.");
-    return [];
-  }
-  let filtered: ITask[] = [];
-  for (const user of users) {
-    filtered = getTasksByFilter(user, filtered, filterType, title);
-  }
-  return filtered;
-}
-
 /* Função principal para mostrar as tarefas de todos os utilizadores */
-export function loadAllUsersTask(servicesUser: UserService): void {
-  // atribuir o valor ao array global de utilizadores
-  users = servicesUser.getAllUsers();
-  // inicializa o array para evitar repetições de dados
-  tasksFiltered = [];
-  // filtra tarefas de todos os usuários
-  tasksFiltered = filterTasksFromAllUsers("all");
+export function loadAllTasks(tasksList: ITask[]): void {
   // Limpa o container antes de mostrar os utilizadores
   clearContainer();
   // carrega a pagina dinamica de utilizadores
-  //loadTasksPage(tasksFiltered);
+  loadTasksPage(tasksList);
 }
 
-/* */
-export function allUsersTasks(): ITask[] {
-  tasksFiltered = filterTasksFromAllUsers("all");
+export function allTasks(tasksList: ITask[]): ITask[] {
+  tasksFiltered = [...tasksList];
   return tasksFiltered;
 }
 
-export function pendingTasks(): ITask[] {
-  tasksFiltered = filterTasksFromAllUsers("pending");
+/* Filtrar tarefas pendentes */
+export function pendingTasks(tasksList: ITask[]): ITask[] {
+  tasksFiltered = tasksList.filter((task) => !task.getCompleted());
   return tasksFiltered;
 }
 
-export function completedTasks(): ITask[] {
-  tasksFiltered = filterTasksFromAllUsers("completed");
-  return tasksFiltered;
-}
-
-export function searchTasksByTitle(title: string): ITask[] {
-  tasksFiltered = filterTasksFromAllUsers("search", title);
+/* Filtrar tarefas concluídas */
+export function completedTasks(tasksList: ITask[]): ITask[] {
+  tasksFiltered = tasksList.filter((task) => task.getCompleted());
   return tasksFiltered;
 }
 
 /* Ordenar utilizadores por nome */
-export function sortTasksByTitle(ascending: boolean = true): ITask[] {
-  tasksFiltered = allUsersTasks();
+export function sortTasksByTitle(
+  tasksList: ITask[],
+  ascending: boolean = true,
+): ITask[] {
   let sortedTasks: ITask[] = [];
   if (ascending) {
-    sortedTasks = tasksFiltered.sort((a, b) =>
+    sortedTasks = tasksList.sort((a, b) =>
       a.getTitle().localeCompare(b.getTitle()),
     );
   } else {
-    sortedTasks = tasksFiltered.sort((a, b) =>
+    sortedTasks = tasksList.sort((a, b) =>
       b.getTitle().localeCompare(a.getTitle()),
     );
   }
   return sortedTasks;
 }
 
-export function removeAllCompletedTask(): ITask[] {
-  if (!users || users.length === 0) {
-    showInfoBanner(
-      "Nenhum usuário disponível para remover tarefas completas.",
-      "info-banner",
-    );
-    return [];
-  }
-  tasksFiltered = [];
-  // Remove tarefas completas de todos os usuários e coleta as pendentes
-  for (const user of users) {
-    const tasks = user.getTasks();
-    if (tasks && tasks.length > 0) {
-      /*  user.getTasks() = tasks.filter((task) => !task.getCompleted());
-      if (user.tasks.length > 0) {
-        tasksFiltered = getTasksByFilter(user, tasksFiltered, "pending");
-      } */
-    }
-  }
+export function searchTasksByTitle(
+  tasksList: ITask[],
+  searchTerm: string,
+): ITask[] {
+  const lowerCaseSearchTerm = searchTerm.toLowerCase();
+  tasksFiltered = tasksList.filter((task) =>
+    task.getTitle().toLowerCase().includes(lowerCaseSearchTerm),
+  );
   return tasksFiltered;
 }
 
-/* Função para inicializar o array global de usuários */
-export function initUsers(servicesUser: UserService): void {
-  users = servicesUser.getAllUsers();
+export function removeAllCompletedTask(taskList: ITask[]): ITask[] {
+  if (!taskList || taskList.length === 0) {
+    showInfoBanner("Não existe tarefas para remover.", "info-banner");
+    return [];
+  }
+  tasksFiltered = [];
+  for (const task of taskList) {
+    if (task.getCompleted()) {
+      UserService.getUserByTaskId(task.getId())?.removeTask(task.getId());
+      TaskService.removeTask(task.getId());
+    } else {
+      tasksFiltered.push(task);
+    }
+  }
+  return tasksFiltered;
 }

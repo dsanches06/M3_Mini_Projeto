@@ -1,5 +1,6 @@
 import { createSection } from "../dom/index.js";
 import { ITask } from "../../tasks/index.js";
+import { UserService } from "../../services/index.js";
 
 /* Container de tarefas */
 const taskContainer = createSection("taskContainer") as HTMLElement;
@@ -70,20 +71,46 @@ function createTableBody(): HTMLTableSectionElement {
   return tbody;
 }
 
-// Ajuste a sua função de criação para retornar apenas a TR
 function createTableRow(task: ITask): HTMLTableRowElement {
   const row = document.createElement("tr");
+
   row.innerHTML = `
-                <td>${task.getId()}</td>
-                <td>${task.getTitle()}</td>
-                <td>${task.getCompleted() ? "Concluído" : "Pendente"}</td>
-                <td>${
-                  task.getCompletedDate()
-                    ? task.getCompletedDate().toLocaleString("pt-PT")
-                    : "N/A"
-                }</td>
-                <td>${task.getTaskCategory()}</td>
-                <td>${task.getUser()?.getName()}</td>
-            `;
+    <td>${task.getId()}</td>
+    <td>${task.getTitle()}</td>
+    <td>${task.getCompleted() ? "Concluído" : "Pendente"}</td>
+    <td>${
+      task.getCompletedDate()
+        ? task.getCompletedDate().toLocaleString("pt-PT")
+        : "N/A"
+    }</td>
+    <td>${task.getTaskCategory()}</td>
+  `;
+
+  const userCell = document.createElement("td");
+  const user = task.getUser();
+  if (user !== null) {
+    userCell.textContent = user.getName();
+  } else {
+    const select = createUnassignedUserSelect();
+    userCell.appendChild(select);
+  }
+  row.appendChild(userCell);
+
   return row;
+}
+
+function createUnassignedUserSelect(): HTMLSelectElement {
+  const select = document.createElement("select");
+  select.className = "user-assignment-select";
+
+  UserService.getAllUsers().forEach((user) => {
+    if (user.getTasks().length === 0) {
+      const option = document.createElement("option");
+      option.value = user.getId().toString();
+      option.textContent = user.getName();
+      select.appendChild(option);
+    }
+  });
+
+  return select;
 }

@@ -7,43 +7,32 @@ import {
   createHeadingTitle,
   createStatisticsCounter,
   createSearchContainer,
+  clearContainer,
 } from "../dom/index.js";
 import {
-  countAllUsers,
   renderUserModal,
-  countAtiveUsers,
-  countUnableUsers,
-  countAtiveInativePercentage,
   renderUsers,
+  showUsersCounters,
 } from "../user/index.js";
-import {
-  allUsers,
-  allUsersAtive,
-  allInactiveUsers,
-  sortUsersByName,
-  searchUserByName,
-} from "../gestUserTask/index.js";
+import { sortUsersByName, searchUserByName } from "../gestUserTask/index.js";
 
 /* Lista de utilizadores */
-export function loadUsersPage(userServices: UserService): void {
+export function loadUsersPage(): void {
   /* ativa o menu Users */
   menuSelected("#menuUsers");
-  //
+  clearContainer();
+
   addElementInContainer(createHeadingTitle("h2", "GESTÃO DE UTILIZADORES"));
-  //
+
   const userCounterSection = createUserCounter("userCounters");
   addElementInContainer(userCounterSection);
-  //
-  showUsersCounters(userServices.getAllUsers() as UserClass[], "utilizadores");
-  //
+
+  showUsersCounters("utilizadores");
+
   const searchContainer = showSearchContainer();
   addElementInContainer(searchContainer);
-  //
 
-  const usersContainer = renderUsers(
-    userServices,
-    userServices.getAllUsers() as UserClass[],
-  );
+  const usersContainer = renderUsers(UserService.getAllUsers());
   addElementInContainer(usersContainer);
 
   // Adicionar event listeners aos botões de contador para filtrar
@@ -60,29 +49,30 @@ export function loadUsersPage(userServices: UserService): void {
   ) as HTMLElement;
   unableUsersBtn.title = "Mostrar todos os utilizadores inativos";
 
+  const filterUsersBtn = userCounterSection.querySelector(
+    "#filterUsersBtn",
+  ) as HTMLElement;
+  filterUsersBtn.title = "Mostrar todos os utilizadores filtrados pelo nome";
+
   allUsersBtn.addEventListener("click", () => {
-    const users = allUsers();
-    renderUsers(userServices, users as UserClass[]);
-    showUsersCounters(users as UserClass[], "utilizadores");
+    renderUsers(UserService.getAllUsers());
+    showUsersCounters("utilizadores");
   });
 
   ativeUsersBtn.addEventListener("click", () => {
-    const usersAtive = allUsersAtive();
-    renderUsers(userServices, usersAtive as UserClass[]);
-    showUsersCounters(usersAtive as UserClass[], "activos");
+    renderUsers(UserService.getActiveUsers());
+    showUsersCounters("activos");
   });
 
   unableUsersBtn.addEventListener("click", () => {
-    const usersInactive = allInactiveUsers();
-    renderUsers(userServices, usersInactive as UserClass[]);
-    showUsersCounters(usersInactive as UserClass[], "inactivos");
+    renderUsers(UserService.getInactiveUsers());
+    showUsersCounters("inactivos");
   });
 
   // Adicionar event listeners aos botões de busca
   const addUserBtn = document.querySelector("#addUserBtn") as HTMLElement;
   addUserBtn.addEventListener("click", () => {
-    // Lógica para adicionar usuário (ex.: abrir modal ou navegar)
-    renderUserModal(userServices);
+    renderUserModal();
   });
 
   const sortUsersBtn = document.querySelector("#sortUsersBtn") as HTMLElement;
@@ -95,8 +85,8 @@ export function loadUsersPage(userServices: UserService): void {
       //Inverta o estado para o próximo clique
       isAscending = !isAscending;
       // Mostrar os utilizadores ordenados
-      renderUsers(userServices, sortedUsers as UserClass[]);
-      showUsersCounters(sortedUsers as UserClass[]);
+      renderUsers(sortedUsers as UserClass[]);
+      showUsersCounters("userFiltered", sortedUsers);
       // Atualize o texto ou ícone do botão
       sortUsersBtn.textContent = isAscending ? "Ordenar A-Z" : "Ordenar Z-A";
     });
@@ -110,8 +100,8 @@ export function loadUsersPage(userServices: UserService): void {
     searchUser.addEventListener("input", () => {
       const name = searchUser.value.toLowerCase();
       const filteredUsers = searchUserByName(name);
-      renderUsers(userServices, filteredUsers as UserClass[]);
-      showUsersCounters(filteredUsers as UserClass[]);
+      renderUsers(filteredUsers);
+      showUsersCounters("userFiltered", filteredUsers as UserClass[]);
     });
   } else {
     console.warn("Elemento de busca de utilizadores não encontrado.");
@@ -145,6 +135,14 @@ function createUserCounter(id: string): HTMLElement {
     "unableUsersCounter",
   ) as HTMLElement;
 
+  const filterUsersBtn = createStatisticsCounter(
+    "filterUsersSection",
+    "filterUsersBtn",
+    "/src/assets/filter.png",
+    "fltrados",
+    "filterUsersCounter",
+  ) as HTMLElement;
+
   const ativeUsersPercentageBtn = createStatisticsCounter(
     "ativeUserPercentage",
     "ativeUsersPercentageBtn",
@@ -152,22 +150,17 @@ function createUserCounter(id: string): HTMLElement {
     "ativos %",
     "ativeUsersPercentageCounter",
   ) as HTMLElement;
+
   const sectionUsersCounter = createSection(`${id}`) as HTMLElement;
   sectionUsersCounter.classList.add("users-counters");
   sectionUsersCounter.append(
     allUsersBtn,
     ativeUsersBtn,
     unableUsersBtn,
+    filterUsersBtn,
     ativeUsersPercentageBtn,
   );
   return sectionUsersCounter;
-}
-
-function showUsersCounters(userList: UserClass[], type?: string): void {
-  countAllUsers("#allUsersCounter", userList);
-  countAtiveUsers("#ativeUsersCounter", userList);
-  countUnableUsers("#unableUsersCounter", userList);
-  countAtiveInativePercentage("#ativeUsersPercentageCounter", userList, type);
 }
 
 /* */

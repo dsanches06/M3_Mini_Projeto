@@ -1,24 +1,15 @@
-import { IUser } from "../models/index.js";
-import { ITask } from "../tasks/index.js";
+import { UserService, TaskService } from "./index.js";
 
 export class BackupService {
-  private users: IUser[];
-  private tasks: ITask[];
-
-  constructor(users: IUser[], tasks: ITask[]) {
-    this.users = users;
-    this.tasks = tasks;
-  }
-
   exportUsers() {
-    return JSON.stringify(this.users);
+    return JSON.stringify(UserService.getAllUsers());
   }
   exportTasks() {
-    return JSON.stringify(this.tasks);
+    return JSON.stringify(TaskService.getAllTasks());
   }
 
   exportAssignments() {
-    const assignments = this.tasks.map((task) => ({
+    const assignments = TaskService.getAllTasks().map((task) => ({
       taskId: task.getId(),
       assignedTo: task.getUser()?.getId() ?? null,
     }));

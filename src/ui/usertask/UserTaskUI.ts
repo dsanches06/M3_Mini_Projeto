@@ -1,11 +1,7 @@
 import { showInfoBanner } from "../../helpers/index.js";
 import { IUser, UserClass } from "../../models/index.js";
 import { ITask } from "../../tasks/index.js";
-import {
-  countAllTasks,
-  countPendingUserTasks,
-  countCompletedUserTasks,
-} from "../task/index.js";
+
 import {
   styleTasks,
   userEditTitle,
@@ -15,10 +11,7 @@ import {
 
 /* Mostrar tarefas */
 export function showUserTask(user: IUser, tasks: ITask[]): void {
-//  countAllTasks("#totalTasks", tasks);
-  //countPendingUserTasks("#pendingTasks", tasks);
-  //countCompletedUserTasks("#completedTasks", tasks);
- // showUserNameHeader(user);
+  showUserNameHeader(user);
   renderUserTask(user as UserClass, tasks);
   styleTasks(tasks);
 }

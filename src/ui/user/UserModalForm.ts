@@ -3,93 +3,96 @@ import {
   createForm,
   createSection,
   createHeadingTitle,
+  createInputGroup,
+  createSelectGroup,
 } from "../dom/index.js";
 import { UserService } from "../../services/index.js";
 import { IUser, UserClass } from "../../models/index.js";
-import { showInfoBanner, getLastID } from "../../helpers/index.js";
-import { renderUsers } from "./index.js";
-
-function createInputGroup(
-  labelStr: string,
-  id: string,
-  type: string,
-  placeholder: string,
-) {
-  const section = document.createElement("section");
-  section.className = "form-group";
-
-  const label = document.createElement("label");
-  label.setAttribute("for", id);
-  label.textContent = labelStr;
-
-  const input = document.createElement("input");
-  input.type = type;
-  input.id = id;
-  input.placeholder = placeholder;
-
-  const errorSection = document.createElement("section");
-  errorSection.id = `${id}Error`;
-  errorSection.className = "error-message";
-
-  section.append(label, input, errorSection);
-
-  return { section, input, errorSection };
-}
+import { showInfoBanner } from "../../helpers/index.js";
+import { renderUsers, showUsersCounters } from "./index.js";
+import { GlobalValidators, IdGenerator } from "../../utils/index.js";
+import { UserRole } from "../../security/index.js";
 
 /**
  * Gere a submissão e validação com Regex para Email
  */
 function setupFormLogic(
-  serviceUsers: UserService,
   form: HTMLFormElement,
-  fields: { name: HTMLInputElement; email: HTMLInputElement },
-  errors: { nameErr: HTMLElement; emailErr: HTMLElement; banner: HTMLElement },
+  fields: {
+    name: HTMLInputElement;
+    email: HTMLInputElement;
+    role: HTMLSelectElement;
+  },
+  errors: {
+    nameErr: HTMLElement;
+    emailErr: HTMLElement;
+    roleErr: HTMLElement;
+    banner: HTMLElement;
+  },
   modal: HTMLElement,
 ): void {
   form.onsubmit = (e: Event) => {
     e.preventDefault();
 
+    //obter os resultados
+    const name = fields.name.value.trim();
+    const email = fields.email.value.trim();
+    const role = fields.role.value.trim();
+
     // Reset de estados
     errors.nameErr.textContent = "";
     errors.emailErr.textContent = "";
+    errors.roleErr.textContent = "";
     errors.banner.style.display = "none";
 
     let isValid = true;
 
     // Validação do Nome
-    if (fields.name.value.trim().length < 3) {
+    if (GlobalValidators.minLength(name, 3)) {
       errors.nameErr.textContent = "O nome deve ter pelo menos 3 caracteres.";
       isValid = false;
     }
 
     // Validação do Nome
-    if (fields.name.value.trim() === "") {
+    if (GlobalValidators.isNonEmpty(name)) {
       errors.nameErr.textContent = "O nome não pode estar vazio.";
       isValid = false;
     }
 
     //  Validação de Email com Regex
-    // Esta regex valida: texto + @ + texto + . + extensão (2 ou mais caracteres)
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    if (!emailRegex.test(fields.email.value.trim())) {
+    if (!GlobalValidators.isValidEmail(email)) {
       errors.emailErr.textContent =
         "Introduza um endereço de email válido (ex: nome@email.com).";
       isValid = false;
     }
 
+    if (!GlobalValidators.isNonEmpty(role)) {
+      errors.roleErr.textContent = "O role não pode estar vazio.";
+      isValid = false;
+    }
+
+    let roleUser: UserRole | undefined;
+
     // Verificação Final
-    if (isValid) {
+    if (isValid && roleUser === undefined) {
       //obter um novo id a partir do ultimo
-      let newId: number = getLastID(serviceUsers.getAllUsers()) + 1;
+      let newId: number = IdGenerator.generate();
       //cria um novo user com os dados inseridos no formulario
-      const user: IUser = new UserClass(
-        newId,
-        fields.name.value,
-        fields.email.value,
-      );
+
+      if (role === "ADMIN") {
+        roleUser = UserRole.ADMIN;
+      } else if (role === "MANAGER") {
+        roleUser = UserRole.MANAGER;
+      } else if (role === "MEMBER") {
+        roleUser = UserRole.MEMBER;
+      } else if (role === "VIEWER") {
+        roleUser = UserRole.VIEWER;
+      }
+
+      const user: IUser = new UserClass(newId, name, email, roleUser);
       //adiciona a lista de utilizadores
-      serviceUsers.addUser(user);
+      UserService.addUser(user);
       if (user && user.getName()) {
         showInfoBanner(
           `${user.getName()} foi adicionado com sucesso.`,
@@ -102,9 +105,12 @@ function setupFormLogic(
         );
       }
       //mostra todos os utilizadores
-      renderUsers(serviceUsers, serviceUsers.getAllUsers() as UserClass[]);
+      renderUsers(UserService.getAllUsers() as UserClass[]);
       // atualizar contadores
-    //  showUsersCounters(serviceUsers.getAllUsers() as UserClass[]);
+      showUsersCounters(
+        "utilizadores",
+        UserService.getAllUsers() as UserClass[],
+      );
       modal.remove();
     } else {
       errors.banner.textContent =
@@ -117,7 +123,7 @@ function setupFormLogic(
 /**
  *  Função Principal: Monta o Modal no DOM
  */
-export function renderUserModal(serviceUsers: UserService): void {
+export function renderUserModal(): void {
   const modal = createSection("modalUserForm") as HTMLElement;
   modal.classList.add("modal");
 
@@ -153,6 +159,8 @@ export function renderUserModal(serviceUsers: UserService): void {
     "email",
     "inserir o email",
   );
+  const roles = ["ADMIN", "MANAGER", "MEMBER", "VIEWER"];
+  const selectRoleData = createSelectGroup("Role", "selectRole", roles);
 
   const submitBtn = createButton(
     "button",
@@ -160,7 +168,6 @@ export function renderUserModal(serviceUsers: UserService): void {
     "submit",
   ) as HTMLButtonElement;
 
-  // Montagem
   form.append(nameData.section, emailData.section, submitBtn);
   content.append(closeBtn, title, errorBanner, form);
   modal.append(content);
@@ -168,12 +175,16 @@ export function renderUserModal(serviceUsers: UserService): void {
 
   // Ligar a lógica ao formulário
   setupFormLogic(
-    serviceUsers,
     form,
-    { name: nameData.input, email: emailData.input },
+    {
+      name: nameData.input,
+      email: emailData.input,
+      role: selectRoleData.select,
+    },
     {
       nameErr: nameData.errorSection,
       emailErr: emailData.errorSection,
+      roleErr: selectRoleData.errorSection,
       banner: errorBanner,
     },
     modal,

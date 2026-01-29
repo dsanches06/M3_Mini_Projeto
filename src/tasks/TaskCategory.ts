@@ -1,5 +1,5 @@
 export enum TaskCategory {
-  WORKED,
-  PERSONAL,
-  STUDY,
+  WORKED="WORKED",
+  PERSONAL="PERSONAL",
+  STUDY="STUDY",
 }

@@ -1,15 +1,11 @@
-import { IUser } from "../models/index.js";
+import { UserService } from "../services/index.js";
 import { ITask } from "../tasks/index.js";
-import { showInfoBanner } from "./infoBanner.js";
+import { showInfoBanner } from "./index.js";
 
 /* Função para obter tarefas por filtro */
-export function getTasksByFilter(
-  user: IUser,
-  tasks: ITask[],
-  filter: string,
-  title?: string,
-): ITask[] {
-  for (const task of user.getTasks()) {
+export function getUserTasksByFilter(filter: string, title?: string): ITask[] {
+  let tasks: ITask[] = [];
+  for (const task of UserService.getAllUserTasks()) {
     switch (filter) {
       case "all":
         tasks.push(task);

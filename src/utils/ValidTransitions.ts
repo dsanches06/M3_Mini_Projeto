@@ -1,4 +1,4 @@
-import { TaskStatus } from "../tasks/TaskStatus.js";
+import { TaskStatus } from "../tasks/index.js";
 
 // - definir transições válidas
 export function validTransitions(

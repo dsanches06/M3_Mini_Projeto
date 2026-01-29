@@ -1,25 +1,19 @@
-import { IUser } from "../models/index.js";
-import { ITask, TaskStatus } from "../tasks/index.js";
+import { TaskStatus } from "../tasks/index.js";
+import { UserService, TaskService } from "./index.js";
 
 export class SearchService {
-  private users: IUser[];
-  private tasks: ITask[];
-
-  constructor(users: IUser[], tasks: ITask[]) {
-    this.users = users;
-    this.tasks = tasks;
-  }
+  constructor() {}
 
   searchByTitle(text: string) {
-    return this.tasks.filter((task) => task.getTitle().includes(text));
+    return TaskService.getAllTasks().filter((task) => task.getTitle().includes(text));
   }
 
   searchByUser(userId: number) {
-    return this.users.find((u) => u.getId() === userId);
+    return UserService.getUserById(userId);
   }
 
   searchByStatus(status: TaskStatus) {
-    return this.tasks.filter((task) => task.getStatus() === status);
+    return TaskService.getAllTasks().filter((task) => task.getStatus() === status);
   }
 
   globalSearch(query: any) {

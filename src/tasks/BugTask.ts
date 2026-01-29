@@ -1,7 +1,7 @@
+import { SystemLogger } from '../logs/SystemLogger.js';
 import { validTransitions } from "../utils/index.js";
 import { IUser, BaseEntity } from "../models/index.js";
 import { ITask, TaskCategory, TaskStatus } from "./index.js";
-import { showInfoBanner } from "../helpers/infoBanner.js";
 
 export class BugTask extends BaseEntity implements ITask {
   private title: string;
@@ -45,7 +45,7 @@ export class BugTask extends BaseEntity implements ITask {
   }
 
   getType(): string {
-    return "bug";
+    return "Bugs";
   }
 
   getUser(): IUser | null {
@@ -81,9 +81,8 @@ export class BugTask extends BaseEntity implements ITask {
         this.setStatus(status);
       }
     } catch (error) {
-      showInfoBanner(
-        `Transição de ${TaskStatus[this.getStatus()]} para ${TaskStatus[status]} não é permitida. ${error}`,
-        "error-banner",
+      SystemLogger.log(
+        `Transição de ${TaskStatus[this.getStatus()]} para ${TaskStatus[status]} não é permitida. ${error}`
       );
     } finally {
       if (status === TaskStatus.COMPLETED) {
