@@ -1,0 +1,14 @@
+{
+  "name": "m3_mini_projeto",
+  "version": "1.0.0",
+  "description": "Gestão de utilizadores e tarefas",
+  "license": "ISC",
+  "author": "Danilson Sanches",
+  "type": "module",
+  "main": "dist/main.js",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "start": "npm run build && node dist/main.js"
+  }
+}

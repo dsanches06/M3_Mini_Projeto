@@ -1,4 +1,4 @@
-import { TaskStatus } from "../tasks/index.js";
+import { TaskStatus } from "../tasks/TaskStatus.js";
 import { UserService, TaskService } from "./index.js";
 
 export class SearchService {

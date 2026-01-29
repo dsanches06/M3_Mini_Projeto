@@ -1,5 +1,5 @@
 import { SystemLogger } from "../logs/SystemLogger.js";
-import { UserRole } from "../security/index.js";
+import { UserRole } from "../security/UserRole.js";
 import { UserService } from "./index.js";
 import Notifications from "../notifications/Notifications.js";
 
@@ -10,7 +10,7 @@ export class NotificationService {
     if (user) {
       const notification = new Notifications(message);
       SystemLogger.log(
-        `NOTIFICATION -> ${user.getName()}: ${notification.getMessage()}.`,
+        `\nNOTIFICATION -> ${user.getName()}: ${notification.getMessage()}.\n`,
       );
     }
   }

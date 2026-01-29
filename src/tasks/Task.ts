@@ -1,6 +1,8 @@
-import { validTransitions } from "../utils/index.js";
+import { StateTransitions } from "../utils/index.js";
 import { IUser, BaseEntity } from "../models/index.js";
-import { ITask, TaskCategory, TaskStatus } from "./index.js";
+import { ITask } from "./index.js";
+import { TaskCategory } from "./TaskCategory.js";
+import { TaskStatus } from "./TaskStatus.js";
 import { SystemLogger } from "../logs/SystemLogger.js";
 
 export class Task extends BaseEntity implements ITask {
@@ -74,7 +76,10 @@ export class Task extends BaseEntity implements ITask {
 
   moveTo(status: TaskStatus): void {
     try {
-      const canTransition = validTransitions(this.getStatus(), status);
+      const canTransition = StateTransitions.validTransitions(
+        this.getStatus(),
+        status,
+      );
       // Validar transição
       // (Ex: Não voltar de COMPLETED para CREATED)
       if (canTransition) {

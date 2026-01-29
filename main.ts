@@ -4,6 +4,7 @@ import {
   UserService,
   TaskService,
   AssignmentService,
+  AutomationRulesService,
 } from "./src/services/index.js";
 import {
   GlobalValidators,
@@ -13,13 +14,9 @@ import {
 import { SystemLogger } from "./src/logs/SystemLogger.js";
 import { fakeTasksData, fakeUsersData } from "./src/helpers/index.js";
 import { UserClass } from "./src/models/index.js";
-import {
-  ITask,
-  BugTask,
-  FeatureTask,
-  Task,
-  TaskCategory,
-} from "./src/tasks/index.js";
+import { ITask, BugTask, FeatureTask, Task } from "./src/tasks/index.js";
+import { TaskCategory } from "./src/tasks/TaskCategory.js";
+import { TaskStatus } from "./src/tasks/TaskStatus.js";
 
 // IMPLEMENTAR UM FLUXO REAL:
 // - configurar sistema
@@ -120,7 +117,38 @@ for (const task of fakeTasksData) {
   }
 }
 //dar espaço entre logs
+SystemLogger.log("\nTRANSIÇÕES DE STATUS...\n");
+
+// EXEMPLO: Transição de status de ASSIGNED para IN_PROGRESS
+const allTasks = TaskService.getAllTasks();
+if (allTasks.length > 0) {
+  for (const task of allTasks) {
+    SystemLogger.log(
+      `Status inicial da tarefa '${task.getTitle()}': ${task.getStatus()}`,
+    );
+    // Forçar status para ASSIGNED para o exemplo
+    task.setStatus(TaskStatus.ASSIGNED);
+    SystemLogger.log(`Status tarefa '${task.getTitle()} após setStatus(ASSIGNED): ${task.getStatus()}`);
+    // Transicionar para IN_PROGRESS
+    task.moveTo(TaskStatus.IN_PROGRESS);
+    SystemLogger.log(`Status tarefa '${task.getTitle()} após moveTo(IN_PROGRESS): ${task.getStatus()}`);
+    // Transicionar para BLOCKED
+    task.moveTo(TaskStatus.BLOCKED);
+    SystemLogger.log(`Status tarefa '${task.getTitle()} após moveTo(BLOCKED): ${task.getStatus()}`);
+    // Transicionar para COMPLETED
+    task.moveTo(TaskStatus.COMPLETED);
+    SystemLogger.log(`Status tarefa '${task.getTitle()} após moveTo(COMPLETED): ${task.getStatus()}`);
+          // Transicionar para ARCHIVED
+    task.moveTo(TaskStatus.ARCHIVED);
+    SystemLogger.log(`Status tarefa '${task.getTitle()} após moveTo(ARCHIVED): ${task.getStatus()}\n`);
+
+  }
+}
+
+
+//dar espaço entre logs
 SystemLogger.log("\nASSIGNMENTS E COMPLETIONS...\n");
+
 //verificar se tarefas podem ser associados ao utilizador
 TaskService.getAllTasks().forEach((task) => {
   const total = UserService.getAllUsers().length;
@@ -137,7 +165,7 @@ TaskService.getAllTasks().forEach((task) => {
     }
     //verificar se o task pode ser completado
     const canComplete = BusinessRules.canTaskBeCompleted(
-      task.getStatus().toString() === "BLOCKED",
+      task.getStatus().toString() === "ASSIGNED",
     );
     if (canComplete) {
       AssignmentService.getTasksFromUser(user.getId()).forEach((t) => {
@@ -149,6 +177,10 @@ TaskService.getAllTasks().forEach((task) => {
         }
       });
     }
+    //aplicar task rules
+    AutomationRulesService.applyRules(task);
+    //aplicar user rules
+    AutomationRulesService.applyUserRules(user);
   }
 });
 
@@ -158,7 +190,9 @@ SystemLogger.log(
     TaskService.getAllTasks().length +
     " tarefas encontradas.\n",
 );
+
 TaskService.getAllTasks().forEach((task) => {
+  AutomationRulesService.applyRules(task);
   processTask(task);
 });
 

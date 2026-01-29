@@ -1,7 +1,9 @@
-import { SystemLogger } from '../logs/SystemLogger.js';
-import { validTransitions } from "../utils/index.js";
+import { StateTransitions } from "../utils/index.js";
 import { IUser, BaseEntity } from "../models/index.js";
-import { ITask, TaskCategory, TaskStatus } from "./index.js";
+import { ITask } from "./index.js";
+import { TaskCategory } from "./TaskCategory.js";
+import { TaskStatus } from "./TaskStatus.js";
+import { SystemLogger } from "../logs/SystemLogger.js";
 
 export class BugTask extends BaseEntity implements ITask {
   private title: string;
@@ -74,21 +76,27 @@ export class BugTask extends BaseEntity implements ITask {
 
   moveTo(status: TaskStatus): void {
     try {
-      const canTransition = validTransitions(this.getStatus(), status);
+      const canTransition = StateTransitions.validTransitions(
+        this.getStatus(),
+        status,
+      );
       // Validar transição
       // (Ex: Não voltar de COMPLETED para CREATED)
       if (canTransition) {
         this.setStatus(status);
+        if (status === TaskStatus.COMPLETED) {
+          this.markCompleted();
+          this.setCompletedDate(new Date());
+        }
+      } else {
+        console.log(
+          `Transição de ${TaskStatus[this.getStatus()]} para ${TaskStatus[status]} não é permitida.`,
+        );
       }
     } catch (error) {
       SystemLogger.log(
-        `Transição de ${TaskStatus[this.getStatus()]} para ${TaskStatus[status]} não é permitida. ${error}`
+        `Transição de ${TaskStatus[this.getStatus()]} para ${TaskStatus[status]} não é permitida. ${error}`,
       );
-    } finally {
-      if (status === TaskStatus.COMPLETED) {
-        this.markCompleted();
-        this.setCompletedDate(new Date());
-      }
     }
   }
 }

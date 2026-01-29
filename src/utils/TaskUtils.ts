@@ -1,9 +1,9 @@
-import { validTransitions } from "../utils/index.js";
 import { ITask } from "../tasks/index.js";
 import { NotificationService } from "../services/index.js";
 import { SystemLogger } from "../logs/SystemLogger.js";
-import { TaskStatus } from "../tasks/index.js";
+import { TaskStatus } from "../tasks/TaskStatus.js";
 import { UserClass } from "models/UserClass.js";
+import { StateTransitions } from "./index.js";
 
 // Função para processar uma tarefa com base no seu tipo
 const taskStatusMap = new Map<number, TaskStatus>();
@@ -18,7 +18,9 @@ export function processTask(task: ITask) {
     case "Bugs":
       //bug → regras mais rígidas, mais validações, logs automáticos, mais notificações
       try {
-        if (validTransitions(previousStatus, task.getStatus())) {
+        if (
+          StateTransitions.validTransitions(previousStatus, task.getStatus())
+        ) {
           SystemLogger.log(
             `INFO: A tarefa ${task.getTitle()} do tipo ${type} atribuido ao ${user?.getName()} foi processado [${previousStatus.toString()} -> ${task.getStatus().toString()}].`,
           );

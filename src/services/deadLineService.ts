@@ -1,22 +1,18 @@
 export class DeadlineService {
   //- Associar uma data limite a cada task
-  private deadlines: Map<number, Date>;
+  private static deadlines = new Map<number, Date>();
 
-  constructor() {
-    this.deadlines = new Map<number, Date>();
-  }
-
-  setDeadline(taskId: number, date: Date) {
+  static setDeadline(taskId: number, date: Date) {
     this.deadlines.set(taskId, date);
   }
 
-  isExpired(taskId: number) {
+  static isExpired(taskId: number) {
     const deadline = this.deadlines.get(taskId);
     if (!deadline) return false;
     return deadline.getTime() < this.getCurrentTimestamp();
   }
 
-  getExpiredTasks() {
+  static getExpiredTasks() {
     const now = this.getCurrentTimestamp();
     const expiredTasks = [];
     for (const [taskId, deadline] of this.deadlines.entries()) {
@@ -27,7 +23,7 @@ export class DeadlineService {
     return expiredTasks;
   }
 
-  private getCurrentTimestamp() {
+  private static getCurrentTimestamp() {
     return Date.now();
   }
 }

@@ -1,4 +1,5 @@
-import { ITask, TaskStatus } from "../tasks/index.js";
+import { ITask } from "../tasks/index.js";
+import { TaskStatus } from "../tasks/TaskStatus.js";
 
 export class TaskService {
   private static tasks = new Map<number, ITask>();

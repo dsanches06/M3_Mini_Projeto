@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "es6",
     "module": "esnext",
-    "lib": ["ES2015", "DOM"],
+    "lib": ["ES2016", "DOM"],
     "moduleResolution": "node",
     "baseUrl": "./src",
     "outDir": "./dist",

@@ -1,4 +1,4 @@
-import { UserRole } from "../security/index.js";
+import { UserRole } from "../security/UserRole.js";
 import { ITask } from "../tasks/index.js";
 
 export interface IUser {

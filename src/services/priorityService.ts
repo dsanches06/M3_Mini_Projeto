@@ -1,4 +1,4 @@
-import { Priority } from "../utils/index.js";
+import { Priority } from "../utils/Priority.js";
 
 export class PriorityService {
   private priorities: Map<number, Priority>;
