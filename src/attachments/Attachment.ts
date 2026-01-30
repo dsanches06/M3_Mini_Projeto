@@ -1,5 +1,6 @@
 import { BaseEntity } from "../models/index.js";
 
+/* Representação de um anexo */
 export default class Attachment extends BaseEntity {
   private taskId: number;
   private fileName: string;

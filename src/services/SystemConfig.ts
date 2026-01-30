@@ -1,3 +1,4 @@
+/* Serviço para gerir configurações do sistema */
 export class SystemConfig {
   static appName: string;
   static version: string;
@@ -7,6 +8,7 @@ export class SystemConfig {
     this.environment = env;
   }
 
+  /* Método para obter informações completas do sistema */
   static getInfo(): string {
     return `${this.appName} - ${this.version} - ${this.environment}`;
   }

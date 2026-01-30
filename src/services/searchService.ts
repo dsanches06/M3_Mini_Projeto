@@ -1,6 +1,7 @@
 import { TaskStatus } from "../tasks/TaskStatus.js";
 import { UserService, TaskService } from "./index.js";
 
+/* Serviço para realizar buscas em tarefas e usuários */
 export class SearchService {
   constructor() {}
 

@@ -1,3 +1,4 @@
+/* Gerador de IDs */
 export class IdGenerator {
   private static counter: number = 0;
 

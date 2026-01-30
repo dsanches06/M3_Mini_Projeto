@@ -1,59 +1,101 @@
-# M3 Mini Projeto
+# M3 Mini Projeto - Gestão de utilizadores e tarefas ✅
 
-Gestão de Utilizadores e de tarefas
+## 📌 Descrição
 
-## Descrição
+Projeto exemplar de gestão de utilizadores e tarefas, implementado em **TypeScript**. Inclui operações básicas (CRUD), associação de tarefas a utilizadores, e um conjunto de utilitários genéricos com testes unitários.
 
-Este projeto consiste na criação de uma aplicação de gestão de utilizadores e tarefas. O objetivo é implementar funcionalidades para criar, ler, atualizar e eliminar utilizadores e suas respectivas tarefas associadas.
-
-## Funcionalidades
+## 🔧 Funcionalidades principais
 
 - Gestão de utilizadores (CRUD)
 - Gestão de tarefas (CRUD)
 - Associação de tarefas a utilizadores
-- Interface amigável e responsiva
+- Utilitários genéricos (cache, favoritos, tags, paginação, etc.)
+- Testes unitários com **Vitest**
 
-## Tecnologias Utilizadas
+## 🧰 Tecnologias
 
 - TypeScript
 - Javascript
-- HTML5
-- CSS3
+- Node JS
+- Vitest (testes)
 
-## Link do Repositório
+## 📁 Estrutura do projeto (resumo)
 
-Clique no [Link do projeto GitHub](https://github.com/dsanches06/M3_Mini_Projeto)
+- `main.ts` — ponto de entrada
+- `src/` — código fonte
+  - `models/` — entidades (User, Task, etc.)
+  - `tasks/` — implementações de tarefas (BugTask, FeatureTask, Task)
+  - `utils/` — utilitários genéricos (EntityList, SimpleCache, Paginator...)
+  - `services/` — serviços da aplicação
+  - `logs/`, `notifications/`, `security/`, etc.
+- `testes/` — testes unitários (Vitest)
+- `vitest.config.ts` — configuração de testes
 
-## Como Clonar e Executar
+---
 
-### Clonar o Repositório
+## 🚀 Como usar
+
+### 1) Clonar
 
 ```bash
 git clone https://github.com/dsanches06/M3_Mini_Projeto.git
+cd M3_Mini_Projeto
 ```
 
-#### Para projeto fase I
+### 2) Instalar dependências
 
 ```bash
-cd m3_mini_projeto/fase_I/
+npm install
 ```
 
-#### Para projeto fase II
+### 3) Compilar
 
 ```bash
-cd m3_mini_projeto/fase_II/
+npm run build
 ```
 
-### Executar o Projeto
-
-1 - No terminal execute
+### 4) Executar
 
 ```bash
-tsc
+npm start
 ```
 
-2 - Depois, abra `index.html` com Live Server.
+---
 
-## Autor do Projeto
+## 🧪 Testes
 
-- **Danilson Sanches - @upskill217**
+- Executar todos os testes:
+
+```bash
+npm test
+```
+
+- Executar em modo watch:
+
+```bash
+npm run test:watch
+```
+
+- Gerar relatório de cobertura (Vitest suporta cobertura via `--coverage`):
+
+```bash
+npx vitest run --coverage
+```
+
+> Nota: o projeto já inclui `vitest` como dependência de desenvolvimento e `vitest.config.ts` para configuração.
+
+---
+
+## 🛠️ Scripts úteis (em `package.json`)
+
+- `npm run build` — compilar TypeScript
+- `npm run watch` — compilar em watch mode
+- `npm start` — build + executar
+- `npm test` — executar testes (Vitest)
+- `npm run test:watch` — testes em watch
+
+---
+
+## 👤 Autor
+
+**Danilson Sanches** — @upskill217

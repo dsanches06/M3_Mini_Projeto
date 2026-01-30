@@ -11,9 +11,20 @@ import {
   IdGenerator,
   processTask,
 } from "./src/utils/index.js";
+import {
+  EntityList,
+  SimpleCache,
+  Favorites,
+  Paginator,
+  TagManager,
+  WatcherSystem,
+  PriorityManager,
+  RatingSystem,
+  DependencyGraph,
+} from "./src/utils/index.js";
 import { SystemLogger } from "./src/logs/SystemLogger.js";
 import { fakeTasksData, fakeUsersData } from "./src/helpers/index.js";
-import { UserClass } from "./src/models/index.js";
+import { UserClass, IUser } from "./src/models/index.js";
 import { ITask, BugTask, FeatureTask, Task } from "./src/tasks/index.js";
 import { TaskCategory } from "./src/tasks/TaskCategory.js";
 import { TaskStatus } from "./src/tasks/TaskStatus.js";
@@ -128,23 +139,31 @@ if (allTasks.length > 0) {
     );
     // Forçar status para ASSIGNED para o exemplo
     task.setStatus(TaskStatus.ASSIGNED);
-    SystemLogger.log(`Status tarefa '${task.getTitle()} após setStatus(ASSIGNED): ${task.getStatus()}`);
+    SystemLogger.log(
+      `Status tarefa '${task.getTitle()} após setStatus(ASSIGNED): ${task.getStatus()}`,
+    );
     // Transicionar para IN_PROGRESS
     task.moveTo(TaskStatus.IN_PROGRESS);
-    SystemLogger.log(`Status tarefa '${task.getTitle()} após moveTo(IN_PROGRESS): ${task.getStatus()}`);
+    SystemLogger.log(
+      `Status tarefa '${task.getTitle()} após moveTo(IN_PROGRESS): ${task.getStatus()}`,
+    );
     // Transicionar para BLOCKED
     task.moveTo(TaskStatus.BLOCKED);
-    SystemLogger.log(`Status tarefa '${task.getTitle()} após moveTo(BLOCKED): ${task.getStatus()}`);
+    SystemLogger.log(
+      `Status tarefa '${task.getTitle()} após moveTo(BLOCKED): ${task.getStatus()}`,
+    );
     // Transicionar para COMPLETED
     task.moveTo(TaskStatus.COMPLETED);
-    SystemLogger.log(`Status tarefa '${task.getTitle()} após moveTo(COMPLETED): ${task.getStatus()}`);
-          // Transicionar para ARCHIVED
+    SystemLogger.log(
+      `Status tarefa '${task.getTitle()} após moveTo(COMPLETED): ${task.getStatus()}`,
+    );
+    // Transicionar para ARCHIVED
     task.moveTo(TaskStatus.ARCHIVED);
-    SystemLogger.log(`Status tarefa '${task.getTitle()} após moveTo(ARCHIVED): ${task.getStatus()}\n`);
-
+    SystemLogger.log(
+      `Status tarefa '${task.getTitle()} após moveTo(ARCHIVED): ${task.getStatus()}\n`,
+    );
   }
 }
-
 
 //dar espaço entre logs
 SystemLogger.log("\nASSIGNMENTS E COMPLETIONS...\n");
@@ -192,12 +211,11 @@ SystemLogger.log(
 );
 
 TaskService.getAllTasks().forEach((task) => {
-  AutomationRulesService.applyRules(task);
   processTask(task);
 });
 
 //dar espaço entre logs
-SystemLogger.log("\nVERIFICANDO DESATIVAÇÕES DE USUÁRIOS...\n");
+SystemLogger.log("\nVERIFICAR SE O UTILIZADOR PODE SER DESATIVADO...\n");
 //verificar se o utilizador pode ser desativado
 UserService.getAllUsers().forEach((user) => {
   const activeTasks = AssignmentService.getTasksFromUser(user.getId()).filter(

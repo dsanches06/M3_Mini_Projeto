@@ -2,12 +2,12 @@ import { ITask } from "../tasks/index.js";
 import { NotificationService } from "../services/index.js";
 import { SystemLogger } from "../logs/SystemLogger.js";
 import { TaskStatus } from "../tasks/TaskStatus.js";
-import { UserClass } from "models/UserClass.js";
+import { UserClass } from "../models/UserClass.js";
 import { StateTransitions } from "./index.js";
 
-// Função para processar uma tarefa com base no seu tipo
 const taskStatusMap = new Map<number, TaskStatus>();
 
+/* Processa a tarefa com base no seu tipo e registra logs e notificações */
 export function processTask(task: ITask) {
   const taskId = task.getId();
   const type = task.getType();

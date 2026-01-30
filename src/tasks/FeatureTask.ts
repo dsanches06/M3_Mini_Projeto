@@ -5,6 +5,7 @@ import { TaskCategory } from "./TaskCategory.js";
 import { TaskStatus } from "./TaskStatus.js";
 import { SystemLogger } from "../logs/SystemLogger.js";
 
+/* Implementação da tarefa do tipo Feature */
 export class FeatureTask extends BaseEntity implements ITask {
   private title: string;
   private completed: boolean;

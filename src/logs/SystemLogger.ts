@@ -1,3 +1,4 @@
+/* Logger do sistema */
 export class SystemLogger {
   private static logs: string[] = [];
 

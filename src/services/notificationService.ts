@@ -3,8 +3,9 @@ import { UserRole } from "../security/UserRole.js";
 import { UserService } from "./index.js";
 import Notifications from "../notifications/Notifications.js";
 
+/* Serviço para gerenciar notificações */
 export class NotificationService {
-  // Adiciona usuários ao serviço de notificação
+  /* Adiciona usuários ao serviço de notificação */
   static notifyUser(userId: number, message: string) {
     const user = UserService.getUserById(userId);
     if (user) {
@@ -15,12 +16,12 @@ export class NotificationService {
     }
   }
 
-  // Notifica um grupo de usuários
+  /* Notifica um grupo de utilizadores */
   static notifyGroup(userIds: number[], message: string) {
     userIds.forEach((userId) => this.notifyUser(userId, message));
   }
 
-  // Notifica todos os administradores
+  /* Notifica todos os administradores */
   static notifyAdmins(message: string) {
     const adminUsers = UserService.getAllUsers().filter(
       (u) => u.getRole() === UserRole.ADMIN,

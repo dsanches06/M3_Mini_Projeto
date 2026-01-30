@@ -4,10 +4,15 @@
     "module": "esnext",
     "lib": ["ES2016", "DOM"],
     "moduleResolution": "node",
-    "baseUrl": "./src",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    },
     "outDir": "./dist",
     "strict": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true
   },
-  "include": ["main.ts", "src/**/*"]
+  "include": ["src/**/*", "main.ts"],
+  "exclude": ["node_modules", "dist", "testes"]
 }

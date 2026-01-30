@@ -1,3 +1,4 @@
+/* Representação de uma notificação */
 export default class Notifications {
   
   private message: string;

@@ -8,7 +8,10 @@ import {
   NotificationService,
 } from "./index.js";
 
+/* Serviço para aplicar regras automáticas de tarefas */
 export class AutomationRulesService {
+  
+  /* Aplica regras automáticas relacionadas a tarefas */
   static applyRules(task: ITask) {
     if (task.getStatus() === TaskStatus.COMPLETED) {
       SystemLogger.log(`Task ${task.getId()} completed on ${Date.now()}`);
@@ -25,6 +28,7 @@ export class AutomationRulesService {
     }
   }
 
+  /* Aplica regras automáticas relacionadas a usuários */
   static applyUserRules(user: IUser) {
     if (!user.isActive()) {
       const tasks = AssignmentService.getTasksFromUser(user.getId());

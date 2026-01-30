@@ -1,6 +1,7 @@
-import {  TaskStatus } from "../tasks/TaskStatus.js";
+import { TaskStatus } from "../tasks/TaskStatus.js";
 import { UserService, TaskService } from "./index.js";
 
+/* Serviço para gerir a atribuição de tarefas a utilizadores */
 export class AssignmentService {
   static assignUser(taskId: number, userId: number) {
     const task = TaskService.getTaskById(taskId);
@@ -12,6 +13,7 @@ export class AssignmentService {
     }
   }
 
+  /* Remove a atribuição de uma tarefa a um utilizador */
   static unassignUser(taskId: number, userId: number) {
     const task = TaskService.getTaskById(taskId);
     const user = UserService.getUserById(userId);
@@ -25,11 +27,13 @@ export class AssignmentService {
     }
   }
 
+  /* Obtém o utilizador atribuído a uma tarefa específica */
   static getUserFromTask(taskId: number) {
     const task = TaskService.getTaskById(taskId);
     return task ? task.getUser() : null;
   }
 
+  /* Obtém todas as tarefas atribuídas a um utilizador específico */
   static getTasksFromUser(userId: number) {
     const user = UserService.getUserById(userId);
     return user ? user.getTasks() : [];

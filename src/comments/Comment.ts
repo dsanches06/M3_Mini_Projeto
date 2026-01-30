@@ -1,5 +1,6 @@
 import {BaseEntity} from "../models/index.js";
 
+/* Representação de um comentário */
 export default class Comment extends BaseEntity {
   private taskId: number;
   private userId: number;

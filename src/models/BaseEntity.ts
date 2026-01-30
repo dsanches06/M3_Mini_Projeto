@@ -1,4 +1,5 @@
-export class BaseEntity {
+/* Representação de uma entidade base */
+export abstract class BaseEntity {
   protected id: number;
   protected createdAt: Date;
   static totalEntities: number = 0;

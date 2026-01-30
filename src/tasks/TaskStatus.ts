@@ -1,3 +1,4 @@
+/* Enumerados de status de tarefas */
 export enum TaskStatus {
   CREATED = "CREATED",
   ASSIGNED = "ASSIGNED",

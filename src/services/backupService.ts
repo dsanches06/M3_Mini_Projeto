@@ -1,5 +1,6 @@
 import { UserService, TaskService } from "./index.js";
 
+/* Serviço para backup de dados */
 export class BackupService {
   exportUsers() {
     return JSON.stringify(UserService.getAllUsers());

@@ -1,3 +1,4 @@
+/* Validadores globais */
 export class GlobalValidators {
   static isValidEmail(email: string): boolean {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

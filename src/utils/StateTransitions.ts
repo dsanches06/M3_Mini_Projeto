@@ -1,5 +1,6 @@
 import { TaskStatus } from "../tasks/TaskStatus.js";
 
+/* Representação de transições de estado */
 export class StateTransitions {
   private static readonly TRANSITIONS = new Map<TaskStatus, TaskStatus[]>([
     [TaskStatus.CREATED, [TaskStatus.ASSIGNED, TaskStatus.ARCHIVED]],
