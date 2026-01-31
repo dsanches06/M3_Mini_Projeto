@@ -11,7 +11,7 @@ export class NotificationService {
     if (user) {
       const notification = new Notifications(message);
       SystemLogger.log(
-        `\nNOTIFICATION -> ${user.getName()}: ${notification.getMessage()}.\n`,
+        `NOTIF -> ${user.getName()}: ${notification.getMessage()}.\n`,
       );
     }
   }

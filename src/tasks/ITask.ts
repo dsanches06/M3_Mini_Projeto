@@ -11,8 +11,8 @@ export interface ITask {
   getCompleted(): boolean;
   getStatus(): TaskStatus;
   setStatus(status: TaskStatus): void;
-  getUser(): IUser | null;
-  setUser(user: IUser | null): void;
+  getUser(): IUser | undefined;
+  setUser(user: IUser | undefined): void;
   getType(): string;
   getCompletedDate(): Date;
   getTaskCategory(): TaskCategory;

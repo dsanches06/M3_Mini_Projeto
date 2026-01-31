@@ -7,7 +7,7 @@ import { TaskCategory } from '../src/tasks/TaskCategory';
 import type { ITask } from '../src/tasks/ITask';
 
 describe('DependencyGraph', () => {
-  it('addDependency and getDependencies work', () => {
+  it('addDependency e getDependencies funcionam', () => {
     const g = new DependencyGraph<ITask>();
     const t1 = new BugTask(1, 'B', TaskCategory.WORKED);
     const t2 = new FeatureTask(2, 'F', TaskCategory.PERSONAL);
@@ -25,7 +25,7 @@ describe('DependencyGraph', () => {
     expect(g.hasDependencies(new Task(999, 'nope', TaskCategory.PERSONAL))).toBe(false);
   });
 
-  it('handles cycles and duplicate dependencies', () => {
+  it('trata ciclos e dependências duplicadas', () => {
     const g = new DependencyGraph<ITask>();
     const a = new BugTask(10, 'A', TaskCategory.WORKED);
     const b = new FeatureTask(11, 'B', TaskCategory.PERSONAL);

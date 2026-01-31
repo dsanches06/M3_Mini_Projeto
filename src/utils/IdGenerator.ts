@@ -1,10 +1,12 @@
 /* Gerador de IDs */
 export class IdGenerator {
-  private static counter: number = 0;
+  private counter: number;
 
-  private constructor() {}
+  constructor() {
+    this.counter = 0;
+  }
 
-  static generate(): number {
+  generate(): number {
     this.counter += 1;
     return this.counter;
   }

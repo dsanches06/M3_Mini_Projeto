@@ -12,7 +12,7 @@ export class Task extends BaseEntity implements ITask {
   private completeDate?: Date;
   private status: TaskStatus;
   private category: TaskCategory;
-  private user: IUser | null;
+  private user: IUser | undefined;
 
   constructor(id: number, title: string, category: TaskCategory) {
     super(id);
@@ -20,7 +20,7 @@ export class Task extends BaseEntity implements ITask {
     this.completed = false;
     this.status = TaskStatus.CREATED;
     this.category = category;
-    this.user = null;
+    this.user = undefined;
   }
 
   getCreatedAt(): Date {
@@ -51,11 +51,11 @@ export class Task extends BaseEntity implements ITask {
     return "Task";
   }
 
-  getUser(): IUser | null {
+  getUser(): IUser | undefined {
     return this.user;
   }
 
-  setUser(user: IUser | null): void {
+  setUser(user: IUser | undefined): void {
     this.user = user;
   }
 
@@ -82,19 +82,20 @@ export class Task extends BaseEntity implements ITask {
         status,
       );
       // Validar transição
-      // (Ex: Não voltar de COMPLETED para CREATED)
       if (canTransition) {
+        SystemLogger.log(
+          `INFO: Transição permitida de ${TaskStatus[this.getStatus()]} para ${TaskStatus[status]}.`,
+        );
         this.setStatus(status);
+        if (status === TaskStatus.COMPLETED) {
+          this.markCompleted();
+          this.setCompletedDate(new Date());
+        }
       }
     } catch (error) {
       SystemLogger.log(
-        `Transição de ${TaskStatus[this.getStatus()]} para ${TaskStatus[status]} não é permitida. ${error}`,
+        `ERRO: Transição de ${TaskStatus[this.getStatus()]} para ${TaskStatus[status]} não é permitida. ${error}`,
       );
-    } finally {
-      if (status === TaskStatus.COMPLETED) {
-        this.markCompleted();
-        this.setCompletedDate(new Date());
-      }
     }
   }
 }

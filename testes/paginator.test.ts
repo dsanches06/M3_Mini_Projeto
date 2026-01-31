@@ -13,20 +13,20 @@ describe('Paginator', () => {
     new UserClass(5, 'E', 'e@e.com'),
   ];
 
-  it('paginates correctly for normal pages', () => {
+  it('pagina corretamente para páginas normais', () => {
     expect(paginator.paginate(items, 1, 2)).toEqual([items[0], items[1]]);
     expect(paginator.paginate(items, 2, 2)).toEqual([items[2], items[3]]);
     expect(paginator.paginate(items, 3, 2)).toEqual([items[4]]);
   });
 
-  it('returns empty array for out-of-range pages or invalid page/size', () => {
+  it('retorna array vazio para páginas fora do intervalo ou página/tamanho inválido', () => {
     expect(paginator.paginate(items, 0, 2)).toEqual([]);
     expect(paginator.paginate(items, -1, 2)).toEqual([]);
     expect(paginator.paginate(items, 10, 2)).toEqual([]);
     expect(paginator.paginate([], 1, 2)).toEqual([]);
   });
 
-  it('handles page size larger than total items', () => {
+  it('lida com tamanho de página maior que total de itens', () => {
     expect(paginator.paginate(items, 1, 99)).toEqual(items);
     expect(paginator.paginate(items, 2, 99)).toEqual([]);
   });

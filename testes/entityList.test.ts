@@ -9,7 +9,7 @@ import type { IUser } from '../src/models/IUser';
 import type { ITask } from '../src/tasks/ITask';
 
 describe('EntityList', () => {
-  it('starts empty and can add users and tasks', () => {
+  it('começa vazio e pode adicionar utilizadores e tarefas', () => {
     const user1 = new UserClass(1, 'Danilson', 'danilson@email.com');
     const user2 = new UserClass(2, 'Leonor', 'leonor@email.com');
     const user3 = new UserClass(3, 'Adriano', 'adriano@email.com');
@@ -30,7 +30,7 @@ describe('EntityList', () => {
     expect(taskList.getAll()).toEqual([task1]);
   });
 
-  it('maintains insertion order for users and tasks', () => {
+  it('mantém a ordem de inserção para utilizadores e tarefas', () => {
     const user1 = new UserClass(1, 'Danilson', 'danilson@email.com');
     const user2 = new UserClass(2, 'Leonor', 'leonor@email.com');
     const user3 = new UserClass(3, 'Adriano', 'adriano@email.com');
@@ -52,7 +52,7 @@ describe('EntityList', () => {
     expect(taskList.getAll()).toEqual([task1, task2, task3]);
   });
 
-  it('allows duplicate items (same reference)', () => {
+  it('permite itens duplicados (mesma referência)', () => {
     const user = new UserClass(10, 'Dup', 'dup@e.com');
     const userList = new EntityList<IUser>();
     userList.add(user);

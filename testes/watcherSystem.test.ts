@@ -7,7 +7,7 @@ import type { IUser } from '../src/models/IUser';
 import type { ITask } from '../src/tasks/ITask';
 
 describe('WatcherSystem', () => {
-  it('watch, unwatch and getWatchers behave as expected', () => {
+  it('watch, unwatch e getWatchers comportam-se como esperado', () => {
     const ws = new WatcherSystem<ITask, IUser>();
     const target = new BugTask(1, 'B', TaskCategory.WORKED);
     const u1 = new UserClass(1, 'A', 'a@e.com');
@@ -19,14 +19,14 @@ describe('WatcherSystem', () => {
     expect(ws.getWatchers(target)).toEqual([u2]);
   });
 
-  it('unwatch on non-watched user does nothing', () => {
+  it('unwatch em utilizador não observado não faz nada', () => {
     const ws = new WatcherSystem<ITask, IUser>();
     const target = new BugTask(1, 'B', TaskCategory.WORKED);
     ws.unwatch(target, new UserClass(9, 'x', 'x@e.com'));
     expect(ws.getWatchers(target)).toEqual([]);
   });
 
-  it('duplicate watchers: adding same watcher twice and unwatch once leaves one', () => {
+  it('observadores duplicados: adicionar o mesmo observador duas vezes e unwatch uma vez deixa um', () => {
     const ws = new WatcherSystem<ITask, IUser>();
     const target = new BugTask(2, 'B2', TaskCategory.WORKED);
     const u = new UserClass(5, 'Dup', 'dup@e.com');

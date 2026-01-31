@@ -5,7 +5,7 @@ import { TaskCategory } from '../src/tasks/TaskCategory';
 import type { ITask } from '../src/tasks/ITask';
 
 describe('PriorityManager', () => {
-  it('set and getPriority work and return undefined for unknown', () => {
+  it('set e getPriority funcionam e retornam undefined para desconhecido', () => {
     const pm = new PriorityManager<ITask>();
     const t = new BugTask(1, 'B', TaskCategory.WORKED);
     expect(pm.getPriority(t)).toBeUndefined();

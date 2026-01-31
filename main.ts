@@ -4,13 +4,13 @@ import {
   UserService,
   TaskService,
   AssignmentService,
-  AutomationRulesService,
 } from "./src/services/index.js";
 import {
   GlobalValidators,
   IdGenerator,
   processTask,
 } from "./src/utils/index.js";
+import { Buffer } from "./src/helpers/index.js";
 import {
   EntityList,
   SimpleCache,
@@ -40,6 +40,7 @@ SystemLogger.log(SystemConfig.getInfo());
 SystemLogger.log("");
 
 //isUserValidar dados e criar no utilizador sem role
+const userIdGenerator = new IdGenerator();
 for (const user of fakeUsersData) {
   let isUserValid = true;
   // - isUserValidar dados
@@ -63,9 +64,11 @@ for (const user of fakeUsersData) {
   }
 
   if (isUserValid === true) {
-    const Id = IdGenerator.generate();
+    const Id = userIdGenerator.generate();
     UserService.addUser(new UserClass(Id, user.name, user.email));
-    SystemLogger.log(`INFO: ${user.name} foi adicionado com sucesso.`);
+    SystemLogger.log(
+      `INFO: ${user.name} com ID ${Id} foi adicionado com sucesso.`,
+    );
   }
 }
 
@@ -73,10 +76,11 @@ for (const user of fakeUsersData) {
 SystemLogger.log("");
 
 //criar os 3 tipos de Tasks
+const taskIdGenerator = new IdGenerator();
 for (const task of fakeTasksData) {
   let isTaskValid = true;
   // - validar dados
-  if (!BusinessRules.isValidTitle(task.title)) {
+  if (!GlobalValidators.isValidTitle(task.title)) {
     SystemLogger.log(
       `ERRO: O título ${task.title} deve ter pelo menos 3 caracteres.`,
     );
@@ -102,7 +106,7 @@ for (const task of fakeTasksData) {
   let category: TaskCategory = TaskCategory.PERSONAL;
 
   if (isTaskValid === true) {
-    const Id = IdGenerator.generate();
+    const Id = taskIdGenerator.generate();
 
     if (task.category === "Trabalho") {
       category = TaskCategory.WORKED;
@@ -128,7 +132,7 @@ for (const task of fakeTasksData) {
   }
 }
 //dar espaço entre logs
-SystemLogger.log("\nTRANSIÇÕES DE STATUS...\n");
+/* SystemLogger.log("\nTRANSIÇÕES DE STATUS...\n");
 
 // EXEMPLO: Transição de status de ASSIGNED para IN_PROGRESS
 const allTasks = TaskService.getAllTasks();
@@ -164,42 +168,26 @@ if (allTasks.length > 0) {
     );
   }
 }
-
+ */
 //dar espaço entre logs
-SystemLogger.log("\nASSIGNMENTS E COMPLETIONS...\n");
+SystemLogger.log("\nASSIGNMENTS...\n");
 
 //verificar se tarefas podem ser associados ao utilizador
 TaskService.getAllTasks().forEach((task) => {
-  const total = UserService.getAllUsers().length;
-  const id = Math.floor(Math.random() * total);
-  const user = UserService.getUserById(id + 1);
-  if (user) {
-    //verificar se tarefas podem ser associados ao utilizador
-    const canAssign = BusinessRules.canAssignTask(user.isActive());
+  const users = UserService.getAllUsers();
+  const activeUsers = users.filter((user) => user && user.isActive());
+  
+  if (activeUsers.length > 0) {
+    const randomIndex = Math.floor(Math.random() * activeUsers.length);
+    const selectedUser = activeUsers[randomIndex];
+    
+    const canAssign = BusinessRules.canAssignTask(selectedUser.isActive());
     if (canAssign) {
-      AssignmentService.assignUser(task.getId(), user.getId());
+      AssignmentService.assignUser(task.getId(), selectedUser.getId());
       SystemLogger.log(
-        `INFO: A tarefa ${task.getTitle()} foi atribuída para ${user.getName()}.`,
+        `INFO: A tarefa ${task.getTitle()} foi atribuída para ${selectedUser.getName()}.`,
       );
     }
-    //verificar se o task pode ser completado
-    const canComplete = BusinessRules.canTaskBeCompleted(
-      task.getStatus().toString() === "ASSIGNED",
-    );
-    if (canComplete) {
-      AssignmentService.getTasksFromUser(user.getId()).forEach((t) => {
-        if (t.getId() === task.getId()) {
-          t.markCompleted();
-          SystemLogger.log(
-            `INFO: A tarefa ${task.getTitle()} foi completada pelo ${user.getName()}.`,
-          );
-        }
-      });
-    }
-    //aplicar task rules
-    AutomationRulesService.applyRules(task);
-    //aplicar user rules
-    AutomationRulesService.applyUserRules(user);
   }
 });
 
@@ -209,10 +197,20 @@ SystemLogger.log(
     TaskService.getAllTasks().length +
     " tarefas encontradas.\n",
 );
+let count = 0;
+while (count < 5) {
+  TaskService.getAllTasks().forEach((task) => {
+    processTask(task);
+  });
+  count++;
+}
 
-TaskService.getAllTasks().forEach((task) => {
-  processTask(task);
-});
+// After assigning all tasks, finalize the CREATED -> ASSIGNED transitions so transition logs
+// appear after the assignment messages and not interleaved with them.
+SystemLogger.log('\nFINALIZANDO ATRIBUIÇÕES...\n');
+AssignmentService.finalizeAssignments();
+
+Buffer.reportProcessSummary();
 
 //dar espaço entre logs
 SystemLogger.log("\nVERIFICAR SE O UTILIZADOR PODE SER DESATIVADO...\n");

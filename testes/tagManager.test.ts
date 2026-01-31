@@ -7,7 +7,7 @@ import { TaskCategory } from '../src/tasks/TaskCategory';
 import type { ITask } from '../src/tasks/ITask';
 
 describe('TagManager', () => {
-  it('can add, get and remove tags for tasks', () => {
+  it('pode adicionar, obter e remover tags de tarefas', () => {
     const tm = new TagManager<ITask>();
     const t1 = new BugTask(1, 'B', TaskCategory.WORKED);
     tm.addTag(t1, 'x');
@@ -17,12 +17,12 @@ describe('TagManager', () => {
     expect(tm.getTags(t1)).toEqual(['y']);
   });
 
-  it('returns empty array for items with no tags', () => {
+  it('retorna array vazio para itens sem tags', () => {
     const tm = new TagManager<ITask>();
     expect(tm.getTags(new Task(999, 'nope', TaskCategory.PERSONAL))).toEqual([]);
   });
 
-  it('adding duplicate tags results in duplicates and removeTag removes all occurrences', () => {
+  it('adicionar tags duplicadas gera duplicatas e removeTag remove todas as ocorrências', () => {
     const tm = new TagManager<ITask>();
     const t1 = new BugTask(2, 'B2', TaskCategory.WORKED);
     tm.addTag(t1, 'dup');

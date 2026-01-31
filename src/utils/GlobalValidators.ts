@@ -14,6 +14,15 @@ export class GlobalValidators {
   }
 
   static minLength(text: string, size: number): boolean {
-    return text.length >= size;
+    return (
+      this.isNonEmpty(text) &&
+      this.isPositiveNumber(size) &&
+      text.trim().length >= size
+    );
+  }
+
+  /* Verifica se o título da tarefa é válido (mínimo de 3 caracteres) */
+  static isValidTitle(title: string): boolean {
+    return this.isNonEmpty(title) && this.minLength(title, 3);
   }
 }

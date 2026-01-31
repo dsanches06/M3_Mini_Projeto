@@ -6,7 +6,7 @@ import { TaskCategory } from '../src/tasks/TaskCategory';
 import type { ITask } from '../src/tasks/ITask';
 
 describe('RatingSystem', () => {
-  it('getAverage returns 0 for no ratings and rates properly', () => {
+  it('getAverage retorna 0 sem classificações e classifica corretamente', () => {
     const rs = new RatingSystem<ITask>();
     const t = new BugTask(1, 'B', TaskCategory.WORKED);
     expect(rs.getRatings(t)).toEqual([]);
@@ -17,7 +17,7 @@ describe('RatingSystem', () => {
     expect(rs.getAverage(t)).toBe((5 + 3) / 2);
   });
 
-  it('handles multiple items independently', () => {
+  it('trata múltiplos itens independentemente', () => {
     const rs = new RatingSystem<ITask>();
     const t1 = new BugTask(1, 'B', TaskCategory.WORKED);
     const t2 = new Task(2, 'T', TaskCategory.PERSONAL);
@@ -27,7 +27,7 @@ describe('RatingSystem', () => {
     expect(rs.getAverage(t2)).toBe(2);
   });
 
-  it('accepts non-integer ratings and computes average correctly', () => {
+  it('aceita classificações não inteiras e calcula média corretamente', () => {
     const rs = new RatingSystem<ITask>();
     const t = new BugTask(5, 'NonInt', TaskCategory.WORKED);
     rs.rate(t, 4.5);
