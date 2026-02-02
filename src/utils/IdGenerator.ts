@@ -1,13 +1,12 @@
 /* Gerador de IDs */
 export class IdGenerator {
-  private counter: number;
+  private static counter: number = 0;
 
-  constructor() {
-    this.counter = 0;
-  }
+  // Não reinicializar o contador no construtor para manter IDs únicos
+  constructor() {}
 
   generate(): number {
-    this.counter += 1;
-    return this.counter;
+    IdGenerator.counter += 1;
+    return IdGenerator.counter;
   }
 }

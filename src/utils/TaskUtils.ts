@@ -19,7 +19,6 @@ export function processTask(task: ITask) {
 
   // Only Bugs require an assigned user; other types can be processed without user
   if (type === "Bugs" && !user) {
-    Buffer.addUnassigned(`${task.getTitle()} (id:${task.getId()})`);
     SystemLogger.log(
       `ERRO: Bug ${task.getTitle()} (id:${task.getId()}) não possui usuário atribuído e não pode ser processado.`,
     );
@@ -28,6 +27,7 @@ export function processTask(task: ITask) {
 
   if (currentStatus === TaskStatus.ARCHIVED) {
     Buffer.addArchived(`${task.getTitle()} (id:${task.getId()})`);
+    
     return;
   }
 

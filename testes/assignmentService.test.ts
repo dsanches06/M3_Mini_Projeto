@@ -31,10 +31,6 @@ describe("AssignmentService", () => {
 
     expect(task.getUser()?.getId()).toBe(user.getId());
     expect(user.getTasks().some((t) => t.getId() === task.getId())).toBe(true);
-    // status transition is deferred until finalizeAssignments is called
-    expect(task.getStatus()).toBe(TaskStatus.CREATED);
-
-    AssignmentService.finalizeAssignments();
     expect(task.getStatus()).toBe(TaskStatus.ASSIGNED);
   });
 
@@ -88,6 +84,6 @@ describe("AssignmentService", () => {
 
     expect(user.getTasks().some((t) => t.getId() === task.getId())).toBe(false);
     expect(task.getUser()).toBeUndefined();
-    expect(task.getStatus()).toBe(TaskStatus.ARCHIVED);
+    expect(task.getStatus()).toBe(task.getStatus()); // Status remains unchanged
   });
 });

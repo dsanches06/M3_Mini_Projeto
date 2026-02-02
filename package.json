@@ -11,9 +11,11 @@
     "watch": "tsc -w",
     "start": "npm run build && node dist/main.js",
     "test": "vitest",
-    "test:watch": "vitest --watch"
+    "test:watch": "vitest --watch",
+    "test:ci": "vitest --run"
   },
   "devDependencies": {
+    "jsdom": "^28.0.0",
     "vitest": "^1.6.1"
   }
 }

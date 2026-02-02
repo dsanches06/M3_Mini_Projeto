@@ -80,28 +80,7 @@ const taskIdGenerator = new IdGenerator();
 for (const task of fakeTasksData) {
   let isTaskValid = true;
   // - validar dados
-  if (!GlobalValidators.isValidTitle(task.title)) {
-    SystemLogger.log(
-      `ERRO: O título ${task.title} deve ter pelo menos 3 caracteres.`,
-    );
-    isTaskValid = false;
-  }
-
-  if (!GlobalValidators.isNonEmpty(task.title)) {
-    SystemLogger.log("ERRO: O título não pode estar vazio.");
-    isTaskValid = false;
-  }
-
-  if (!GlobalValidators.isNonEmpty(task.category)) {
-    SystemLogger.log("ERRO: A categoria não pode estar vazio.");
-    isTaskValid = false;
-  }
-
-  if (!GlobalValidators.isNonEmpty(task.type)) {
-    SystemLogger.log("ERRO: O tipo não pode estar vazio.");
-    isTaskValid = false;
-  }
-
+  
   let newTask: ITask | undefined;
   let category: TaskCategory = TaskCategory.PERSONAL;
 
@@ -131,56 +110,18 @@ for (const task of fakeTasksData) {
     }
   }
 }
-//dar espaço entre logs
-/* SystemLogger.log("\nTRANSIÇÕES DE STATUS...\n");
 
-// EXEMPLO: Transição de status de ASSIGNED para IN_PROGRESS
-const allTasks = TaskService.getAllTasks();
-if (allTasks.length > 0) {
-  for (const task of allTasks) {
-    SystemLogger.log(
-      `Status inicial da tarefa '${task.getTitle()}': ${task.getStatus()}`,
-    );
-    // Forçar status para ASSIGNED para o exemplo
-    task.setStatus(TaskStatus.ASSIGNED);
-    SystemLogger.log(
-      `Status tarefa '${task.getTitle()} após setStatus(ASSIGNED): ${task.getStatus()}`,
-    );
-    // Transicionar para IN_PROGRESS
-    task.moveTo(TaskStatus.IN_PROGRESS);
-    SystemLogger.log(
-      `Status tarefa '${task.getTitle()} após moveTo(IN_PROGRESS): ${task.getStatus()}`,
-    );
-    // Transicionar para BLOCKED
-    task.moveTo(TaskStatus.BLOCKED);
-    SystemLogger.log(
-      `Status tarefa '${task.getTitle()} após moveTo(BLOCKED): ${task.getStatus()}`,
-    );
-    // Transicionar para COMPLETED
-    task.moveTo(TaskStatus.COMPLETED);
-    SystemLogger.log(
-      `Status tarefa '${task.getTitle()} após moveTo(COMPLETED): ${task.getStatus()}`,
-    );
-    // Transicionar para ARCHIVED
-    task.moveTo(TaskStatus.ARCHIVED);
-    SystemLogger.log(
-      `Status tarefa '${task.getTitle()} após moveTo(ARCHIVED): ${task.getStatus()}\n`,
-    );
-  }
-}
- */
 //dar espaço entre logs
 SystemLogger.log("\nASSIGNMENTS...\n");
-
 //verificar se tarefas podem ser associados ao utilizador
 TaskService.getAllTasks().forEach((task) => {
   const users = UserService.getAllUsers();
   const activeUsers = users.filter((user) => user && user.isActive());
-  
+
   if (activeUsers.length > 0) {
     const randomIndex = Math.floor(Math.random() * activeUsers.length);
     const selectedUser = activeUsers[randomIndex];
-    
+
     const canAssign = BusinessRules.canAssignTask(selectedUser.isActive());
     if (canAssign) {
       AssignmentService.assignUser(task.getId(), selectedUser.getId());
@@ -193,24 +134,17 @@ TaskService.getAllTasks().forEach((task) => {
 
 // - aplicar regras
 SystemLogger.log(
-  "\nPROCESSANDO TAREFAS... " +
+  "\nPROCESSING TASKS... " +
     TaskService.getAllTasks().length +
     " tarefas encontradas.\n",
 );
 let count = 0;
-while (count < 5) {
+while (count < 1) {
   TaskService.getAllTasks().forEach((task) => {
     processTask(task);
   });
   count++;
 }
-
-// After assigning all tasks, finalize the CREATED -> ASSIGNED transitions so transition logs
-// appear after the assignment messages and not interleaved with them.
-SystemLogger.log('\nFINALIZANDO ATRIBUIÇÕES...\n');
-AssignmentService.finalizeAssignments();
-
-Buffer.reportProcessSummary();
 
 //dar espaço entre logs
 SystemLogger.log("\nVERIFICAR SE O UTILIZADOR PODE SER DESATIVADO...\n");
@@ -235,3 +169,4 @@ UserService.getAllUsers().forEach((user) => {
 
 // - imprimir resultados
 SystemLogger.getLogs().forEach((log) => console.log(log));
+Buffer.reportProcessSummary();

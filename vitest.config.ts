@@ -2,7 +2,8 @@ import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   test: {
-    environment: 'node',
+    // Usar jsdom para simular o DOM nos testes
+    environment: 'jsdom',
     include: ['testes/**/*.test.ts'],
     exclude: [
       '**/node_modules/**', 

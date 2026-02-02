@@ -17,16 +17,6 @@ export class UserService {
     return this.users.delete(id);
   }
 
-  /* Obtém todos os usuários ativos */
-  static getActiveUsers(): IUser[] {
-    return Array.from(this.users.values()).filter((user) => user.isActive());
-  }
-
-  /* Obtém todos os usuários inativos */
-  static getInactiveUsers(): IUser[] {
-    return Array.from(this.users.values()).filter((user) => !user.isActive());
-  }
-
   /* Obtém todos os usuários registrados */
   static getAllUsers(): IUser[] {
     return Array.from(this.users.values());

@@ -14,9 +14,4 @@ export class BusinessRules {
   static canAssignTask(active: boolean): boolean {
     return active === true ? true : false;
   }
-
-  /* Verifica se o título da tarefa é válido (mínimo de 3 caracteres) 
-  static isValidTitle(title: string): boolean {
-    return title.trim().length >= 3 ? true : false;
-  }*/
 }
