@@ -1,7 +1,7 @@
 import { showInfoBanner } from "../../helpers/index.js";
 import { IUser } from "../../models/index.js";
 import { ITask } from "../../tasks/index.js";
-import { AssignmentService } from "../../services/index.js";
+import { UserDashboard } from "./index.js";
 
 /* Estilização por estado */
 export function styleTasks(tasList: ITask[]): void {
@@ -61,4 +61,9 @@ export function userCompleteTask(user: IUser, taskId: number): void {
       user.getTasks()[index].markCompleted();
     } //atualizar a exibição das tarefas
   }
+}
+
+export function dashBoard(user: IUser): HTMLElement {
+  const dashboard = new UserDashboard(user);
+  return dashboard.render();
 }

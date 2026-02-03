@@ -1,4 +1,5 @@
 import { ITask } from "../tasks/index.js";
+import { TaskStatus } from "../tasks/TaskStatus.js";
 
 /* Serviço para gerir tarefas */
 export class TaskService {
@@ -28,7 +29,7 @@ export class TaskService {
   /* Obtém todas as tarefas atribuídas */
   static getTasksAssign(): ITask[] {
     return Array.from(this.tasks.values()).filter(
-      (task) => task.getUser() !== undefined,
+      (task) => task.getStatus() === TaskStatus.ASSIGNED,
     );
   }
 

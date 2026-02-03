@@ -1,7 +1,10 @@
 import { UserClass } from "../../models/index.js";
 import { ITask } from "../../tasks/index.js";
-import { removeCompletedTasks, renderModalUserAssignTask } from "./index.js";
-import { showUserTask } from "../usertask/index.js";
+import {
+  dashBoard,
+  removeCompletedTasks,
+  renderModalUserAssignTask,
+} from "./index.js";
 import {
   addElementInContainer,
   createHeadingTitle,
@@ -14,6 +17,7 @@ import {
   countCompletedTasks,
   countFilterTasks,
   countPendingTasks,
+  renderTaskModal,
 } from "../../ui/tasks/index.js";
 import { showInfoBanner } from "../../helpers/infoBanner.js";
 import { createNotificationsUI } from "../notifications/notificationsUI.js";
@@ -40,7 +44,10 @@ export function loadUserTaskPage(user: UserClass): void {
   const userTasksContainer = createSection("usersTaskContainer");
   addElementInContainer(userTasksContainer);
   //
-  showUserTask(user, user.getTasks());
+  //showUserTask(user, user.getTasks());
+
+  addElementInContainer(dashBoard(user));
+
   // Adicionar event listeners aos botões de contador para filtrar
   const allUserTasksBtn = userTaskCounterSection.querySelector(
     "#allUserTasksBtn",
@@ -60,21 +67,40 @@ export function loadUserTaskPage(user: UserClass): void {
   filteredUserTaskBtn.title = "Mostrar tarefas filtradas";
 
   allUserTasksBtn.addEventListener("click", () => {
-    showUserTask(user, user.getTasks());
-    showUserTasksCounters(user.getTasks());
+    //showUserTask(user, user.getTasks());
+    //   showUserTasksCounters(user.getTasks());
   });
 
   pendingUserTaskBtn.addEventListener("click", () => {
-    const pendingTasks = user.pendingTasks();
-    showUserTask(user, pendingTasks);
-    showUserTasksCounters(pendingTasks);
+    //  const pendingTasks = user.pendingTasks();
+    /// showUserTask(user, pendingTasks);
+    // showUserTasksCounters(pendingTasks);
   });
 
   completedUserTaskBtn.addEventListener("click", () => {
-    const completedTasks = user.completedTasks();
-    showUserTask(user, completedTasks);
-    showUserTasksCounters(completedTasks);
+    //const completedTasks = user.completedTasks();
+    // showUserTask(user, completedTasks);
+    // showUserTasksCounters(completedTasks);
   });
+
+  // Adicionar event listeners aos botões de busca
+  const addUserTaskBtn = document.querySelector(
+    "#addUserTaskBtn",
+  ) as HTMLElement;
+  if (addUserTaskBtn) {
+    addUserTaskBtn.addEventListener("click", () => {
+      if (user.isActive()) {
+        renderTaskModal(user);
+      } else {
+        showInfoBanner(
+          `ERRO: ${user.getName()} está inativo e não pode criar tarefas.`,
+          "error-banner",
+        );
+      }
+    });
+  } else {
+    console.warn("Elemento #addUserTaskBtn não encontrado.");
+  }
 
   // Adicionar event listeners aos botões de busca
   const assignUserTaskBtn = document.querySelector(
@@ -113,8 +139,8 @@ export function loadUserTaskPage(user: UserClass): void {
       //Inverta o estado para o próximo clique
       isAscending = !isAscending;
       // Mostrar as tarefas ordenadas
-      showUserTask(user, sortedTasks);
-      showUserTasksCounters(sortedTasks, "filtered");
+      // showUserTask(user, sortedTasks);
+      // showUserTasksCounters(sortedTasks, "filtered");
       // Atualize o texto ou ícone do botão
       sortUserTasksBtn.textContent = isAscending
         ? "Ordenar A-Z"
@@ -133,8 +159,8 @@ export function loadUserTaskPage(user: UserClass): void {
       const filteredTasks = user
         .getTasks()
         .filter((task) => task.getTitle().toLowerCase().includes(name));
-      showUserTask(user, filteredTasks);
-      showUserTasksCounters(filteredTasks, "filtered");
+      // showUserTask(user, filteredTasks);
+      // showUserTasksCounters(filteredTasks, "filtered");
     });
   } else {
     console.warn("Elemento de busca de tarefas do utilizador não encontrado.");
@@ -147,8 +173,8 @@ export function loadUserTaskPage(user: UserClass): void {
   if (removeCompletedUserTaskBtn) {
     removeCompletedUserTaskBtn.addEventListener("click", () => {
       removeCompletedTasks(user);
-      showUserTask(user, user.getTasks());
-      showUserTasksCounters(user.getTasks());
+      // showUserTask(user, user.getTasks());
+      // showUserTasksCounters(user.getTasks());
     });
   }
 }
@@ -205,9 +231,10 @@ function showUserTaskSearchContainer(): HTMLElement {
     "searchUserTaskContainer",
     { id: "searchUserTask", placeholder: "Procurar tarefa..." },
     [
+      { id: "addUserTaskBtn", text: "Criar tarefa" },
       { id: "assignUserTaskBtn", text: "Atribuir tarefa" },
       { id: "sortUserTasksBtn", text: "Ordenar A-Z" },
-      { id: "removeCompletedUserTaskBtn", text: "Remover tarefas concluídas" },
+      { id: "removeCompletedUserTaskBtn", text: "Remover concluídas" },
     ],
   );
   searchUserTaskContainer.classList.add("search-add-container");

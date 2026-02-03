@@ -1,8 +1,9 @@
-import { IUser } from "../../models/index.js";
+import { IUser, UserClass } from "../../models/index.js";
 import { ITask } from "../../tasks/index.js";
 import { UserService, AssignmentService } from "../../services/index.js";
 import { GlobalValidators } from "../../utils/index.js";
 import {
+  clearContainer,
   createButton,
   createForm,
   createHeadingTitle,
@@ -10,7 +11,7 @@ import {
 } from "../dom/index.js";
 import { showInfoBanner } from "../../helpers/index.js";
 import { TaskService } from "../../services/index.js";
-import { showUserTask, showUserTasksCounters } from "../usertask/index.js";
+import { loadUserTaskPage } from "../usertask/index.js";
 
 /**
  * Configuração da lógica do formulário de atribuição de tarefa
@@ -54,10 +55,10 @@ function setupUserAssignTaskFormLogic(
         if (task) {
           // Atribuir a tarefa ao utilizador
           AssignmentService.assignUser(task.getId(), user.getId());
-          
+
           // Atualizar o utilizador com as tarefas mais recentes
           const updatedUser = UserService.getUserById(user.getId());
-          
+
           showInfoBanner(
             `A tarefa "${task.getTitle()}" foi atribuída ao utilizador "${user.getName()}" com sucesso.`,
             "info-banner",
@@ -65,8 +66,8 @@ function setupUserAssignTaskFormLogic(
 
           // Atualizar a visualização das tarefas
           if (updatedUser) {
-            showUserTask(updatedUser, updatedUser.getTasks());
-            showUserTasksCounters(updatedUser.getTasks());
+            clearContainer();
+            loadUserTaskPage(updatedUser as UserClass);
           }
 
           modal.remove();

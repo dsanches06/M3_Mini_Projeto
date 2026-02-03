@@ -1,11 +1,12 @@
 import { ITask, BugTask, FeatureTask, Task } from "../../tasks/index.js";
 import { TaskCategory } from "../../tasks/TaskCategory.js";
-import { IUser } from "../../models/index.js";
+import { IUser, UserClass } from "../../models/index.js";
 import { GlobalValidators, IdGenerator } from "../../utils/index.js";
 import { renderAllTasks, showTasksCounters } from "../tasks/index.js";
-import { TaskService } from "../../services/index.js";
+import { TaskService, AssignmentService } from "../../services/index.js";
 
 import {
+  clearContainer,
   createButton,
   createForm,
   createHeadingTitle,
@@ -14,7 +15,7 @@ import {
   createSelectGroup,
 } from "../../ui/dom/index.js";
 import { showInfoBanner } from "../../helpers/index.js";
-import { showUserTask } from "../../ui/usertask/index.js";
+import { loadUserTaskPage } from "../../ui/usertask/index.js";
 
 function setupTaskFormLogic(
   form: HTMLFormElement,
@@ -94,12 +95,13 @@ function setupTaskFormLogic(
       if (newTask) {
         if (user) {
           user.createTask(newTask);
+          TaskService.addTask(newTask);
           showInfoBanner(
             `A tarefa ${newTask.getTitle()} foi criado ao utilizador ${user.getName()} com sucesso.`,
             "info-banner",
           );
-          showUserTask(user, user.getTasks());
-          showTasksCounters( user.getTasks());
+          clearContainer();
+          loadUserTaskPage(user as UserClass);
         } else {
           TaskService.addTask(newTask);
           showInfoBanner(
