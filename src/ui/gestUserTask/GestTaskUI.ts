@@ -10,7 +10,7 @@ let tasksFiltered: ITask[];
 /* Função principal para mostrar as tarefas de todos os utilizadores */
 export function loadAInitialTasks(): void {
   // Limpa o container antes de mostrar os utilizadores
-  clearContainer();
+  clearContainer("#containerSection");
   // carrega a pagina dinamica de utilizadores
   loadTasksPage();
 }

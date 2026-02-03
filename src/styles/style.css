@@ -369,103 +369,13 @@ main {
 }
 
 #taskContainer,
-#usersTaskContainer {
+.dash-container {
   position: relative;
   width: 1150px;
   padding: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-#taskContainer table,
-#usersTaskContainer #usersTaskList {
-  border-collapse: collapse;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-  border-radius: 12px;
-  overflow: hidden;
-}
-
-#taskContainer table {
-  width: 100%;
-}
-#usersTaskContainer #usersTaskList {
-  width: 80%;
-}
-
-#taskContainer table caption {
-  font-size: 20px;
-  font-weight: bold;
-  margin: 10px 0;
-  text-align: center;
-  color: #333;
-}
-
-#taskContainer table th,
-#taskContainer table td {
-  padding: 15px;
-  text-align: left;
-  border-bottom: 1px solid #eee;
-  cursor: pointer;
-}
-
-#taskContainer table th {
-  background-color: #f8f9fa;
-  color: #333;
-  font-weight: 600;
-}
-
-#taskContainer table tbody tr:nth-child(even),
-#usersTaskContainer .user-task-item:nth-child(even) {
-  background-color: rgba(51, 51, 51, 0.3);
-}
-
-#taskContainer table tbody tr:nth-child(odd),
-#usersTaskContainer .user-task-item:nth-child(odd) {
-  background-color: rgba(51, 51, 51, 0.1);
-}
-
-#taskContainer table tbody tr:hover,
-#usersTaskContainer .user-task-item:hover {
-  background-color: #f8f9fa;
-}
-
-#usersTaskContainer #usersTaskList {
-  line-height: 200%;
-}
-
-#usersTaskContainer .user-task-item {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px;
-  gap: 30px;
-  border-bottom: 1px solid #eee;
-}
-
-#usersTaskContainer .task-buttons {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
-}
-
-.task-buttons a {
-  width: 30px;
-  height: 30px;
-}
-
-.task-buttons a#editTaskBtn {
-  background-image: url("../assets/editar.png");
-}
-.task-buttons a#completeTaskBtn {
-  background-image: url("../assets/tarefa-concluida.png");
-}
-
-.task-buttons a#unassignTaskBtn {
-  background-image: url("../assets/remover.png");
 }
 
 .modal {
@@ -531,6 +441,52 @@ main {
   transition: color 0.2s ease;
 }
 
+#modalTaskForm .modal-content,
+#modalUserForm .modal-content {
+  max-width: 420px;
+  width: 80%;
+  padding: 30px;
+  margin: 40px auto;
+}
+
+#modalEditTask .modal-content {
+  max-width: 380px;
+  width: 70%;
+  padding: 16px 18px;
+  margin: 20px auto;
+  max-height: 80vh;
+  overflow-y: visible;
+  height: auto;
+  box-sizing: border-box;
+}
+
+#modalEditTask .form-group {
+  gap: 12px;
+}
+
+#modalEditTask.modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@media (max-width: 480px) {
+  #modalEditTask .modal-content {
+    width: 95%;
+    max-width: 360px;
+    padding: 16px;
+    margin: 20px auto;
+  }
+
+  #modalTaskForm .modal-content,
+  #modalUserForm .modal-content {
+    width: 95%;
+    max-width: 380px;
+    padding: 20px;
+    margin: 20px auto;
+  }
+}
+
 #modalAssignUser.modal,
 #modalUserAssignTask.modal {
   display: flex;
@@ -559,12 +515,6 @@ main {
   gap: 8px;
 }
 
-#assignBtn,
-#unassignBtn {
-  width: 100px;
-}
-
-#unassignBtn,
 #removeAllCompletedTaskBtn,
 #removeCompletedUserTaskBtn {
   background-color: #dc3545;
@@ -765,25 +715,10 @@ footer p {
 .fa-shake-once {
   animation-iteration-count: 1 !important;
 }
-.dash-board {
-  width: 100%;
-  padding: 20px;
-}
-
-.dash-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: flex;
-  gap: 16px;
-  justify-content: flex-start;
-  align-items: center;
-  flex-wrap: nowrap;
-  padding-bottom: 8px;
-}
 
 .dash-column {
-  flex: 0 0 220px;
-  min-width: 180px;
+  flex: 0 0 200px;
+  min-width: 160px;
   background: #f8f8f8;
   border-radius: 6px;
   padding: 15px;
@@ -903,244 +838,4 @@ footer p {
   padding: 4px 8px;
   border-radius: 4px;
   font-weight: 500;
-}
-
-/* Responsividade */
-@media (max-width: 768px) {
-  body {
-    padding: 10px;
-  }
-
-  header {
-    padding: 10px;
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  header > h1 {
-    font-size: 24px;
-  }
-
-  header nav ul {
-    gap: 10px;
-  }
-
-  header nav ul li a {
-    font-size: 16px;
-    padding: 5px;
-  }
-
-  main {
-    padding: 100px 10px 80px 10px;
-    gap: 15px;
-  }
-
-  .container {
-    gap: 20px;
-  }
-
-  .users-counters,
-  .tasks-counters,
-  #taskCounters,
-  #userCountersTask {
-    flex-direction: column;
-    gap: 20px;
-  }
-
-  .statistics {
-    gap: 5px;
-  }
-
-  .counters-img {
-    width: 40px;
-    height: 40px;
-  }
-
-  #totalUsers,
-  #ativeUsers,
-  #unableUsers,
-  #ativeUserPercentage,
-  #totalTasks,
-  #pendingTasks,
-  #completedTasks,
-  #totalTasksUser,
-  #pendingUserTasks,
-  #completedUserTasks {
-    font-size: 14px;
-  }
-
-  .search-add-container {
-    gap: 15px;
-  }
-
-  #searchUser,
-  #searchTask,
-  #searchTaskUser {
-    width: 100%;
-    max-width: 300px;
-  }
-
-  #usersContainer,
-  #taskContainer,
-  #usersTaskContainer {
-    width: 100%;
-    padding: 10px;
-  }
-
-  #usersContainer .card {
-    width: 250px;
-    height: 350px;
-    margin: 10px;
-  }
-
-  #usersContainer .card .title h2 {
-    padding: 20px 0;
-    font-size: 20px;
-  }
-
-  #usersContainer .card .content {
-    bottom: 35%;
-    padding: 10px;
-  }
-
-  #usersContainer .card .content p {
-    font-size: 14px;
-  }
-
-  #usersContainer .card .content .userTasks {
-    margin-top: 5px;
-  }
-
-  #usersContainer .card .content .userTasks a#addTaskIconBtn,
-  .task-buttons a {
-    width: 40px;
-    height: 40px;
-  }
-
-  #usersContainer .card .btnGroup {
-    bottom: 15px;
-    gap: 5px;
-  }
-
-  #usersContainer .card .btnGroup button {
-    padding: 8px 15px;
-    font-size: 14px;
-  }
-
-  #taskContainer table,
-  #usersTaskContainer #usersTaskList {
-    font-size: 14px;
-  }
-
-  #taskContainer table caption {
-    font-size: 18px;
-  }
-
-  #taskContainer table th,
-  #taskContainer table td {
-    padding: 10px;
-  }
-
-  #usersTaskContainer .user-task-item {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-    padding: 10px;
-  }
-
-  #usersTaskContainer .task-buttons {
-    gap: 15px;
-  }
-
-  .task-buttons a {
-    width: 25px;
-    height: 25px;
-  }
-
-  .modal-content {
-    margin: 20px auto;
-    padding: 20px;
-    width: 95%;
-    max-width: none;
-    max-height: none;
-  }
-
-  .modal-content h2 {
-    margin-bottom: 15px;
-    font-size: 18px;
-  }
-
-  .close {
-    top: 10px;
-    right: 15px;
-    font-size: 24px;
-  }
-
-  .form-group {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 5px;
-  }
-
-  label {
-    min-width: auto;
-    font-size: 12px;
-  }
-
-  input[type="text"],
-  input[type="email"],
-  select {
-    min-width: auto;
-    width: 100%;
-    padding: 10px;
-  }
-
-  button[type="submit"] {
-    padding: 10px 15px;
-    font-size: 14px;
-    margin-top: 15px;
-  }
-
-  .user-details {
-    padding: 15px;
-  }
-
-  .user-details h3 {
-    font-size: 16px;
-  }
-
-  .user-details p {
-    font-size: 12px;
-  }
-
-  .user-tasks-details {
-    margin-top: 15px;
-    line-height: 150%;
-  }
-
-  footer {
-    padding: 15px;
-  }
-
-  footer p {
-    font-size: 12px;
-  }
-
-  button {
-    width: 100%;
-    max-width: 200px;
-  }
-
-  div > input[type="text"],
-  div > input[type="email"] {
-    margin-right: 0;
-    width: 100%;
-  }
-
-  .error-banner,
-  .info-banner {
-    padding: 8px;
-    margin-bottom: 10px;
-    font-size: 12px;
-  }
 }

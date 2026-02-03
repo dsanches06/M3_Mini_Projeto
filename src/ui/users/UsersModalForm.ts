@@ -153,7 +153,7 @@ export function renderUserModal(): void {
 
   const title = createHeadingTitle(
     "h2",
-    "Adicionar Novo Utilizador",
+    "Adicionar Utilizador",
   ) as HTMLHeadingElement;
 
   const form = createForm("formUser") as HTMLFormElement;

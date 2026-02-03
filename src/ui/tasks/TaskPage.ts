@@ -1,5 +1,7 @@
+import { IUser } from "../../models/index.js";
+import { ITask } from "../../tasks/index.js";
 import { showInfoBanner } from "../../helpers/index.js";
-import { showTasksCounters, renderAllTasks, renderTaskModal } from "./index.js";
+import { showTasksCounters, renderTaskModal } from "./index.js";
 import {
   removeAllCompletedTask,
   searchTasksByTitle,
@@ -15,25 +17,29 @@ import {
   clearContainer,
 } from "../dom/index.js";
 import { TaskService } from "../../services/taskService.js";
+import { TaskDashboardUI } from "./index.js";
 
 /* Lista de tarefas  */
-export function loadTasksPage(): void {
+export function loadTasksPage(user?: IUser): void {
   /* ativa o menu tarefas */
   menuSelected("#menuTasks");
 
-  clearContainer();
-  addElementInContainer(createHeadingTitle("h2", "GESTÃO DE TAREFAS"));
+  const tasks = user ? user.getTasks() : TaskService.getAllTasks();
+  const title = user ? `Tarefas de ${user.getName()}` : "GESTÃO DE TAREFAS";
+
+  clearContainer("#containerSection");
+  addElementInContainer("#containerSection", createHeadingTitle("h2", title));
 
   const taskCounterSection = createTaskCounter("taskCounters") as HTMLElement;
-  addElementInContainer(taskCounterSection);
+  addElementInContainer("#containerSection", taskCounterSection);
 
-  showTasksCounters(TaskService.getAllTasks());
+  showTasksCounters(tasks);
 
   const searchContainer = showSearchTaskContainer();
-  addElementInContainer(searchContainer);
+  addElementInContainer("#containerSection", searchContainer);
 
-  const tasksContainer = renderAllTasks(TaskService.getAllTasks());
-  addElementInContainer(tasksContainer);
+  //dashboard de tarefas
+  renderDashboard(tasks, user);
 
   // Adicionar event listeners aos botões de contador para filtrar
   const allTasksBtn = taskCounterSection.querySelector(
@@ -50,20 +56,17 @@ export function loadTasksPage(): void {
   completedTaskBtn.title = "Mostrar tarefas concluídas";
 
   allTasksBtn.addEventListener("click", () => {
-    renderAllTasks(TaskService.getAllTasks());
-    showTasksCounters(TaskService.getAllTasks());
+    renderDashboard(tasks, user);
   });
 
   pendingTaskBtn.addEventListener("click", () => {
-    const tasks = TaskService.getAllTasks().filter((task) => !task.getCompleted());
-    renderAllTasks(tasks);
-    showTasksCounters(tasks);
+    const tasksPending = tasks.filter((task) => !task.getCompleted());
+    renderDashboard(tasksPending, user);
   });
 
   completedTaskBtn.addEventListener("click", () => {
-    const tasks = TaskService.getAllTasks().filter((task) => task.getCompleted());
-    renderAllTasks(tasks);
-    showTasksCounters(tasks);
+    const tasksCompleted = tasks.filter((task) => task.getCompleted());
+    renderDashboard(tasksCompleted, user);
   });
 
   const addTasksBtn = document.querySelector("#addTasksBtn") as HTMLElement;
@@ -77,16 +80,11 @@ export function loadTasksPage(): void {
 
   const sortTasksBtn = document.querySelector("#sortTasksBtn") as HTMLElement;
   if (sortTasksBtn) {
-    //Crie uma variável de controle de estado
     let isAscending = true;
     sortTasksBtn.addEventListener("click", () => {
-      const sortedTasks = sortTasksByTitle(TaskService.getAllTasks(), isAscending);
-      //Inverta o estado para o próximo clique
+      const sortedTasks = sortTasksByTitle(tasks, isAscending);
       isAscending = !isAscending;
-      // Mostrar as tarefas ordenadas
-      renderAllTasks(sortedTasks);
-      showTasksCounters(sortedTasks, "filtered");
-      // Atualize o texto ou ícone do botão
+      renderDashboard(sortedTasks, user, "filtered");
       sortTasksBtn.textContent = isAscending ? "Ordenar A-Z" : "Ordenar Z-A";
     });
   } else {
@@ -100,9 +98,8 @@ export function loadTasksPage(): void {
   if (searchTaskInput) {
     searchTaskInput.addEventListener("input", () => {
       const searchTerm = searchTaskInput.value;
-      const filteredTasks = searchTasksByTitle(TaskService.getAllTasks(), searchTerm);
-      renderAllTasks(filteredTasks);
-      showTasksCounters(filteredTasks, "filtered");
+      const filteredTasks = searchTasksByTitle(tasks, searchTerm);
+      renderDashboard(filteredTasks, user, "filtered");
     });
   } else {
     console.warn("Elemento de busca de tarefas não encontrado.");
@@ -115,7 +112,7 @@ export function loadTasksPage(): void {
 
   if (removeAllCompletedTaskBtn) {
     removeAllCompletedTaskBtn.addEventListener("click", () => {
-      const removedTasks = removeAllCompletedTask(TaskService.getAllTasks());
+      const removedTasks = removeAllCompletedTask(tasks);
 
       if (removedTasks.length > 0) {
         const completedTaskCount = removedTasks.filter((task) =>
@@ -127,8 +124,7 @@ export function loadTasksPage(): void {
             "error-banner",
           );
         }
-        renderAllTasks(removedTasks);
-        showTasksCounters(removedTasks);
+        renderDashboard(removedTasks, user);
       } else {
         showInfoBanner("Não há tarefa concluída para remover.", "error-banner");
       }
@@ -196,4 +192,24 @@ function showSearchTaskContainer(): HTMLElement {
   );
   searchTaskContainer.classList.add("search-add-container");
   return searchTaskContainer;
+}
+
+/* */
+function showTaskDashboardUI(tasks: ITask[], user?: IUser): void {
+  const existing = document.querySelector("#dashBoardContainer");
+  const dashboard = new TaskDashboardUI(tasks, user);
+  const rendered = dashboard.render();
+  if (!existing) {
+    addElementInContainer("#containerSection", rendered);
+  }
+}
+
+/* Renderiza o dashboard de tarefas */
+export function renderDashboard(
+  tasks: ITask[],
+  user?: IUser,
+  type?: string,
+): void {
+  showTasksCounters(tasks, type);
+  showTaskDashboardUI(tasks, user);
 }

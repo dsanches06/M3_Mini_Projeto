@@ -1,12 +1,11 @@
 import { ITask, BugTask, FeatureTask, Task } from "../../tasks/index.js";
 import { TaskCategory } from "../../tasks/TaskCategory.js";
-import { IUser, UserClass } from "../../models/index.js";
+import { IUser } from "../../models/index.js";
 import { GlobalValidators, IdGenerator } from "../../utils/index.js";
-import { renderAllTasks, showTasksCounters } from "../tasks/index.js";
-import { TaskService, AssignmentService } from "../../services/index.js";
+import { renderDashboard, showTasksCounters } from "../tasks/index.js";
+import { TaskService } from "../../services/index.js";
 
 import {
-  clearContainer,
   createButton,
   createForm,
   createHeadingTitle,
@@ -15,7 +14,6 @@ import {
   createSelectGroup,
 } from "../../ui/dom/index.js";
 import { showInfoBanner } from "../../helpers/index.js";
-import { loadUserTaskPage } from "../../ui/usertask/index.js";
 
 function setupTaskFormLogic(
   form: HTMLFormElement,
@@ -96,20 +94,18 @@ function setupTaskFormLogic(
         if (user) {
           user.createTask(newTask);
           TaskService.addTask(newTask);
+          renderDashboard(TaskService.getAllTasks(), user);
           showInfoBanner(
-            `A tarefa ${newTask.getTitle()} foi criado ao utilizador ${user.getName()} com sucesso.`,
+            `INFO: A tarefa ${newTask.getTitle()} foi criado ao utilizador ${user.getName()} com sucesso.`,
             "info-banner",
           );
-          clearContainer();
-          loadUserTaskPage(user as UserClass);
         } else {
           TaskService.addTask(newTask);
+          renderDashboard(TaskService.getAllTasks());
           showInfoBanner(
-            `A tarefa ${newTask.getTitle()} foi criado com sucesso.`,
+            `INFO: A tarefa ${newTask.getTitle()} foi criado com sucesso.`,
             "info-banner",
           );
-          renderAllTasks(TaskService.getAllTasks());
-          showTasksCounters(TaskService.getAllTasks());
         }
       } else {
         showInfoBanner(
@@ -144,7 +140,7 @@ export function renderTaskModal(user?: IUser): void {
 
   const titleHeading = createHeadingTitle(
     "h2",
-    "Adicionar Novo Task",
+    "Adicionar Tarefa",
   ) as HTMLHeadingElement;
 
   const form = createForm("formTask") as HTMLFormElement;

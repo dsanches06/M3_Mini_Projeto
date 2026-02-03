@@ -5,10 +5,9 @@ import { renderUsers, showUserDetails, showUsersCounters } from "./index.js";
 import {
   createSection,
   createHeadingTitle,
-  clearContainer,
 } from "../dom/index.js";
 import { removeUserByID, toggleUserState } from "../gestUserTask/index.js";
-import { loadUserTaskPage } from "../usertask/index.js";
+import { loadTasksPage } from "../tasks/index.js";
 
 /* Criar cartão de utilizador */
 export function createUserCard(user: UserClass): HTMLElement {
@@ -85,8 +84,7 @@ function userCardContent(user: UserClass): HTMLElement {
   divCardAddTaskBtn.title = "Visualizar tarefas do utilizador";
   divCardAddTaskBtn.addEventListener("click", (event) => {
     event.stopPropagation();
-    clearContainer();
-    loadUserTaskPage(user);
+    loadTasksPage(user);
   });
 
   const divCardUserTasks = document.createElement("section") as HTMLElement;

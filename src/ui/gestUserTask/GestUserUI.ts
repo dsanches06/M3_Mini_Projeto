@@ -11,7 +11,7 @@ import { loadUsersPage } from "../users/index.js";
 /* Função principal para carregar utilizadores iniciais */
 export function loadInitialUsers(): void {
   //Limpa o container antes de mostrar os utilizadores
-  clearContainer();
+  clearContainer("#containerSection");
   // carrega a pagina dinamica de utilizadores
   loadUsersPage(UserService.getAllUsers());
 }

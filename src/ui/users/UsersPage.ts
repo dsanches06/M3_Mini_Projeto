@@ -21,20 +21,23 @@ import {
 export function loadUsersPage(users: IUser[]): void {
   /* ativa o menu Users */
   menuSelected("#menuUsers");
-  clearContainer();
+  clearContainer("#containerSection");
 
-  addElementInContainer(createHeadingTitle("h2", "GESTÃO DE UTILIZADORES"));
+  addElementInContainer(
+    "#containerSection",
+    createHeadingTitle("h2", "GESTÃO DE UTILIZADORES"),
+  );
 
   const userCounterSection = createUserCounter("userCounters");
-  addElementInContainer(userCounterSection);
+  addElementInContainer("#containerSection", userCounterSection);
 
   showUsersCounters(users, "utilizadores");
 
   const searchContainer = showSearchContainer();
-  addElementInContainer(searchContainer);
+  addElementInContainer("#containerSection", searchContainer);
 
   const usersContainer = renderUsers(UserService.getAllUsers());
-  addElementInContainer(usersContainer);
+  addElementInContainer("#containerSection", usersContainer);
 
   // Adicionar event listeners aos botões de contador para filtrar
   const allUsersBtn = userCounterSection.querySelector(

@@ -1,16 +1,21 @@
 import { ITask } from "../../tasks/index.js";
 import { TaskStatus } from "../../tasks/TaskStatus.js";
-import { TaskService } from "../../services/index.js";
 import { createSection } from "../dom/CreatePage.js";
 import { IUser } from "../../models/index.js";
+import { renderModalEditTask } from "./index.js";
 
-export class UserDashboard {
+export class TaskDashboardUI {
   private container: HTMLElement;
-  private user: IUser;
+  private user?: IUser;
+  private tasks: ITask[];
 
-  constructor(user: IUser) {
+  constructor(tasks: ITask[], user?: IUser) {
+    this.tasks = tasks;
     this.user = user;
-    this.container = createSection("dashBoardContainer");
+    const existing = document.querySelector(
+      "#dashBoardContainer",
+    ) as HTMLElement | null;
+    this.container = existing || createSection("dashBoardContainer");
   }
 
   render(): HTMLElement {
@@ -76,7 +81,7 @@ export class UserDashboard {
   }
 
   private populateTasks(): void {
-    const allUserTasks = this.user.getTasks();
+    const allTasks = this.user ? this.user.getTasks() : this.tasks;
 
     // Agrupar tarefas por status
     const tasksByStatus: Map<TaskStatus, ITask[]> = new Map();
@@ -88,7 +93,7 @@ export class UserDashboard {
       tasksByStatus.set(status, []);
     });
 
-    allUserTasks.forEach((task) => {
+    allTasks.forEach((task) => {
       const status = task.getStatus();
       const tasksForStatus = tasksByStatus.get(status) || [];
       tasksForStatus.push(task);
@@ -116,8 +121,9 @@ export class UserDashboard {
 
       if (!container) return;
 
-      // update badge only if it exists
-      if (countBadge) countBadge.textContent = tasks.length.toString();
+      if (countBadge) {
+        countBadge.textContent = tasks.length.toString();
+      }
 
       // clear container then append tasks (safe for future partial updates)
       container.innerHTML = "";
@@ -141,16 +147,16 @@ export class UserDashboard {
     meta.className = "task-meta";
 
     const userTask = task.getUser();
+
+    const userSpan = document.createElement("span");
+    userSpan.className = "task-user";
+    meta.appendChild(userSpan);
     if (userTask) {
-      const userSpan = document.createElement("span");
-      userSpan.className = "task-user";
-      userSpan.textContent = userTask.getName();
-      meta.appendChild(userSpan);
+      const names =
+        userTask.getName().split(" ") || userTask.getName().split("");
+      userSpan.textContent = names[0];
     } else {
-      const userSpan = document.createElement("span");
-      userSpan.className = "task-user";
-      userSpan.textContent = this.user.getName();
-      meta.appendChild(userSpan);
+      userSpan.textContent = "";
     }
 
     const status = document.createElement("span");
@@ -162,35 +168,9 @@ export class UserDashboard {
     card.appendChild(meta);
 
     card.addEventListener("click", () => {
-      this.handleTaskClick(task);
+      renderModalEditTask(task);
     });
 
     return card;
-  }
-
-  private handleTaskClick(task: ITask): void {
-    const currentStatus = task.getStatus();
-    const nextStatus = this.getNextStatus(currentStatus);
-
-    if (nextStatus) {
-      task.moveTo(nextStatus);
-      this.render();
-    }
-  }
-
-  private getNextStatus(currentStatus: TaskStatus): TaskStatus | null {
-    const statusFlow = [
-      TaskStatus.CREATED,
-      TaskStatus.ASSIGNED,
-      TaskStatus.IN_PROGRESS,
-      TaskStatus.COMPLETED,
-      TaskStatus.ARCHIVED,
-    ];
-
-    const currentIndex = statusFlow.indexOf(currentStatus);
-    if (currentIndex < statusFlow.length - 1) {
-      return statusFlow[currentIndex + 1];
-    }
-    return null;
   }
 }
