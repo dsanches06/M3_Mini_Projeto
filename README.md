@@ -29,35 +29,35 @@ Projeto exemplar de gestão de utilizadores e tarefas, implementado em **TypeScr
   - `services/` — serviços da aplicação
   - `logs/`, `notifications/`, `security/`, etc.
 - `testes/` — testes unitários (Vitest)
+- `tsconfig.json` —  define como o código deve ser compilado
 - `vitest.config.ts` — configuração de testes
 
 ---
 
 ## 🚀 Como usar
 
-### 1) Clonar
+
+### 1) Commit do exercicios sobre static e genericos 
+
+[Commit 97a53bc](https://github.com/dsanches06/M3_Mini_Projeto/tree/97a53bcde07f7f4438786b1569365bba6555b832)
+
+### 2) Clonar 
 
 ```bash
 git clone https://github.com/dsanches06/M3_Mini_Projeto.git
 cd M3_Mini_Projeto
 ```
 
-### 2) Instalar dependências
+### 3) Instalar dependências
 
 ```bash
 npm install
 ```
 
-### 3) Compilar
+### 5) Compilar
 
 ```bash
 npm run build
-```
-
-### 4) Executar
-
-```bash
-npm start
 ```
 
 ---
