@@ -3,10 +3,11 @@ import { TaskStatus } from "../tasks/TaskStatus.js";
 /* Representação de transições de estado */
 export class StateTransitions {
   private static readonly TRANSITIONS: Record<TaskStatus, TaskStatus[]> = {
-    [TaskStatus.CREATED]: [TaskStatus.ASSIGNED],
+    [TaskStatus.CREATED]: [TaskStatus.ASSIGNED, TaskStatus.BLOCKED],
     [TaskStatus.ASSIGNED]: [TaskStatus.IN_PROGRESS, TaskStatus.BLOCKED],
     [TaskStatus.IN_PROGRESS]: [TaskStatus.COMPLETED, TaskStatus.BLOCKED],
     [TaskStatus.BLOCKED]: [
+      TaskStatus.ASSIGNED,
       TaskStatus.IN_PROGRESS,
       TaskStatus.COMPLETED,
       TaskStatus.ARCHIVED,

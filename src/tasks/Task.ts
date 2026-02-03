@@ -73,6 +73,7 @@ export class Task extends BaseEntity implements ITask {
 
   markCompleted(): void {
     this.completed = true;
+    this.setCompletedDate(new Date());
   }
 
   moveTo(status: TaskStatus): void {

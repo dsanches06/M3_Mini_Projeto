@@ -9,7 +9,7 @@ import {
 import { UserService } from "../../services/index.js";
 import { IUser, UserClass } from "../../models/index.js";
 import { showInfoBanner } from "../../helpers/index.js";
-import { loadUsersPage, renderUsers, showUsersCounters } from "./index.js";
+import { renderUsers, showUsersCounters } from "./index.js";
 import { GlobalValidators, IdGenerator } from "../../utils/index.js";
 import { UserRole } from "../../security/UserRole.js";
 
@@ -27,7 +27,6 @@ function setupFormLogic(
     nameErr: HTMLElement;
     emailErr: HTMLElement;
     roleErr: HTMLElement;
-    banner: HTMLElement;
   },
   modal: HTMLElement,
 ): void {
@@ -43,7 +42,6 @@ function setupFormLogic(
     errors.nameErr.textContent = "";
     errors.emailErr.textContent = "";
     errors.roleErr.textContent = "";
-    errors.banner.style.display = "none";
 
     let isValid = true;
 
@@ -71,13 +69,30 @@ function setupFormLogic(
       isValid = false;
     }
 
+    // // Validar se já existe utilizador com o mesmo nome
+    // const existingUserByName = UserService.getAllUsers().find(
+    //   (user) => user.getName().toLowerCase() === name.toLowerCase(),
+    // );
+    // if (existingUserByName) {
+    //   errors.nameErr.textContent = `Já existe um utilizador com o nome "${name}".`;
+    //   isValid = false;
+    // }
+
+    // Validar se já existe utilizador com o mesmo email
+    const existingUserByEmail = UserService.getAllUsers().find(
+      (user) => user.getEmail().toLowerCase() === email.toLowerCase(),
+    );
+    if (existingUserByEmail) {
+      errors.emailErr.textContent = `Já existe um utilizador com o email "${email}".`;
+      isValid = false;
+    }
+
     let roleUser: UserRole | undefined;
 
     // Verificação Final
     if (isValid && roleUser === undefined) {
-      //obter um novo id
-      const idGenerator = new IdGenerator();
-      let newId: number = idGenerator.generate();
+      //obter um novo id sequencial global
+      let newId: number = IdGenerator.generateUserId();
       //cria um novo user com os dados inseridos no formulario
 
       if (role === "ADMIN") {
@@ -92,7 +107,6 @@ function setupFormLogic(
       const user: IUser = new UserClass(newId, name, email, roleUser);
       //adiciona a lista de utilizadores
       UserService.addUser(user);
-      console.table(UserService.getAllUsers());
       //mensagem de sucesso ou erro
       if (user && user.getName()) {
         showInfoBanner(
@@ -142,10 +156,6 @@ export function renderUserModal(): void {
     "Adicionar Novo Utilizador",
   ) as HTMLHeadingElement;
 
-  const errorBanner = createSection("section") as HTMLElement;
-  errorBanner.classList.add("error-banner");
-  errorBanner.style.display = "none";
-
   const form = createForm("formUser") as HTMLFormElement;
 
   // Criação dos campos usando a função auxiliar
@@ -170,8 +180,13 @@ export function renderUserModal(): void {
     "submit",
   ) as HTMLButtonElement;
 
-  form.append(nameData.section, emailData.section, submitBtn);
-  content.append(closeBtn, title, errorBanner, form);
+  form.append(
+    nameData.section,
+    emailData.section,
+    selectRoleData.section,
+    submitBtn,
+  );
+  content.append(closeBtn, title, form);
   modal.append(content);
   document.body.appendChild(modal);
 
@@ -187,7 +202,6 @@ export function renderUserModal(): void {
       nameErr: nameData.errorSection,
       emailErr: emailData.errorSection,
       roleErr: selectRoleData.errorSection,
-      banner: errorBanner,
     },
     modal,
   );

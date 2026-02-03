@@ -1,54 +1,42 @@
 import { ITask } from "../../tasks/index.js";
 
-export function showTasksCounters(type: string, filteredTask?: ITask[]): void {
-  countAllTasks("#allTasksCounter", type, filteredTask);
-  countCompletedTasks("#completedTaskCounter", type, filteredTask);
-  countFilterTasks("#filterTasksCounter", type, filteredTask);
-  countPendingTasks("#pendingTasksCounter", type, filteredTask);
+export function showTasksCounters(filteredTask: ITask[], type?: string): void {
+  countAllTasks("#allTasksCounter", filteredTask);
+  countCompletedTasks("#completedTaskCounter", filteredTask);
+  countPendingTasks("#pendingTasksCounter", filteredTask);
+  countFilterTasks("#filterTasksCounter", type!, filteredTask);
 }
 
 /* Contador de tarefas pendentes de todos os utilizadores */
-function countPendingTasks(
-  id: string,
-  type: string,
-  tasksList?: ITask[],
-): void {
+export function countPendingTasks(id: string, tasksList: ITask[]): void {
   const section = document.querySelector(`${id}`) as HTMLElement;
   if (section) {
-    if (type === "pending") {
-      section.textContent = `${tasksList?.length}`;
-    } else {
-      section.textContent = "0";
-    }
+    section.textContent = `${tasksList.filter((task) => !task.getCompleted()).length}`;
   } else {
     console.warn(`Elemento ${id} não foi encontrado no DOM.`);
   }
 }
 
 /* Contador de tarefas terminadas de todos os utilizadores */
-function countCompletedTasks(
-  id: string,
-  type: string,
-  tasksList?: ITask[],
-): void {
+export function countCompletedTasks(id: string, tasksList: ITask[]): void {
   const section = document.querySelector(`${id}`) as HTMLElement;
   if (section) {
-    if (type === "completed") {
-      section.textContent = `${tasksList?.length}`;
-    } else {
-      section.textContent = "0";
-    }
+    section.textContent = `${tasksList.filter((task) => task.getCompleted()).length}`;
   } else {
     console.warn(`Elemento ${id} não foi encontrado no DOM.`);
   }
 }
 
 /* Contador de tasks filtrados por nome*/
-function countFilterTasks(id: string, type: string, tasksList?: ITask[]): void {
+export function countFilterTasks(
+  id: string,
+  type: string,
+  tasksList: ITask[],
+): void {
   const section = document.querySelector(`${id}`) as HTMLElement;
   if (section) {
-    if (type === "taskFiltered") {
-      section.textContent = `${tasksList?.length}`;
+    if (type === "filtered" && tasksList && tasksList.length > 0) {
+      section.textContent = `${tasksList.length}`;
     } else {
       section.textContent = "0";
     }
@@ -58,14 +46,10 @@ function countFilterTasks(id: string, type: string, tasksList?: ITask[]): void {
 }
 
 /* Contador de tarefas de todos os utilizadores */
-function countAllTasks(id: string, type: string, tasksList?: ITask[]): void {
+export function countAllTasks(id: string, tasksList: ITask[]): void {
   const section = document.querySelector(`${id}`) as HTMLElement;
   if (section) {
-    if (type === "all") {
-      section.textContent = `${tasksList?.length}`;
-    } else {
-      section.textContent = "0";
-    }
+    section.textContent = `${tasksList.length}`;
   } else {
     console.warn(`Elemento ${id} não foi encontrado no DOM.`);
   }

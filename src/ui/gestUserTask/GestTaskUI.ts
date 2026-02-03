@@ -12,24 +12,7 @@ export function loadAInitialTasks(): void {
   // Limpa o container antes de mostrar os utilizadores
   clearContainer();
   // carrega a pagina dinamica de utilizadores
-  loadTasksPage(TaskService.getAllTasks());
-}
-
-export function allTasks(tasksList: ITask[]): ITask[] {
-  tasksFiltered = [...tasksList];
-  return tasksFiltered;
-}
-
-/* Filtrar tarefas pendentes */
-export function pendingTasks(tasksList: ITask[]): ITask[] {
-  tasksFiltered = tasksList.filter((task) => !task.getCompleted());
-  return tasksFiltered;
-}
-
-/* Filtrar tarefas concluídas */
-export function completedTasks(tasksList: ITask[]): ITask[] {
-  tasksFiltered = tasksList.filter((task) => task.getCompleted());
-  return tasksFiltered;
+  loadTasksPage();
 }
 
 /* Ordenar utilizadores por nome */

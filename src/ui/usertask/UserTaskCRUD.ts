@@ -1,8 +1,7 @@
-import { showTasksCounters } from "../../ui/tasks/index.js";
 import { showInfoBanner } from "../../helpers/index.js";
 import { IUser } from "../../models/index.js";
 import { ITask } from "../../tasks/index.js";
-import { showUserTask } from "../usertask/index.js";
+import { AssignmentService } from "../../services/index.js";
 
 /* Estilização por estado */
 export function styleTasks(tasList: ITask[]): void {
@@ -21,23 +20,6 @@ export function styleTasks(tasList: ITask[]): void {
   });
 }
 
-/* Função para adicionar uma nova tarefa do utilizador */
-export function addNewUserTask(id: number, user: IUser): ITask | undefined {
-  //Lê os valores dos inputs.
-  const titleInput = document.querySelector("#titleInput") as HTMLInputElement;
-  const title = titleInput.value;
-  const taskCategory = document.querySelector(
-    "#taskCategory",
-  ) as HTMLSelectElement;
-  const category = taskCategory.value;
-  //Limpa os valores dos inputs.
-  titleInput.value = "";
-  taskCategory.value = "";
-  //retorna um novo objeto do tipo Task
-
-  return undefined;
-}
-
 /* Função para remover a tarefas concluidas de um utilizador  */
 export function removeCompletedTasks(user: IUser): void {
   //para cada tarefa do utilizador
@@ -53,9 +35,6 @@ export function removeCompletedTasks(user: IUser): void {
       );
     }
   });
-  showTasksCounters("all", user.getTasks() as ITask[]);
-  //atualizar a exibição das tarefas
-  showUserTask(user, user.getTasks() as ITask[]);
 }
 
 /* Função Editar tarefa */
@@ -68,9 +47,6 @@ export function userEditTitle(user: IUser, taskId: number): void {
     );
     if (newTitle !== null && newTitle.trim() !== "") {
       user.getTasks()[index].setTitle(newTitle.trim());
-      showTasksCounters("all", user.getTasks());
-      //atualizar a exibição das tarefas
-      showUserTask(user, user.getTasks());
     }
   }
 }
@@ -84,13 +60,5 @@ export function userCompleteTask(user: IUser, taskId: number): void {
       //marcar a tarefa como concluída
       user.getTasks()[index].markCompleted();
     } //atualizar a exibição das tarefas
-    showTasksCounters("all", user.getTasks());
-    showUserTask(user, user.getTasks());
   }
-}
-
-export function userRemoveTask(user: IUser, taskId: number): void {
-  user.removeTask(taskId);
-  showTasksCounters("all", user.getTasks());
-  showUserTask(user, user.getTasks());
 }

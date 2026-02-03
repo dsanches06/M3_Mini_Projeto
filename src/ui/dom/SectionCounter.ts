@@ -41,7 +41,7 @@ export function createSearchContainer(
 
   // 2. Criar o grupo de botões (form-group)
   const sectionGroup = createSection(`${containerId}Group`) as HTMLElement;
-  sectionGroup.classList.add("form-group");
+  sectionGroup.classList.add("button-group");
 
   // 3. Criar e adicionar os botões dinamicamente
   buttons.forEach((btn) => {

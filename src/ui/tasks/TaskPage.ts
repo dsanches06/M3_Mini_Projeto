@@ -1,9 +1,6 @@
 import { showInfoBanner } from "../../helpers/index.js";
-import { showTasksCounters, renderAllTasks, renderModal } from "./index.js";
+import { showTasksCounters, renderAllTasks, renderTaskModal } from "./index.js";
 import {
-  allTasks,
-  completedTasks,
-  pendingTasks,
   removeAllCompletedTask,
   searchTasksByTitle,
   sortTasksByTitle,
@@ -17,10 +14,10 @@ import {
   createSearchContainer,
   clearContainer,
 } from "../dom/index.js";
-import { ITask } from "../../tasks/index.js";
+import { TaskService } from "../../services/taskService.js";
 
 /* Lista de tarefas  */
-export function loadTasksPage(tasksList: ITask[]): void {
+export function loadTasksPage(): void {
   /* ativa o menu tarefas */
   menuSelected("#menuTasks");
 
@@ -30,12 +27,12 @@ export function loadTasksPage(tasksList: ITask[]): void {
   const taskCounterSection = createTaskCounter("taskCounters") as HTMLElement;
   addElementInContainer(taskCounterSection);
 
-  showTasksCounters("all", tasksList);
+  showTasksCounters(TaskService.getAllTasks());
 
   const searchContainer = showSearchTaskContainer();
   addElementInContainer(searchContainer);
 
-  const tasksContainer = renderAllTasks(tasksList);
+  const tasksContainer = renderAllTasks(TaskService.getAllTasks());
   addElementInContainer(tasksContainer);
 
   // Adicionar event listeners aos botões de contador para filtrar
@@ -53,27 +50,26 @@ export function loadTasksPage(tasksList: ITask[]): void {
   completedTaskBtn.title = "Mostrar tarefas concluídas";
 
   allTasksBtn.addEventListener("click", () => {
-    const tasks = allTasks(tasksList);
-   renderAllTasks(tasks);
-    showTasksCounters("all", tasks);
+    renderAllTasks(TaskService.getAllTasks());
+    showTasksCounters(TaskService.getAllTasks());
   });
 
   pendingTaskBtn.addEventListener("click", () => {
-    const tasks = pendingTasks(tasksList);
-  renderAllTasks(tasks);
-    showTasksCounters("pending", tasks);
+    const tasks = TaskService.getAllTasks().filter((task) => !task.getCompleted());
+    renderAllTasks(tasks);
+    showTasksCounters(tasks);
   });
 
   completedTaskBtn.addEventListener("click", () => {
-    const tasks = completedTasks(tasksList);
-  renderAllTasks(tasks);
-   showTasksCounters("completed", tasks);
+    const tasks = TaskService.getAllTasks().filter((task) => task.getCompleted());
+    renderAllTasks(tasks);
+    showTasksCounters(tasks);
   });
 
   const addTasksBtn = document.querySelector("#addTasksBtn") as HTMLElement;
   if (addTasksBtn) {
     addTasksBtn.addEventListener("click", () => {
-      renderModal();
+      renderTaskModal();
     });
   } else {
     console.warn("Elemento #addTasksBtn não foi renderizado no DOM.");
@@ -84,12 +80,12 @@ export function loadTasksPage(tasksList: ITask[]): void {
     //Crie uma variável de controle de estado
     let isAscending = true;
     sortTasksBtn.addEventListener("click", () => {
-      const sortedTasks = sortTasksByTitle(tasksList, isAscending);
+      const sortedTasks = sortTasksByTitle(TaskService.getAllTasks(), isAscending);
       //Inverta o estado para o próximo clique
       isAscending = !isAscending;
       // Mostrar as tarefas ordenadas
-     renderAllTasks(sortedTasks);
-      showTasksCounters("filtrados", sortedTasks);
+      renderAllTasks(sortedTasks);
+      showTasksCounters(sortedTasks, "filtered");
       // Atualize o texto ou ícone do botão
       sortTasksBtn.textContent = isAscending ? "Ordenar A-Z" : "Ordenar Z-A";
     });
@@ -104,9 +100,9 @@ export function loadTasksPage(tasksList: ITask[]): void {
   if (searchTaskInput) {
     searchTaskInput.addEventListener("input", () => {
       const searchTerm = searchTaskInput.value;
-      const filteredTasks = searchTasksByTitle(tasksList, searchTerm);
+      const filteredTasks = searchTasksByTitle(TaskService.getAllTasks(), searchTerm);
       renderAllTasks(filteredTasks);
-      showTasksCounters("filtrados", filteredTasks);
+      showTasksCounters(filteredTasks, "filtered");
     });
   } else {
     console.warn("Elemento de busca de tarefas não encontrado.");
@@ -116,9 +112,10 @@ export function loadTasksPage(tasksList: ITask[]): void {
   const removeAllCompletedTaskBtn = document.querySelector(
     "#removeAllCompletedTaskBtn",
   ) as HTMLElement;
+
   if (removeAllCompletedTaskBtn) {
     removeAllCompletedTaskBtn.addEventListener("click", () => {
-      const removedTasks = removeAllCompletedTask(tasksList);
+      const removedTasks = removeAllCompletedTask(TaskService.getAllTasks());
 
       if (removedTasks.length > 0) {
         const completedTaskCount = removedTasks.filter((task) =>
@@ -131,7 +128,7 @@ export function loadTasksPage(tasksList: ITask[]): void {
           );
         }
         renderAllTasks(removedTasks);
-        showTasksCounters("all", removedTasks);
+        showTasksCounters(removedTasks);
       } else {
         showInfoBanner("Não há tarefa concluída para remover.", "error-banner");
       }
@@ -168,8 +165,8 @@ function createTaskCounter(id: string): HTMLElement {
 
   const filteredTaskBtn = createStatisticsCounter(
     "filterTasksSection",
-    "filterTasksCounter",
-    "/src/assets/tarefa-concluida.png",
+    "filterTasksCounterBtn",
+    "/src/assets/filtrar-tarefas.png",
     "filtrados",
     "filterTasksCounter",
   ) as HTMLElement;
@@ -177,7 +174,12 @@ function createTaskCounter(id: string): HTMLElement {
   //
   const sectionTasksCounter = createSection(`${id}`) as HTMLElement;
   sectionTasksCounter.classList.add("tasks-counters");
-  sectionTasksCounter.append(allTasksBtn, pendingTaskBtn, completedTaskBtn);
+  sectionTasksCounter.append(
+    allTasksBtn,
+    pendingTaskBtn,
+    completedTaskBtn,
+    filteredTaskBtn,
+  );
   return sectionTasksCounter;
 }
 
@@ -187,7 +189,7 @@ function showSearchTaskContainer(): HTMLElement {
     "searchTaskContainer",
     { id: "searchTask", placeholder: "Procurar tarefa..." },
     [
-      { id: "addTasksBtn", text: "Criar Nova Tarefa" },
+      { id: "addTasksBtn", text: "Criar tarefa" },
       { id: "sortTasksBtn", text: "Ordenar A-Z" },
       { id: "removeAllCompletedTaskBtn", text: "Remover tarefas concluídas" },
     ],

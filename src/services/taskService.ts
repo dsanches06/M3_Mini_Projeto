@@ -1,5 +1,4 @@
 import { ITask } from "../tasks/index.js";
-import { TaskStatus } from "../tasks/TaskStatus.js";
 
 /* Serviço para gerir tarefas */
 export class TaskService {
@@ -17,13 +16,6 @@ export class TaskService {
     return this.tasks.delete(id);
   }
 
-  /* Obtém todas as tarefas concluídas */
-  static getCompletedTasks(): ITask[] {
-    return Array.from(this.tasks.values()).filter((task) =>
-      task.getCompleted(),
-    );
-  }
-
   /* Obtém todas as tarefas não concluídas */
   static getAllTasks(): ITask[] {
     return Array.from(this.tasks.values());
@@ -36,14 +28,14 @@ export class TaskService {
   /* Obtém todas as tarefas atribuídas */
   static getTasksAssign(): ITask[] {
     return Array.from(this.tasks.values()).filter(
-      (task) => task.getStatus() === TaskStatus.ASSIGNED,
+      (task) => task.getUser() !== undefined,
     );
   }
 
   /* Obtém todas as tarefas não atribuídas */
   static getTasksUnassign(): ITask[] {
     return Array.from(this.tasks.values()).filter(
-      (task) => task.getStatus() === TaskStatus.CREATED,
+      (task) => task.getUser() === undefined,
     );
   }
 }

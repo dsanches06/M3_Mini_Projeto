@@ -5,5 +5,5 @@ export function showInfoBanner(message: string, className: string): void {
   banner.textContent = message;
   banner.classList.add(className);
   document.body.appendChild(banner);
-  setTimeout(() => banner.remove(), 3000);
+  setTimeout(() => banner.remove(), 2000);
 }

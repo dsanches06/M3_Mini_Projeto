@@ -1,12 +1,23 @@
-/* Gerador de IDs */
+/* Gerador de IDs sequencial global */
 export class IdGenerator {
-  private static counter: number = 0;
+  private static taskCounter: number = 0;
+  private static userCounter: number = 0;
 
-  // Não reinicializar o contador no construtor para manter IDs únicos
-  constructor() {}
+  /* Gera um novo ID para tarefas */
+  static generateTaskId(): number {
+    this.taskCounter += 1;
+    return this.taskCounter;
+  }
 
-  generate(): number {
-    IdGenerator.counter += 1;
-    return IdGenerator.counter;
+  /* Gera um novo ID para utilizadores */
+  static generateUserId(): number {
+    this.userCounter += 1;
+    return this.userCounter;
+  }
+
+  /* Reinicia os contadores (útil para testes) */
+  static reset(): void {
+    this.taskCounter = 0;
+    this.userCounter = 0;
   }
 }

@@ -71,10 +71,10 @@ function userCardContent(user: UserClass): HTMLElement {
   divCardTask.textContent = `${user.getTasks().length} tarefas`;
 
   const eyeOpenIcon = document.createElement("i") as HTMLElement;
-  eyeOpenIcon.className = "fa-solid fa-eye fa-2xl";
+  eyeOpenIcon.className = "fa-solid fa-eye fa-lg";
 
   const eyeCloseIcon = document.createElement("i") as HTMLElement;
-  eyeCloseIcon.className = "fa-solid fa-eye-slash fa-2xl";
+  eyeCloseIcon.className = "fa-solid fa-eye-slash fa-lg";
 
   const eyeIcon = user.getTasks().length > 0 ? eyeOpenIcon : eyeCloseIcon;
 
@@ -123,7 +123,7 @@ function userCardBtn(user: UserClass): HTMLElement {
   });
 
   const trashIcon = document.createElement("i") as HTMLElement;
-  trashIcon.className = "fa-solid fa-trash fa-2xl";
+  trashIcon.className = "fa-solid fa-trash fa-lg";
 
   const btnRemover = document.createElement("span") as HTMLButtonElement;
   btnRemover.appendChild(trashIcon);

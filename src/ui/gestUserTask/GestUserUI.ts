@@ -1,5 +1,10 @@
+import { showInfoBanner } from "../../helpers/infoBanner.js";
 import { IUser } from "../../models/index.js";
-import { UserService } from "../../services/index.js";
+import {
+  AssignmentService,
+  TaskService,
+  UserService,
+} from "../../services/index.js";
 import { clearContainer } from "../dom/index.js";
 import { loadUsersPage } from "../users/index.js";
 
@@ -22,8 +27,43 @@ export function toggleUserState(id: number): void {
   const user = UserService.getUserById(id);
   //se o utilizador for encontrado
   if (user) {
-    //alternar o estado do utilizador
+    //alternar o estado
     user.toggleActive();
+    //para ativo
+    if (user.isActive()) {
+      showInfoBanner(
+        `O utilizador "${user.getName()}" está agora ativo.`,
+        "info-banner",
+      );
+    } else {
+      //todas as tarefas serão processadas
+      const tasksToRemove = [...user.getTasks()];
+
+      if (tasksToRemove.length === 0) {
+        showInfoBanner(
+          `O utilizador "${user.getName()}" não tem tarefas a cancelar.`,
+          "info-banner",
+        );
+      } else {
+        for (const task of tasksToRemove) {
+          if (!task.getCompleted()) {
+            //se não tiver completa, desassignar
+            unassigUserTask(user, task.getId());
+          }
+          //remover tarefa do utilizador
+          user.removeTask(task.getId());
+          //remover tarefa do sistema
+          TaskService.removeTask(task.getId());
+        }
+
+        if (!user.isActive()) {
+          showInfoBanner(
+            `Todas as tarefas do utilizador "${user.getName()}" foram canceladas porque está inactivo.`,
+            "info-banner",
+          );
+        }
+      }
+    }
   }
 }
 
@@ -52,4 +92,8 @@ export function sortUsersByName(ascending: boolean = true): IUser[] {
     sortedUsers.sort((a, b) => b.getName().localeCompare(a.getName()));
   }
   return sortedUsers;
+}
+
+export function unassigUserTask(user: IUser, taskId: number): void {
+  AssignmentService.unassignUser(taskId, user.getId());
 }

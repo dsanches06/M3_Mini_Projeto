@@ -46,9 +46,10 @@ function modalUserDetail(user: UserClass): HTMLElement {
 
   const detailStatus = document.createElement("p") as HTMLParagraphElement;
   detailStatus.id = "detailStatus";
-  detailStatus.innerHTML = `<strong>Status:</strong> ${
-    user.isActive() ? "Ativo" : "Inativo"
-  }`;
+  detailStatus.innerHTML = `<strong>Status:</strong>
+   <span style="color: ${user.isActive() ? "green" : "red"}">${
+     user.isActive() ? "Activo" : "Inactivo"
+   }</span>`;
 
   const userTasksDetails = modalUserTask(user);
   userTasksDetails.className = "user-tasks-details";

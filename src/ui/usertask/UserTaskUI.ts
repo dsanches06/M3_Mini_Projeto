@@ -1,17 +1,16 @@
 import { showInfoBanner } from "../../helpers/index.js";
 import { IUser, UserClass } from "../../models/index.js";
 import { ITask } from "../../tasks/index.js";
-
+import { unassigUserTask } from "../gestUserTask/index.js";
 import {
   styleTasks,
   userEditTitle,
   userCompleteTask,
-  userRemoveTask,
+  showUserTasksCounters,
 } from "./index.js";
 
 /* Mostrar tarefas */
 export function showUserTask(user: IUser, tasks: ITask[]): void {
-  showUserNameHeader(user);
   renderUserTask(user as UserClass, tasks);
   styleTasks(tasks);
 }
@@ -66,7 +65,16 @@ ${task.getTaskCategory()} - ${
   editBtn.title = "Editar titulo da tarefa";
   editBtn.role = "button";
   editBtn.addEventListener("click", () => {
-    userEditTitle(user, task.getId());
+    if (!task.getCompleted()) {
+      userEditTitle(user, task.getId());
+      showUserTask(user, user.getTasks());
+      showUserTasksCounters(user.getTasks());
+    } else {
+      showInfoBanner(
+        `A tarefa "${task.getTitle()}" não pode ser editada pois já está concluída.`,
+        "info-banner",
+      );
+    }
   });
 
   // Botão Concluir
@@ -76,49 +84,37 @@ ${task.getTaskCategory()} - ${
   completeBtn.role = "button";
   completeBtn.addEventListener("click", () => {
     userCompleteTask(user, task.getId());
+    showUserTask(user, user.getTasks());
+    showUserTasksCounters(user.getTasks());
   });
 
   // Botão Remover
-  const deleteBtn = document.createElement("a") as HTMLAnchorElement;
-  deleteBtn.id = "deleteTaskBtn";
-  deleteBtn.title = "Remover tarefa";
-  deleteBtn.role = "button";
-  deleteBtn.addEventListener("click", () => {
-    if (task.getCompleted()) {
-      userRemoveTask(user, task.getId());
+  const unassigTaskBtn = document.createElement("a") as HTMLAnchorElement;
+  unassigTaskBtn.id = "unassignTaskBtn";
+  unassigTaskBtn.title = "Cancelar tarefa";
+  unassigTaskBtn.role = "button";
+  unassigTaskBtn.addEventListener("click", () => {
+    if (!task.getCompleted()) {
+      unassigUserTask(user, task.getId());
       showInfoBanner(
-        `${user.getName()} removeu a tarefa ${task.getTitle()} com sucesso.`,
+        `A tarefa "${task.getTitle()}" foi cancelada do utilizador "${user.getName()}" com sucesso.`,
         "info-banner",
       );
+      showUserTask(user, user.getTasks());
+      showUserTasksCounters(user.getTasks());
     } else {
       showInfoBanner(
-        "Utilizador com tarefas pendentes não pode ser removido.",
-        "error-banner",
+        `A tarefa "${task.getTitle()}" não pode ser cancelada pois já está concluída.`,
+        "info-banner",
       );
     }
   });
 
   buttonContainer.appendChild(editBtn);
   buttonContainer.appendChild(completeBtn);
-  buttonContainer.appendChild(deleteBtn);
+  buttonContainer.appendChild(unassigTaskBtn);
 
   listItem.appendChild(buttonContainer);
 
   return listItem;
-}
-
-/* Função para mostrar o nome de utilizador no cabeçalho */
-function showUserNameHeader(user: IUser): void {
-  const userNameTaskHeader = document.querySelector(
-    "#userNameTaskHeader",
-  ) as HTMLHeadingElement;
-  if (userNameTaskHeader) {
-    if (user) {
-      userNameTaskHeader.textContent = `TAREFAS DE ${user.getName().toUpperCase()}`;
-    } else {
-      userNameTaskHeader.textContent = "Utilizador Desconhecido";
-    }
-  } else {
-    console.warn("Elemento #userNameTaskHeader não foi renderizado no DOM.");
-  }
 }

@@ -27,7 +27,6 @@ function setupTaskFormLogic(
     titleErr: HTMLElement;
     categoryErr: HTMLElement;
     typeErr: HTMLElement;
-    banner: HTMLElement;
   },
   modal: HTMLElement,
   user?: IUser,
@@ -44,7 +43,6 @@ function setupTaskFormLogic(
     errors.titleErr.textContent = "";
     errors.categoryErr.textContent = "";
     errors.typeErr.textContent = "";
-    errors.banner.style.display = "none";
 
     let isValid = true;
 
@@ -82,9 +80,8 @@ function setupTaskFormLogic(
           taskCategory = TaskCategory.STUDY;
         }
       }
-      //obter um novo id
-      const idGenerator = new IdGenerator();
-      let newId: number = idGenerator.generate();
+      //obter um novo id sequencial global
+      let newId: number = IdGenerator.generateTaskId();
       //obter o tipo de task a criar
       if (type.trim() === "Bugs") {
         newTask = new BugTask(newId, title, taskCategory);
@@ -98,19 +95,19 @@ function setupTaskFormLogic(
         if (user) {
           user.createTask(newTask);
           showInfoBanner(
-        `A tarefa ${newTask.getTitle()} foi criado ao utilizador ${user.getName()} com sucesso.`,
-        "info-banner",
+            `A tarefa ${newTask.getTitle()} foi criado ao utilizador ${user.getName()} com sucesso.`,
+            "info-banner",
           );
           showUserTask(user, user.getTasks());
-          showTasksCounters("all", user.getTasks());
+          showTasksCounters( user.getTasks());
         } else {
           TaskService.addTask(newTask);
           showInfoBanner(
-        `A tarefa ${newTask.getTitle()} foi criado com sucesso.`,
-        "info-banner",
+            `A tarefa ${newTask.getTitle()} foi criado com sucesso.`,
+            "info-banner",
           );
           renderAllTasks(TaskService.getAllTasks());
-          showTasksCounters("all", TaskService.getAllTasks());
+          showTasksCounters(TaskService.getAllTasks());
         }
       } else {
         showInfoBanner(
@@ -120,9 +117,10 @@ function setupTaskFormLogic(
       }
       modal.remove();
     } else {
-      errors.banner.textContent =
-        "Existem erros no formulário. Por favor, verifique os campos.";
-      errors.banner.style.display = "block";
+      showInfoBanner(
+        `ERRO: A tarefa ${title} não foi criado. Verifique os erros no formulário.`,
+        "error-banner",
+      );
     }
   };
 }
@@ -130,11 +128,11 @@ function setupTaskFormLogic(
 /**
  *  Função Principal: Monta o Modal no DOM
  */
-export function renderModal(user?: IUser): void {
-  const modal = createSection("modalForm") as HTMLElement;
+export function renderTaskModal(user?: IUser): void {
+  const modal = createSection("modalTaskForm") as HTMLElement;
   modal.classList.add("modal");
 
-  const content = createSection("modalContent") as HTMLElement;
+  const content = createSection("modalTaskContent") as HTMLElement;
   content.classList.add("modal-content");
 
   const closeBtn = document.createElement("span") as HTMLSpanElement;
@@ -147,24 +145,20 @@ export function renderModal(user?: IUser): void {
     "Adicionar Novo Task",
   ) as HTMLHeadingElement;
 
-  const errorBanner = createSection("section") as HTMLElement;
-  errorBanner.classList.add("error-banner");
-  errorBanner.style.display = "none";
-
   const form = createForm("formTask") as HTMLFormElement;
 
   // Criação dos campos usando a função auxiliar
   const titleData = createInputGroup(
     "Titulo",
-    "TitleInput",
+    "taskTitleInput",
     "text",
     "inserir o titulo da tarefa",
   );
   const taskCategory = ["Trabalho", "Pessoal", "Estudo"];
-  const categoryData = createSelectGroup("Cargo", "userRole", taskCategory);
+  const categoryData = createSelectGroup("Cargo", "categoryID", taskCategory);
 
   const taskType = ["Bugs", "Feature", "Task"];
-  const TypeData = createSelectGroup("Tipo", "userRole", taskType);
+  const TypeData = createSelectGroup("Tipo", "typeID", taskType);
 
   const submitBtn = createButton(
     "button",
@@ -178,7 +172,7 @@ export function renderModal(user?: IUser): void {
     TypeData.section,
     submitBtn,
   );
-  content.append(closeBtn, titleHeading, errorBanner, form);
+  content.append(closeBtn, titleHeading, form);
   modal.append(content);
   document.body.appendChild(modal);
 
@@ -194,7 +188,6 @@ export function renderModal(user?: IUser): void {
       titleErr: titleData.errorSection,
       categoryErr: categoryData.errorSection,
       typeErr: TypeData.errorSection,
-      banner: errorBanner,
     },
     modal,
     user,

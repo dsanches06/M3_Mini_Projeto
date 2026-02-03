@@ -11,23 +11,12 @@ import {
   processTask,
 } from "./src/utils/index.js";
 import { Buffer } from "./src/helpers/index.js";
-import {
-  EntityList,
-  SimpleCache,
-  Favorites,
-  Paginator,
-  TagManager,
-  WatcherSystem,
-  PriorityManager,
-  RatingSystem,
-  DependencyGraph,
-} from "./src/utils/index.js";
+
 import { SystemLogger } from "./src/logs/SystemLogger.js";
 import { fakeTasksData, fakeUsersData } from "./src/helpers/index.js";
 import { UserClass, IUser } from "./src/models/index.js";
 import { ITask, BugTask, FeatureTask, Task } from "./src/tasks/index.js";
 import { TaskCategory } from "./src/tasks/TaskCategory.js";
-import { TaskStatus } from "./src/tasks/TaskStatus.js";
 
 // IMPLEMENTAR UM FLUXO REAL:
 // - configurar sistema
@@ -40,7 +29,6 @@ SystemLogger.log(SystemConfig.getInfo());
 SystemLogger.log("");
 
 //isUserValidar dados e criar no utilizador sem role
-const userIdGenerator = new IdGenerator();
 for (const user of fakeUsersData) {
   let isUserValid = true;
   // - isUserValidar dados
@@ -64,7 +52,7 @@ for (const user of fakeUsersData) {
   }
 
   if (isUserValid === true) {
-    const Id = userIdGenerator.generate();
+    const Id = IdGenerator.generateUserId();
     UserService.addUser(new UserClass(Id, user.name, user.email));
     SystemLogger.log(
       `INFO: ${user.name} com ID ${Id} foi adicionado com sucesso.`,
@@ -76,16 +64,15 @@ for (const user of fakeUsersData) {
 SystemLogger.log("");
 
 //criar os 3 tipos de Tasks
-const taskIdGenerator = new IdGenerator();
 for (const task of fakeTasksData) {
   let isTaskValid = true;
   // - validar dados
-  
+
   let newTask: ITask | undefined;
   let category: TaskCategory = TaskCategory.PERSONAL;
 
   if (isTaskValid === true) {
-    const Id = taskIdGenerator.generate();
+    const Id = IdGenerator.generateTaskId();
 
     if (task.category === "Trabalho") {
       category = TaskCategory.WORKED;

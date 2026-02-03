@@ -1,6 +1,9 @@
-import { createSection } from "../dom/index.js";
+import { createButton, createSection } from "../dom/index.js";
 import { ITask } from "../../tasks/index.js";
-import { UserService } from "../../services/index.js";
+import { renderModalAssignUser, showTasksCounters } from "./index.js";
+import { showInfoBanner } from "../../helpers/index.js";
+import { unassigUserTask } from "../gestUserTask/index.js";
+import { TaskService } from "../../services/index.js";
 
 /* Container de tarefas */
 const taskContainer = createSection("taskContainer") as HTMLElement;
@@ -54,6 +57,8 @@ function createTableHeader(): HTMLTableSectionElement {
     "Data de Conclusão",
     "Categoria",
     "Utilizador",
+    "",
+    "",
   ];
   headers.forEach((headerText) => {
     const th = document.createElement("th");
@@ -88,29 +93,39 @@ function createTableRow(task: ITask): HTMLTableRowElement {
 
   const userCell = document.createElement("td");
   const user = task.getUser();
-  if (user !== null && user !== undefined) {
+  if (user) {
     userCell.textContent = user.getName();
   } else {
-    const select = createUnassignedUserSelect();
-    userCell.appendChild(select);
+    const btnAssingn = createButton(`assignBtn`, "Atribuir", "button");
+    btnAssingn.addEventListener("click", () => {
+      renderModalAssignUser(task);
+    });
+    userCell.appendChild(btnAssingn);
   }
-  row.appendChild(userCell);
+
+  const unassigUserCell = document.createElement("td");
+  if (user) {
+    const btnUnassign = createButton(`unassignBtn`, "Cancelar", "button");
+    btnUnassign.addEventListener("click", () => {
+      if (!task.getCompleted()) {
+        unassigUserTask(user, task.getId());
+        showInfoBanner(
+          `A tarefa "${task.getTitle()}" foi cancelada do utilizador "${user.getName()}" com sucesso.`,
+          "info-banner",
+        );
+        renderAllTasks(TaskService.getAllTasks());
+        showTasksCounters(TaskService.getAllTasks());
+      } else {
+        showInfoBanner(
+          `A tarefa "${task.getTitle()}" não pode ser cancelada pois já está concluída.`,
+          "info-banner",
+        );
+      }
+    });
+    unassigUserCell.appendChild(btnUnassign);
+  }
+
+  row.append(userCell, unassigUserCell);
 
   return row;
-}
-
-function createUnassignedUserSelect(): HTMLSelectElement {
-  const select = document.createElement("select");
-  select.className = "user-assignment-select";
-
-  UserService.getAllUsers().forEach((user) => {
-    if (user.getTasks().length === 0) {
-      const option = document.createElement("option");
-      option.value = user.getId().toString();
-      option.textContent = user.getName();
-      select.appendChild(option);
-    }
-  });
-
-  return select;
 }

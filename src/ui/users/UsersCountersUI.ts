@@ -103,11 +103,15 @@ function changeImageAndFigCaption(type: string) {
     if (ativosPercentangeCaption && ativeUsersPercentageBtn) {
       switch (type) {
         case "inactivos":
+          ativeUsersPercentageBtn.title =
+            "Mostrar percentagem de utilizadores inactivos";
           ativeUsersPercentageBtn.src = "/src/assets/grafico.png";
           ativosPercentangeCaption.textContent = "inactivos %";
           break;
         case "utilizadores":
         case "activos":
+          ativeUsersPercentageBtn.title =
+            "Mostrar percentagem de utilizadores activos";
           ativeUsersPercentageBtn.src = "/src/assets/percentagem.png";
           ativosPercentangeCaption.textContent = "activos %";
           break;
