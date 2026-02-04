@@ -5,7 +5,7 @@ import {
   TaskService,
   AssignmentService,
 } from "../../services/index.js";
-import { GlobalValidators } from "../../utils/index.js";
+import { GlobalValidators, StateTransitions } from "../../utils/index.js";
 import {
   createButton,
   createForm,
@@ -51,64 +51,22 @@ function setupEditTaskFormLogic(
       isValid = false;
     }
 
-    if (isValid) {
-      if (title !== task.getTitle()) {
-        task.setTitle(title);
-      }
-
-      const newStatus = (TaskStatus as any)[statusValue] as TaskStatus;
-      if (newStatus && newStatus !== task.getStatus()) {
-        if (task.getUser()) {
-          task.moveTo(newStatus);
-        } else {
-          showInfoBanner(
-            `ERRO: A tarefa "${task.getTitle()}" não pode mudar de status sem estar atribuída a um utilizador.`,
-            "error-banner",
-          );
-          isValid = false;
-        }
-      }
-      let select = document.querySelector(
-        "#editTaskStatus",
-      ) as HTMLSelectElement;
-      if (userValue === "") {
-        const currentUser = task.getUser();
-        if (currentUser) {
-          if (!task.getCompleted()) {
-            fields.status.disabled = true;
-            AssignmentService.unassignUser(task.getId(), currentUser.getId());
-            showInfoBanner(
-              `INFO: A tarefa "${task.getTitle()}" foi cancelada do utilizador "${currentUser.getName()}" com sucesso.`,
-              "info-banner",
-            );
-          } else {
-            showInfoBanner(
-              `ERRO: A tarefa "${task.getTitle()}" não pode ser cancelada pois já está concluída.`,
-              "error-banner",
-            );
-          }
-        }
-      } else {
-        const userId = parseInt(userValue);
-        if (!isNaN(userId)) {
-          fields.status.disabled = true;
-          AssignmentService.assignUser(task.getId(), userId);
-          const user = UserService.getUserById(userId);
-          showInfoBanner(
-            `INFO: A tarefa "${task.getTitle()}" foi atribuída ao utilizador "${user?.getName()}" com sucesso.`,
-            "info-banner",
-          );
-        }
-      }
-      // Re-renderizar o dashboard com todas as tasks
-      renderDashboard(TaskService.getAllTasks());
-      modal.remove();
-    } else {
+    if (!isValid) {
       showInfoBanner(
         `ERRO: A tarefa ${title} não foi atualizada. Verifique os erros no formulário.`,
         "error-banner",
       );
+      return;
     }
+
+    handleTitleChange(task, title);
+    handleStatusChange(task, statusValue);
+    if (userValue === "") {
+      handleUnassign(task, fields);
+    } else {
+      handleAssign(userValue, task, fields);
+    }
+    modal.remove();
   };
 }
 
@@ -225,4 +183,94 @@ export function renderModalEditTask(task: ITask): void {
   };
 
   modal.style.display = "flex";
+}
+
+// Handlers separados para permitir operações independentes
+function handleTitleChange(task: ITask, title: string) {
+  if (title !== task.getTitle()) {
+    task.setTitle(title);
+    renderDashboard(TaskService.getAllTasks());
+    showInfoBanner(
+      `INFO: O título da tarefa "${task.getTitle()}" foi atualizado.`,
+      "info-banner",
+    );
+  }
+}
+
+function handleStatusChange(task: ITask, statusValue: string) {
+  const newStatus = (TaskStatus as any)[statusValue] as TaskStatus;
+  if (newStatus && newStatus !== task.getStatus()) {
+    if (task.getUser()) {
+      if (StateTransitions.validTransitions(task.getStatus(), newStatus)) {
+        task.moveTo(newStatus);
+        renderDashboard(TaskService.getAllTasks());
+        showInfoBanner(
+          `INFO: O estado da tarefa "${task.getTitle()}" foi alterado para ${TaskStatus[newStatus]}.`,
+          "info-banner",
+        );
+      } else {
+        showInfoBanner(
+          `ERRO: Transição da tarefa ${task.getTitle()} do estado ${TaskStatus[task.getStatus()]} -> ${TaskStatus[newStatus]} não é permitida.`,
+          "error-banner",
+        );
+      }
+    } else {
+      showInfoBanner(
+        `ERRO: A tarefa "${task.getTitle()}" não pode mudar de status sem estar atribuída a um utilizador.`,
+        "error-banner",
+      );
+    }
+  }
+}
+
+function handleUnassign(task: ITask, fields: { status: HTMLSelectElement }) {
+  const currentUser = task.getUser();
+  if (currentUser) {
+    if (!task.getCompleted()) {
+      fields.status.disabled = true;
+      AssignmentService.unassignUser(task.getId(), currentUser.getId());
+      renderDashboard(TaskService.getAllTasks());
+      showInfoBanner(
+        `INFO: A tarefa "${task.getTitle()}" foi cancelada do utilizador "${currentUser.getName()}" com sucesso.`,
+        "info-banner",
+      );
+    } else {
+      showInfoBanner(
+        `ERRO: A tarefa "${task.getTitle()}" não pode ser cancelada pois já está concluída.`,
+        "error-banner",
+      );
+    }
+  }
+}
+
+function handleAssign(
+  userValue: string,
+  task: ITask,
+  fields: { status: HTMLSelectElement },
+) {
+  const userId = parseInt(userValue, 10);
+  if (isNaN(userId)) return;
+  if (!task.getCompleted()) {
+    fields.status.disabled = true;
+    const currentUser = task.getUser();
+    if (!currentUser || currentUser.getId() !== userId) {
+      AssignmentService.assignUser(task.getId(), userId);
+      const user = UserService.getUserById(userId);
+      renderDashboard(TaskService.getAllTasks());
+      showInfoBanner(
+        `INFO: A tarefa "${task.getTitle()}" foi atribuída ao utilizador "${user?.getName()}" com sucesso.`,
+        "info-banner",
+      );
+    } /*else {
+          showInfoBanner(
+            `INFO: A atribuição da tarefa "${task.getTitle()}" mantém-se no utilizador "${currentUser.getName()}".`,
+            "info-banner",
+          );
+        }*/
+  } else {
+    showInfoBanner(
+      `ERRO: A tarefa "${task.getTitle()}" não pode ser atribuída pois já está concluída.`,
+      "error-banner",
+    );
+  }
 }

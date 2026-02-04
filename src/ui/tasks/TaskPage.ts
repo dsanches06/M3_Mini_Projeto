@@ -18,6 +18,7 @@ import {
 } from "../dom/index.js";
 import { TaskService } from "../../services/taskService.js";
 import { TaskDashboardUI } from "./index.js";
+import { createNotificationsUI } from "../notifications/notificationsUI.js";
 
 /* Lista de tarefas  */
 export function loadTasksPage(user?: IUser): void {
@@ -28,6 +29,11 @@ export function loadTasksPage(user?: IUser): void {
   const title = user ? `Tarefas de ${user.getName()}` : "GESTÃO DE TAREFAS";
 
   clearContainer("#containerSection");
+
+  if (user) {
+    addElementInContainer("#containerSection", createNotificationsUI());
+  }
+
   addElementInContainer("#containerSection", createHeadingTitle("h2", title));
 
   const taskCounterSection = createTaskCounter("taskCounters") as HTMLElement;
