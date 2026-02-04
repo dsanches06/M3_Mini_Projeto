@@ -30,7 +30,7 @@ export class AssignmentService {
       if (taskIndex !== -1) {
         user.getTasks().splice(taskIndex, 1);
         task.setUser(undefined);
-        //a task mantem o seu status atual apos desatribuição
+        task.moveTo(TaskStatus.CREATED);
       }
     }
   }
