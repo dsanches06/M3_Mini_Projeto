@@ -30,7 +30,7 @@ function applyCardColors(usersContainer: HTMLElement): void {
     const randomColor = `rgb(${Math.floor(Math.random() * 128)}, ${Math.floor(
       Math.random() * 128,
     )}, ${Math.floor(Math.random() * 128)})`;
-    const title = card.querySelector(".title") as HTMLElement;
+    const title = card.querySelector(".face1") as HTMLElement;
     if (title) {
       title.style.background = randomColor;
     }
@@ -43,35 +43,3 @@ function applyCardColors(usersContainer: HTMLElement): void {
   }
 }
 
-export function loadUsersPage(): void {
-  const searchUser = document.querySelector("#searchUser") as HTMLInputElement;
-  if (searchUser) {
-    searchUser.addEventListener("input", () => {
-      const name = searchUser.value.toLowerCase();
-      const filteredUsers = searchUserByName(name);
-      renderUsers(filteredUsers);
-      showUsersCounters(filteredUsers, "filterByName");
-    });
-  }
-  const addTaskUserBtn = document.querySelector(
-    "#addTaskUserBtn",
-  ) as HTMLButtonElement;
-  if (addTaskUserBtn) {
-    addTaskUserBtn.addEventListener("click", () => {
-      const modal = document.querySelector("#modalUserTaskForm") as HTMLElement;
-      if (modal) {
-        modal.style.display = "block";
-      }
-    });
-  } else {
-    console.warn("Elemento #addTaskUserBtn não foi renderizado no DOM.");
-  }
-  const addUserBtn = document.querySelector("#addUserBtn") as HTMLButtonElement;
-  if (addUserBtn) {
-    addUserBtn.addEventListener("click", () => {
-      renderUserModal();
-    });
-  } else {
-    console.warn("Elemento #addUserBtn não foi renderizado no DOM.");
-  }
-}
