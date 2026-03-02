@@ -4,8 +4,10 @@
     "module": "esnext",
     "lib": ["ES2016", "DOM"],
     "moduleResolution": "node",
+    "types": ["node"],
     "baseUrl": ".",
     "paths": {
+      "@api/*": ["src/api/*"],
       "@/*": ["src/*"]
     },
     "outDir": "./dist",
@@ -13,6 +15,6 @@
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true
   },
-  "include": ["src/**/*", "main.ts", "mainUI.ts"],
+  "include": ["src/**/*", "main.ts", "main.ts", "src/**/*.ts", "api/**/*.ts"],
   "exclude": ["node_modules", "dist", "testes"]
 }
