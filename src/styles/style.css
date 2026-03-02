@@ -763,12 +763,8 @@ footer p {
 }
 
 .cardContainer .card .face.face1 .content{
-    opacity: 0.2;
-    transition: 0.5s;
-}
-
-.cardContainer .card:hover .face.face1 .content{
     opacity: 1;
+    transition: 0.5s;
 }
 
 .cardContainer .card .face.face1 .content h3{
