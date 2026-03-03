@@ -20,6 +20,7 @@ function setupEditTaskFormLogic(
   form: HTMLFormElement,
   fields: {
     title: HTMLInputElement;
+    description: HTMLTextAreaElement;
     status: HTMLSelectElement;
     user: HTMLSelectElement;
   },
@@ -33,6 +34,7 @@ function setupEditTaskFormLogic(
     e.preventDefault();
 
     const title = fields.title.value.trim();
+    const description = fields.description.value.trim();
     const statusValue = fields.status.value as keyof typeof TaskStatus;
     const userValue = fields.user.value;
 
@@ -60,6 +62,7 @@ function setupEditTaskFormLogic(
     }
 
     handleTitleChange(task, title);
+    handleDescriptionChange(task, description);
     handleStatusChange(task, statusValue);
     if (userValue === "") {
       handleUnassign(task, fields);
@@ -101,13 +104,35 @@ export function renderModalEditTask(task: ITask): void {
   );
   titleData.input.value = task.getTitle();
 
+  // Description textarea
+  const descriptionGroup = document.createElement("section");
+  descriptionGroup.className = "form-group";
+
+  const descriptionLabel = document.createElement("label");
+  descriptionLabel.htmlFor = "editTaskDescription";
+  descriptionLabel.textContent = "Descrição";
+
+  const descriptionTextarea = document.createElement("textarea") as HTMLTextAreaElement;
+  descriptionTextarea.id = "editTaskDescription";
+  descriptionTextarea.rows = 4;
+  descriptionTextarea.placeholder = "Descreva a tarefa";
+  // some tasks may not have description defined
+  try {
+    // getDescription may return undefined/null
+    descriptionTextarea.value = (task as any).getDescription ? (task as any).getDescription() ?? "" : "";
+  } catch (e) {
+    descriptionTextarea.value = "";
+  }
+
+  descriptionGroup.append(descriptionLabel, descriptionTextarea);
+
   // Status select (grouped)
   const statusGroup = document.createElement("section");
   statusGroup.className = "form-group";
 
   const statusLabel = document.createElement("label");
   statusLabel.htmlFor = "editTaskStatus";
-  statusLabel.textContent = "";
+  statusLabel.textContent = "Estado";
 
   const statusSelect = document.createElement("select") as HTMLSelectElement;
   statusSelect.id = "editTaskStatus";
@@ -131,7 +156,7 @@ export function renderModalEditTask(task: ITask): void {
 
   const userLabel = document.createElement("label");
   userLabel.htmlFor = "editTaskUser";
-  userLabel.textContent = "";
+  userLabel.textContent = "Atribuído a";
 
   const userSelect = document.createElement("select") as HTMLSelectElement;
   userSelect.id = "editTaskUser";
@@ -158,7 +183,7 @@ export function renderModalEditTask(task: ITask): void {
     "submit",
   ) as HTMLButtonElement;
 
-  form.append(titleData.section, statusGroup, userGroup, submitBtn);
+  form.append(titleData.section, descriptionGroup, statusGroup, userGroup, submitBtn);
   content.append(closeBtn, titleHeading, errorBanner, form);
   modal.append(content);
 
@@ -168,6 +193,7 @@ export function renderModalEditTask(task: ITask): void {
     form,
     {
       title: titleData.input,
+      description: descriptionTextarea,
       status: statusSelect,
       user: userSelect,
     },
@@ -194,6 +220,21 @@ function handleTitleChange(task: ITask, title: string) {
       `INFO: O título da tarefa "${task.getTitle()}" foi atualizado.`,
       "info-banner",
     );
+  }
+}
+
+function handleDescriptionChange(task: ITask, description: string) {
+  // only update if the method exists on the task
+  if ((task as any).setDescription && (task as any).getDescription) {
+    const current = (task as any).getDescription() ?? "";
+    if (description !== current) {
+      (task as any).setDescription(description);
+      renderDashboard(TaskService.getAllTasks());
+      showInfoBanner(
+        `INFO: A descrição da tarefa "${task.getTitle()}" foi atualizada.`,
+        "info-banner",
+      );
+    }
   }
 }
 
