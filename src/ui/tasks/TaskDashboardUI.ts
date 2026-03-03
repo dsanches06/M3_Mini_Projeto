@@ -2,7 +2,8 @@ import { ITask } from "../../tasks/index.js";
 import { TaskStatus } from "../../tasks/TaskStatus.js";
 import { createSection } from "../dom/CreatePage.js";
 import { IUser } from "../../models/index.js";
-import { renderModalEditTask } from "./index.js";
+import { renderModalEditTask } from "../modal/index.js";
+import { getCardBorderColor, setCardBorderColor } from "../../helpers/index.js";
 
 export class TaskDashboardUI {
   private container: HTMLElement;
@@ -125,7 +126,6 @@ export class TaskDashboardUI {
         countBadge.textContent = tasks.length.toString();
       }
 
-      // clear container then append tasks (safe for future partial updates)
       container.innerHTML = "";
       tasks.forEach((task) => {
         const taskCard = this.createTaskCard(task);
@@ -146,14 +146,12 @@ export class TaskDashboardUI {
     const meta = document.createElement("div");
     meta.className = "task-meta";
 
-    const userTask = task.getUser();
-
     const userSpan = document.createElement("span");
     userSpan.className = "task-user";
     meta.appendChild(userSpan);
-    if (userTask) {
+    if (this.user) {
       const names =
-        userTask.getName().split(" ") || userTask.getName().split("");
+        this.user.getName().split(" ") || this.user.getName().split("");
       userSpan.textContent = names[0];
     } else {
       userSpan.textContent = "";
@@ -167,8 +165,17 @@ export class TaskDashboardUI {
     card.appendChild(title);
     card.appendChild(meta);
 
-    card.addEventListener("click", () => {
-      renderModalEditTask(task);
+    // Aplicar cor do border baseada no status
+    const borderColor = getCardBorderColor(task.getStatus());
+    setCardBorderColor(card, borderColor);
+
+    card.addEventListener("click", (event) => {
+      event.stopPropagation();
+      if (this.user) {
+        renderModalEditTask(task, this.user);
+      } else {
+        renderModalEditTask(task);
+      }
     });
 
     return card;

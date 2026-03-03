@@ -1,9 +1,13 @@
+import { IUser } from "../../models/index.js";
 import { ITask } from "../../tasks/index.js";
-import { createHeadingTitle, createSection } from "../dom/index.js";
-import { renderEditTaskLeftPanel } from "../modal/index.js";
-import { renderEditTaskRightPanel } from "../modal/index.js";
+import {
+  createHeadingTitle,
+  createSection,
+} from "../dom/index.js";
+import { renderEditTaskLeftPanel } from "./index.js";
+import { renderEditTaskRightPanel } from "./index.js";
 
-export function renderModalEditTask(task: ITask): void {
+export function renderModalEditTask(task: ITask, user?: IUser): void {
   const modal = createSection("modalEditTask") as HTMLElement;
   modal.classList.add("modal");
 
@@ -20,7 +24,7 @@ export function renderModalEditTask(task: ITask): void {
     `Editar ${task.getTitle()}`,
   ) as HTMLHeadingElement;
 
-  const leftPanel = renderEditTaskLeftPanel(task, task.getUser(), modal);
+  const leftPanel = renderEditTaskLeftPanel(task, user, modal);
 
   const rightPanel = renderEditTaskRightPanel(task);
 
@@ -32,7 +36,7 @@ export function renderModalEditTask(task: ITask): void {
   divider.className = "edit-task-divider";
   divider.style.width = "1px";
   divider.style.backgroundColor = "#ccc";
-
+  
   mainContainer.append(leftPanel.leftContainer, divider, rightPanel);
 
   content.append(closeBtn, titleHeading, mainContainer);

@@ -1,4 +1,4 @@
-import {BaseEntity} from "../models/index.js";
+import { BaseEntity } from "../models/index.js";
 
 /* Representação de um comentário */
 export default class Comment extends BaseEntity {
@@ -20,12 +20,19 @@ export default class Comment extends BaseEntity {
   getTaskId(): number {
     return this.taskId;
   }
+
   getUserId(): number {
     return this.userId;
   }
+
   getMessage(): string {
     return this.message;
   }
+
+  setMessage(newMessage: string) {
+    this.message = newMessage;
+  }
+
   getCreatedAt(): Date {
     return super.getCreatedAt();
   }

@@ -9,7 +9,8 @@ import {
   createSearchContainer,
   clearContainer,
 } from "../dom/index.js";
-import { renderUserModal, renderUsers, showUsersCounters } from "./index.js";
+import { renderUsers, showUsersCounters } from "./index.js";
+import { renderUserModal } from "../modal/index.js";
 import {
   sortUsersByName,
   searchUserByName,

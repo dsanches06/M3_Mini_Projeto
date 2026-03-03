@@ -1,7 +1,8 @@
 import { IUser } from "../../models/index.js";
 import { ITask } from "../../tasks/index.js";
 import { showInfoBanner } from "../../helpers/index.js";
-import { showTasksCounters, renderTaskModal } from "./index.js";
+import { showTasksCounters } from "./index.js";
+import { renderTaskModal } from "../modal/index.js";
 import {
   removeAllCompletedTask,
   searchTasksByTitle,

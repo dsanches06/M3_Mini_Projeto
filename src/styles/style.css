@@ -344,18 +344,144 @@ main {
 }
 
 #modalEditTask .modal-content {
-  max-width: 380px;
-  width: 70%;
+  max-width: 900px;        /* reduce overall modal width */
+  width: 900px;            /* fixed width */
   padding: 16px 18px;
   margin: 20px auto;
-  max-height: 80vh;
-  overflow-y: visible;
+  max-height: 85vh;
+  overflow-y: auto;
   height: auto;
   box-sizing: border-box;
 }
 
+/* new layout classes for edit modal */
+#modalEditTask .modal-content .edit-task-main {
+  display: flex;
+  gap: 0;
+}
+
+#modalEditTask .modal-content .edit-task-left,
+#modalEditTask .modal-content .edit-task-right {
+  flex: 1;
+}
+
+#modalEditTask .modal-content .edit-task-divider {
+  width: 1px;
+  background-color: #ccc;
+  margin: 0;
+}
+
+#modalEditTask .modal-content .edit-task-right {
+  display: flex;
+  flex-direction: column;
+  height: 520px;
+  max-height: 520px;
+  overflow-y: auto;
+}
+
+
+#modalEditTask .modal-content .comment-item {
+  margin-bottom: 1rem;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  padding: 0.75rem;
+  background-color: #ffffff;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+#modalEditTask .modal-content .comment-item strong {
+  display: block;
+  color: #333;
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-bottom: 0.25rem;
+}
+
+#modalEditTask .modal-content .comment-item p {
+  word-break: break-word;
+  overflow-wrap: break-word;
+  margin: 0;
+  color: #555;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+#modalEditTask .modal-content .comment-list {
+  height: 300px;
+  overflow-y: auto;
+  flex-shrink: 0;             /* prevent shrinking */
+  background-color: #f9f9f9;  /* light gray background */
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 0.75rem;
+}
+
 #modalEditTask .form-group {
   gap: 12px;
+}
+
+/* ensure inputs/selects in edit modal take full width */
+#modalEditTask .form-group input,
+#modalEditTask .form-group textarea,
+#modalEditTask .form-group select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+/* prevent user from resizing the whole form or textarea growth */
+#modalEditTask .modal-content form {
+  width: 100%;
+  resize: none;
+}
+
+#modalEditTask .modal-content textarea {
+  resize: none;
+  overflow-y: auto;
+  max-height: 120px;     /* keep textarea from expanding beyond this */
+}
+
+#modalEditTask .modal-content form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* left and right columns padding */
+#modalEditTask .modal-content .edit-task-left {
+  padding-right: 1rem;
+  padding-left: 1rem;
+}
+#modalEditTask .modal-content .edit-task-right {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+/* style comment textarea and send button */
+#modalEditTask .modal-content textarea#newCommentText {
+  resize: none;
+  min-height: 60px;
+  max-height: 80px;
+  overflow-y: auto;
+}
+
+#modalEditTask .modal-content #buttonSendComment {
+  align-self: flex-end;
+  margin-top: 4px;
+}
+
+/* error banner visible styling */
+#modalEditTask .error-banner {
+  color: #b22222;
+  padding: 8px;
+  margin-bottom: 10px;
+  background: #ffe6e6;
+  border: 1px solid #ffb3b3;
+  border-radius: 4px;
 }
 
 #modalEditTask.modal {
@@ -698,7 +824,6 @@ footer p {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   cursor: pointer;
   transition: all 0.3s ease;
-  border-left: 4px solid #4a90e2;
 }
 
 .task-card:hover {
@@ -883,7 +1008,6 @@ footer p {
     color: #555;
 }
 
-/* Blur effect on card hover - use the outer users container so siblings react */
 #usersContainer {
     transition: all 0.5s ease;
 }

@@ -1,6 +1,7 @@
 import { IUser, UserClass } from "../../models/index.js";
 import { createSection } from "../dom/index.js";
 import { createUserCard } from "./index.js";
+import {generateRandomColor} from "../../helpers/index.js";
 
 /* Container de utilizadores */
 const usersContainer = createSection("usersContainer") as HTMLElement;
@@ -22,9 +23,7 @@ function applyCardColors(usersContainer: HTMLElement): void {
   const cards = Array.from(usersContainer.querySelectorAll(".card"));
   for (const card of cards) {
     // Gerar uma cor aleatória suave
-    const randomColor = `rgb(${Math.floor(Math.random() * 128)}, ${Math.floor(
-      Math.random() * 128,
-    )}, ${Math.floor(Math.random() * 128)})`;
+    const randomColor = generateRandomColor();
     const title = card.querySelector(".face1") as HTMLElement;
     if (title) {
       title.style.background = randomColor;
@@ -37,3 +36,5 @@ function applyCardColors(usersContainer: HTMLElement): void {
     }
   }
 }
+
+

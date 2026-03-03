@@ -8,6 +8,8 @@ export interface ITask {
   getCreatedAt(): Date;
   setTitle(title: string): void;
   getTitle(): string;
+  setDescription(description: string): void;
+  getDescription(): string | undefined;
   getCompleted(): boolean;
   getStatus(): TaskStatus;
   setStatus(status: TaskStatus): void;

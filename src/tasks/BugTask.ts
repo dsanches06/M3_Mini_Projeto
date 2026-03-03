@@ -8,15 +8,17 @@ import { SystemLogger } from "../logs/SystemLogger.js";
 /* Implementação da tarefa do tipo Bug */
 export class BugTask extends BaseEntity implements ITask {
   private title: string;
+  private description?: string;
   private completed: boolean;
   private completeDate?: Date;
   private status: TaskStatus;
   private category: TaskCategory;
   private user: IUser | undefined;
 
-  constructor(id: number, title: string, category: TaskCategory) {
+  constructor(id: number, title: string, description: string | undefined, category: TaskCategory) {
     super(id);
     this.title = title;
+    this.description = description;
     this.completed = false;
     this.status = TaskStatus.CREATED;
     this.category = category;
@@ -34,6 +36,15 @@ export class BugTask extends BaseEntity implements ITask {
   setTitle(title: string): void {
     this.title = title;
   }
+
+    getDescription(): string | undefined {
+    return this.description;
+  }
+
+  setDescription(description: string): void {
+    this.description = description;
+  }
+
 
   getCompleted(): boolean {
     return this.completed;

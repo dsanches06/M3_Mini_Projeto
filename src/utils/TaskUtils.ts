@@ -17,7 +17,6 @@ export function processTask(task: ITask) {
   const currentStatus = task.getStatus();
   const nextStatus = StateTransitions.getNextStatus(currentStatus);
 
-  // Only Bugs require an assigned user; other types can be processed without user
   if (type === "Bugs" && !user) {
     SystemLogger.log(
       `ERRO: Bug ${task.getTitle()} (id:${task.getId()}) não possui usuário atribuído e não pode ser processado.`,

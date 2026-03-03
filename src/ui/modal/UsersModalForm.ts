@@ -9,7 +9,7 @@ import {
 import { UserService } from "../../services/index.js";
 import { IUser, UserClass } from "../../models/index.js";
 import { showInfoBanner } from "../../helpers/index.js";
-import { renderUsers, showUsersCounters } from "./index.js";
+import { renderUsers, showUsersCounters } from "../users/index.js";
 import { GlobalValidators, IdGenerator } from "../../utils/index.js";
 import { UserRole } from "../../security/UserRole.js";
 

@@ -12,7 +12,7 @@ import {
   createInputGroup,
   createSection,
   createSelectGroup,
-} from "../../ui/dom/index.js";
+} from "../dom/index.js";
 import { showInfoBanner } from "../../helpers/index.js";
 
 function setupTaskFormLogic(
@@ -83,11 +83,11 @@ function setupTaskFormLogic(
       let newId: number = IdGenerator.generateTaskId();
       //obter o tipo de task a criar
       if (type.trim() === "Bugs") {
-        newTask = new BugTask(newId, title, taskCategory);
+        newTask = new BugTask(newId, title, undefined, taskCategory);
       } else if (type.trim() === "Feature") {
-        newTask = new FeatureTask(newId, title, taskCategory);
+        newTask = new FeatureTask(newId, title, undefined, taskCategory);
       } else if (type.trim() === "Task") {
-        newTask = new Task(newId, title, taskCategory);
+        newTask = new Task(newId, title, undefined, taskCategory);
       }
 
       if (newTask) {
