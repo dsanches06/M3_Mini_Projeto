@@ -378,6 +378,22 @@ main {
   gap: 20px;
 }
 
+
+#modalUserForm .modal-content > div {
+  display: flex;
+  gap: 1rem;             /* space shown in screenshot */
+}
+
+#modalUserForm .modal-content > div .form-group {
+  flex: 1;
+}
+
+/* make the select boxes stretch to the width of their flex item */
+#modalUserForm .modal-content > div .form-group select {
+  width: 100%;
+  box-sizing: border-box;
+}
+
 .form-group {
   display: flex;
   flex-direction: column;
@@ -765,6 +781,10 @@ footer p {
 .cardContainer .card .face.face1 .content{
     opacity: 1;
     transition: 0.5s;
+}
+
+.container .card .face.face1 .content img{
+    max-width: 100px;
 }
 
 .cardContainer .card .face.face1 .content h3{

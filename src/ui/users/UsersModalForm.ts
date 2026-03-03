@@ -21,11 +21,13 @@ function setupFormLogic(
   fields: {
     name: HTMLInputElement;
     email: HTMLInputElement;
+    gender: HTMLSelectElement;
     role: HTMLSelectElement;
   },
   errors: {
     nameErr: HTMLElement;
     emailErr: HTMLElement;
+    genderErr: HTMLElement;
     roleErr: HTMLElement;
   },
   modal: HTMLElement,
@@ -36,11 +38,13 @@ function setupFormLogic(
     //obter os resultados
     const name = fields.name.value.trim();
     const email = fields.email.value.trim();
+    const gender = fields.gender.value.trim();
     const role = fields.role.value.trim();
 
     // Reset de estados
     errors.nameErr.textContent = "";
     errors.emailErr.textContent = "";
+    errors.genderErr.textContent = "";
     errors.roleErr.textContent = "";
 
     let isValid = true;
@@ -54,6 +58,12 @@ function setupFormLogic(
     // Validação do Nome
     if (!GlobalValidators.isNonEmpty(name)) {
       errors.nameErr.textContent = "O nome não pode estar vazio.";
+      isValid = false;
+    }
+
+    // Validação do Genero
+    if (!GlobalValidators.isNonEmpty(gender)) {
+      errors.genderErr.textContent = "O género não pode estar vazio.";
       isValid = false;
     }
 
@@ -104,29 +114,32 @@ function setupFormLogic(
       } else if (role === "VIEWER") {
         roleUser = UserRole.VIEWER;
       }
-      const user: IUser = new UserClass(newId, name, email, roleUser);
-      //adiciona a lista de utilizadores
-      UserService.addUser(user);
-      //mensagem de sucesso ou erro
-      if (user && user.getName()) {
-        showInfoBanner(
-          `${user.getName()} foi adicionado com sucesso.`,
-          "info-banner",
+
+      if (roleUser) {
+        const user: IUser = new UserClass(newId, name, email, gender, roleUser);
+        //adiciona a lista de utilizadores
+        UserService.addUser(user);
+        //mensagem de sucesso ou erro
+        if (user && user.getName()) {
+          showInfoBanner(
+            `${user.getName()} foi adicionado com sucesso.`,
+            "info-banner",
+          );
+        } else {
+          showInfoBanner(
+            `ERRO: ${fields.name.value} não foi adicionado.`,
+            "error-banner",
+          );
+        }
+        //mostra todos os utilizadores
+        renderUsers(UserService.getAllUsers() as UserClass[]);
+        // atualizar contadores
+        showUsersCounters(
+          UserService.getAllUsers() as UserClass[],
+          "utilizadores",
         );
-      } else {
-        showInfoBanner(
-          `ERRO: ${fields.name.value} não foi adicionado.`,
-          "error-banner",
-        );
+        modal.remove();
       }
-      //mostra todos os utilizadores
-      renderUsers(UserService.getAllUsers() as UserClass[]);
-      // atualizar contadores
-      showUsersCounters(
-        UserService.getAllUsers() as UserClass[],
-        "utilizadores",
-      );
-      modal.remove();
     } else {
       showInfoBanner(
         `O utilizador não foi adicionado. Verifique os erros no formulário.`,
@@ -171,9 +184,23 @@ export function renderUserModal(): void {
     "email",
     "inserir o email",
   );
-  const roles = ["ADMIN", "MANAGER", "MEMBER", "VIEWER"];
-  const selectRoleData = createSelectGroup("Role", "selectRole", roles);
+  const selectGenderData = createSelectGroup("Gender", "selectGender", [
+    "Masculino",
+    "Feminino",
+  ]);
+  const selectRoleData = createSelectGroup("Role", "selectRole", [
+    "ADMIN",
+    "MANAGER",
+    "MEMBER",
+    "VIEWER",
+  ]);
 
+  // Container para colocar lado a lado
+  const selectsContainer = document.createElement("div");
+  selectsContainer.style.display = "flex";
+  selectsContainer.style.gap = "6rem";
+  selectsContainer.append(selectGenderData.section, selectRoleData.section);
+ 
   const submitBtn = createButton(
     "button",
     "Adicionar",
@@ -183,7 +210,7 @@ export function renderUserModal(): void {
   form.append(
     nameData.section,
     emailData.section,
-    selectRoleData.section,
+    selectsContainer,
     submitBtn,
   );
   content.append(closeBtn, title, form);
@@ -196,11 +223,13 @@ export function renderUserModal(): void {
     {
       name: nameData.input,
       email: emailData.input,
+      gender: selectGenderData.select,
       role: selectRoleData.select,
     },
     {
       nameErr: nameData.errorSection,
       emailErr: emailData.errorSection,
+      genderErr: selectGenderData.errorSection,
       roleErr: selectRoleData.errorSection,
     },
     modal,

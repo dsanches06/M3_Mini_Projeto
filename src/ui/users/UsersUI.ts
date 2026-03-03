@@ -1,11 +1,6 @@
 import { IUser, UserClass } from "../../models/index.js";
 import { createSection } from "../dom/index.js";
-import {
-  createUserCard,
-  renderUserModal,
-  showUsersCounters,
-} from "./index.js";
-import { searchUserByName } from "../gestUserTask/index.js";
+import { createUserCard } from "./index.js";
 
 /* Container de utilizadores */
 const usersContainer = createSection("usersContainer") as HTMLElement;
@@ -42,4 +37,3 @@ function applyCardColors(usersContainer: HTMLElement): void {
     }
   }
 }
-

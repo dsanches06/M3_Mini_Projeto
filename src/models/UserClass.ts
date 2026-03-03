@@ -7,13 +7,21 @@ export class UserClass extends BaseEntity implements IUser {
   private name: string;
   private email: string;
   private active: boolean;
-  private role?: UserRole;
+  private role: UserRole;
   private tasks: ITask[];
+  private gender: string;
 
-  constructor(id: number, name: string, email: string, role?: UserRole) {
+  constructor(
+    id: number,
+    name: string,
+    email: string,
+    gender: string,
+    role: UserRole,
+  ) {
     super(id);
     this.name = name;
     this.email = email;
+    this.gender = gender;
     this.active = true;
     this.role = role;
     this.tasks = [];
@@ -32,11 +40,15 @@ export class UserClass extends BaseEntity implements IUser {
   }
 
   getRole(): UserRole {
-    return this.role!;
+    return this.role;
   }
 
   getEmail(): string {
     return this.email;
+  }
+
+  getGender(): string {
+    return this.gender;
   }
 
   createTask(task: ITask): void {

@@ -23,10 +23,17 @@ export function createUserCard(user: UserClass): HTMLElement {
   const content1 = document.createElement("div") as HTMLElement;
   content1.className = "content";
 
+  const randomValue = Math.floor(Math.random() * 4) + 1;
+  const imageFolder = user.getGender() === "Masculino" ? "man" : "woman";  
+  const img = document.createElement("img") as HTMLImageElement;
+  img.src = `/src/assets/${imageFolder}-${randomValue}.png`;
+  img.alt = "User Avatar";
+
+
   const h3 = document.createElement("h3") as HTMLElement;
   h3.textContent = user.getName().split(" ")[0];
 
-  content1.appendChild(h3);
+  content1.append(img, h3);
   face1.appendChild(content1);
   card.appendChild(face1);
 
